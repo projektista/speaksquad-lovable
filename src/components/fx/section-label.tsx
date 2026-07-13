@@ -9,4 +9,3 @@ export function SectionLabel({ n, children }: { n?: string; children: ReactNode 
     </span>
   );
 }
-*** End Patch

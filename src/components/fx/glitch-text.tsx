@@ -11,4 +11,3 @@ export function GlitchText({
 }) {
   return <Tag className={`glitch ${className}`}>{children}</Tag>;
 }
-*** End Patch

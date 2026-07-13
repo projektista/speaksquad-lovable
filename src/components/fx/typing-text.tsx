@@ -36,4 +36,3 @@ export function TypingText({ text, speed = 45, startDelay = 200, className = "",
     </span>
   );
 }
-*** End Patch

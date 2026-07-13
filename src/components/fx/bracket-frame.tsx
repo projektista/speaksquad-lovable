@@ -9,4 +9,3 @@ export function BracketFrame({
 }) {
   return <div className={`bracket-corners ${className}`}>{children}</div>;
 }
-*** End Patch

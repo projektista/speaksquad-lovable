@@ -79,4 +79,3 @@ export function ParticleField({ density = 40, className = "" }: { density?: numb
     />
   );
 }
-*** End Patch
