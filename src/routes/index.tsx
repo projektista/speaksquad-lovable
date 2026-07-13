@@ -130,12 +130,12 @@ function Hero() {
           <div className="mt-8 flex flex-wrap gap-2 font-mono-alt text-xs">
             <span className="rounded-[4px] border-hair bg-bg2 px-2.5 py-1 text-soft">Minecraft</span>
             <span className="rounded-[4px] border-hair bg-bg2 px-2.5 py-1 text-soft">Fortnite</span>
-            <span className="rounded-[4px] border-hair bg-bg2 px-2.5 py-1 text-soft">via Zoom</span>
+            <span className="rounded-[4px] border-hair bg-bg2 px-2.5 py-1 text-soft">{"\n"}</span>
           </div>
         </div>
 
         <BracketFrame className="relative p-5">
-          <div className="section-label mb-4">// hero_stats</div>
+          <div className="section-label mb-4">// VANTAGENS</div>
           <div className="space-y-4 font-mono-alt">
             {[
               { v: "1-on-1", l: "mesmo professor sempre" },
@@ -149,7 +149,7 @@ function Hero() {
             ))}
           </div>
           <div className="mt-6 flex items-center justify-between font-mono-alt text-[10px] uppercase tracking-widest text-muted">
-            <span>tokyo · jst</span>
+            <span>{"\n"}</span>
             <span className="text-success">▊ online</span>
           </div>
         </BracketFrame>
@@ -264,7 +264,7 @@ function Gratis() {
         <Reveal delay={140}>
           <div className="mt-6 flex items-center gap-3 rounded-[4px] border border-[color:var(--success)]/40 bg-[color:color-mix(in_oklab,var(--success)_10%,transparent)] px-4 py-3 font-mono-alt text-sm text-soft">
             <span className="text-success">✓</span>
-            Da conta criada até a aula agendada, o processo leva poucos minutos.
+            {"\n"}Criar sua conta e agendar sua primeira aula, leva poucos minutos. Vale a pena!
           </div>
         </Reveal>
         <div className="mt-10 grid gap-4 md:grid-cols-4">
@@ -289,7 +289,7 @@ function Pricing() {
       <Reveal><SectionLabel n="05">Preço</SectionLabel></Reveal>
       <Reveal delay={80}>
         <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
-          Simples. <span className="text-magenta">Sem letras miúdas.</span>
+          Simples,&nbsp;transparente e direto.
         </h2>
       </Reveal>
       <p className="mt-4 max-w-2xl text-soft">
@@ -386,10 +386,10 @@ function Sobre() {
             </div>
             <div className="mt-4 font-display text-xl">Hugo</div>
             <div className="mt-1 font-mono-alt text-xs text-muted">
-              fundador · speaksquad
+              Fundador · Instrutor ·&nbsp;Gamer
             </div>
             <div className="mt-4 font-mono-alt text-[10px] uppercase tracking-widest text-cyan">
-              [ tokyo · jst ]
+              {"\n"}
             </div>
           </BracketFrame>
         </Reveal>
@@ -448,8 +448,7 @@ function CTA() {
           </div>
         </Reveal>
         <p className="mt-6 font-mono-alt text-xs text-muted">
-          Disponível para crianças e adolescentes no Japão.<br />
-          Zoom · Minecraft ou Fortnite · Tokyo timezone.
+          Faça um teste já!
         </p>
       </div>
     </section>
