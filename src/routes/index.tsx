@@ -107,10 +107,10 @@ function Hero() {
             <span className="text-cyan">&gt;_</span> LEVEL UP YOUR ENGLISH
           </SectionLabel>
           <h1 className="mt-5 font-display text-4xl leading-[1.05] md:text-6xl">
-            <span className="block">APRENDA INGLÊS</span>
+            <span className="block" style={{ color: "#f7fafc" }}>APRENDA INGLÊS</span>
             <span className="block">
-              <span className="text-muted lowercase">jogando</span>{" "}
-              <span className="text-cyan">
+              <span style={{ color: "#00d9ff" }}>jogando</span>{" "}
+              <span style={{ color: "#ff006e" }}>
                 <TypingText text="GAMES" speed={90} startDelay={350} />
               </span>
             </span>
@@ -167,7 +167,7 @@ function Metodo() {
       </Reveal>
       <Reveal delay={80}>
         <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
-          Esse método <span className="text-cyan">vai funcionar</span> com você.
+          <span style={{ color: "#f7fafc" }}>Esse</span> <span style={{ color: "#00d9ff" }}>método</span> <span style={{ color: "#f7fafc" }}>vai funcionar com</span> <span style={{ color: "#ff006e" }}>você</span>.
         </h2>
       </Reveal>
       <div className="mt-8 grid gap-6 md:grid-cols-2">
@@ -195,7 +195,7 @@ function Features() {
         <Reveal><SectionLabel n="02">Diferenciais</SectionLabel></Reveal>
         <Reveal delay={80}>
           <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
-            Aprenda <span className="text-magenta">falando</span>, não decorando.
+            <span style={{ color: "#f7fafc" }}>Aprenda</span> <span style={{ color: "#ff006e" }}>falando,</span> <span style={{ color: "#00d9ff" }}>não decorando</span>.
           </h2>
         </Reveal>
         <div className="mt-12 grid gap-4 md:grid-cols-3">
@@ -222,7 +222,7 @@ function Fluxo() {
       <Reveal><SectionLabel n="03">Estrutura da aula</SectionLabel></Reveal>
       <Reveal delay={80}>
         <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
-          Como é o <span className="text-cyan">fluxo</span> da aula.
+          <span style={{ color: "#f7fafc" }}>Como é o</span> <span style={{ color: "#ff006e" }}>fluxo</span> <span style={{ color: "#f7fafc" }}>da aula</span>.
         </h2>
       </Reveal>
       <p className="mt-4 max-w-2xl text-soft">
@@ -258,7 +258,7 @@ function Gratis() {
         <Reveal><SectionLabel n="04">Como funciona</SectionLabel></Reveal>
         <Reveal delay={80}>
           <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
-            Sua <span className="text-cyan">1ª aula é gratuita</span>.
+            <span style={{ color: "#f7fafc" }}>Sua</span> <span style={{ color: "#00d9ff" }}>1ª aula</span> <span style={{ color: "#f7fafc" }}>é</span> <span style={{ color: "#ff006e" }}>gratuita</span>.
           </h2>
         </Reveal>
         <Reveal delay={140}>
@@ -432,8 +432,8 @@ function CTA() {
         </Reveal>
         <Reveal delay={80}>
           <h2 className="mt-6 font-display text-3xl md:text-5xl">
-            Comece sua primeira<br />
-            <span className="text-cyan">aula gratuita</span> já.
+            <span style={{ color: "#f7fafc" }}>Comece sua primeira</span><br />
+            <span style={{ color: "#00d9ff" }}>aula gratuita</span> <span style={{ color: "#ff006e" }}>já</span>.
           </h2>
         </Reveal>
         <Reveal delay={140}>

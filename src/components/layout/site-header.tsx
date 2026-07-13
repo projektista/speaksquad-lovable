@@ -23,13 +23,17 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
     lang === "jp"
       ? [
           { href: "#method", label: "メソッド" },
+          { href: "#flow", label: "レッスンの流れ" },
           { href: "#pricing", label: "料金" },
           { href: "#faq", label: "FAQ" },
+          { href: "/contato", label: "お問い合わせ", isRoute: true },
         ]
       : [
           { href: "#method", label: "Método" },
+          { href: "#flow", label: "Fluxo da aula" },
           { href: "#pricing", label: "Preço" },
           { href: "#faq", label: "FAQ" },
+          { href: "/contato", label: "CONTATO", isRoute: true },
         ];
 
   const setLang = (l: Lang) => {
@@ -47,7 +51,7 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
         <Link
           to={lang === "jp" ? "/jp" : "/"}
-          className="glitch flex items-center gap-2 font-display text-lg"
+          className="group brand-link glitch flex items-center gap-2 font-display text-lg"
         >
           <span
             className="inline-flex h-7 w-7 items-center justify-center rounded-[4px] text-[11px] font-bold text-[#04121a]"
@@ -55,20 +59,22 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
           >
             SS
           </span>
-          <span>
-            Speak<span className="text-cyan">Squad</span>
-            <span
-              aria-hidden
-              className="mx-0.5 inline-block h-[2px] w-3 translate-y-[-3px] bg-[color:var(--magenta)]"
-            />
+          <span className="brand-text whitespace-nowrap decoration-2 underline-offset-4 group-hover:underline group-hover:decoration-[#00d9ff]">
+            <span style={{ color: "#f7fafc" }}>Speak</span><span style={{ color: "#ff006e" }}>Squad</span>
           </span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
           {nav.map((n) => (
-            <a key={n.href} href={n.href} className="btn-ghost">
-              {n.label}
-            </a>
+            n.isRoute ? (
+              <Link key={n.href} to={n.href} className="btn-ghost">
+                {n.label}
+              </Link>
+            ) : (
+              <a key={n.href} href={n.href} className="btn-ghost">
+                {n.label}
+              </a>
+            )
           ))}
           <span className="mx-2 h-4 w-px bg-[color:var(--border2)]" />
           <div className="flex items-center gap-1 font-mono-alt text-xs text-muted">
@@ -110,9 +116,15 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
         <div className="border-t border-hair bg-bg2 md:hidden">
           <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4">
             {nav.map((n) => (
-              <a key={n.href} href={n.href} className="btn-ghost justify-start">
-                {n.label}
-              </a>
+              n.isRoute ? (
+                <Link key={n.href} to={n.href} className="btn-ghost justify-start">
+                  {n.label}
+                </Link>
+              ) : (
+                <a key={n.href} href={n.href} className="btn-ghost justify-start">
+                  {n.label}
+                </a>
+              )
             ))}
             <div className="hair-divider my-2" />
             <div className="flex items-center gap-3 px-1 font-mono-alt text-xs">
