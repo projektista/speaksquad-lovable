@@ -51,7 +51,7 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
         <Link
           to={lang === "jp" ? "/jp" : "/"}
-          className="brand-link glitch flex items-center gap-2 font-display text-lg"
+          className="group brand-link glitch flex items-center gap-2 font-display text-lg"
         >
           <span
             className="inline-flex h-7 w-7 items-center justify-center rounded-[4px] text-[11px] font-bold text-[#04121a]"
@@ -59,7 +59,7 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
           >
             SS
           </span>
-          <span className="brand-text whitespace-nowrap">
+          <span className="brand-text whitespace-nowrap decoration-2 underline-offset-4 group-hover:underline group-hover:decoration-[#00d9ff]">
             <span style={{ color: "#f7fafc" }}>Speak</span><span style={{ color: "#ff006e" }}>Squad</span>
           </span>
         </Link>
