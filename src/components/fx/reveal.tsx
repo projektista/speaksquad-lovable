@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, type ReactNode, type CSSProperties } from "react";
+import { useEffect, useRef, useState, createElement, type ReactNode, type CSSProperties, type ElementType } from "react";
 
 type Props = {
   children: ReactNode;
   delay?: number;
-  as?: keyof HTMLElementTagNameMap;
+  as?: ElementType;
   className?: string;
   style?: CSSProperties;
 };
@@ -31,15 +31,13 @@ export function Reveal({ children, delay = 0, as = "div", className = "", style 
     return () => io.disconnect();
   }, []);
 
-  const Tag = as as keyof JSX.IntrinsicElements;
-  return (
-    // @ts-expect-error dynamic tag
-    <Tag
-      ref={ref as never}
-      className={`ss-reveal ${visible ? "is-visible" : ""} ${className}`}
-      style={{ animationDelay: `${delay}ms`, ...style }}
-    >
-      {children}
-    </Tag>
+  return createElement(
+    as,
+    {
+      ref,
+      className: `ss-reveal ${visible ? "is-visible" : ""} ${className}`.trim(),
+      style: { animationDelay: `${delay}ms`, ...style },
+    },
+    children,
   );
 }
