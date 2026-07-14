@@ -7,6 +7,7 @@ import { Reveal } from "@/components/fx/reveal";
 import { ParticleField } from "@/components/fx/particle-field";
 import { BracketFrame } from "@/components/fx/bracket-frame";
 import { GlitchText } from "@/components/fx/glitch-text";
+import { ScrambleText } from "@/components/fx/scramble-text";
 import { useState } from "react";
 
 export const Route = createFileRoute("/")({
@@ -99,15 +100,15 @@ function LandingPT() {
 
 function Hero() {
   return (
-    <section id="hero" className="relative overflow-hidden">
+    <section id="hero" className="hero-aurora bg-noise relative overflow-hidden">
       <ParticleField density={36} />
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-5 pb-16 pt-14 md:grid-cols-[1.2fr_0.8fr] md:pb-24 md:pt-20">
         <div>
           <SectionLabel n="00">
             <span className="text-magenta">&gt;_</span> LEVEL UP YOUR ENGLISH
           </SectionLabel>
-          <h1 className="mt-5 font-display text-4xl leading-[1.05] md:text-6xl">
-            <span className="block" style={{ color: "#f7fafc" }}>APRENDA INGLÊS</span>
+          <h1 className="glitch-rgb mt-5 font-display text-4xl leading-[1.05] md:text-6xl">
+            <span className="ss-clip-reveal block" style={{ color: "#f7fafc" }}>APRENDA INGLÊS</span>
             <span className="block">
               <span style={{ color: "#00d9ff" }}>jogando</span>{" "}
               <span style={{ color: "#ff006e" }}>
@@ -121,7 +122,7 @@ function Hero() {
             oportunidades de praticar.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link to="/signup" className="btn-primary">Primeira aula grátis</Link>
+            <Link to="/signup" className="btn-primary btn-shine">Primeira aula grátis</Link>
             <a href="#method" className="btn-outline">Ver o método</a>
           </div>
           <p className="mt-4 flex items-center gap-2 font-mono-alt text-xs text-muted">
@@ -134,7 +135,7 @@ function Hero() {
           </div>
         </div>
 
-        <BracketFrame className="relative p-5">
+        <BracketFrame className="card-tilt relative p-5">
           <div className="section-label mb-4">// VANTAGENS</div>
           <div className="space-y-4 font-mono-alt">
             {[
@@ -148,9 +149,9 @@ function Hero() {
               </Reveal>
             ))}
           </div>
-          <div className="mt-6 flex items-center justify-between font-mono-alt text-[10px] uppercase tracking-widest text-muted">
-            <span>{"\n"}</span>
-            <span className="text-magenta">▊ online</span>
+          <div className="mt-6 flex items-center justify-between">
+            <span className="font-mono-alt text-[10px] uppercase tracking-widest text-muted">// status</span>
+            <span className="badge-pulse">▊ online</span>
           </div>
         </BracketFrame>
       </div>
@@ -161,47 +162,48 @@ function Hero() {
 
 function Metodo() {
   return (
-    <section id="method" className="section-glow-cyan relative mx-auto max-w-6xl px-5 py-20">
+    <section id="method" className="section-glow-cyan bg-grid-parallax relative mx-auto max-w-6xl px-5 py-20">
       <Reveal>
         <SectionLabel n="01">O método</SectionLabel>
       </Reveal>
-      <Reveal delay={80}>
-        <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
+      <Reveal delay={80} variant="clip">
+        <h2 className="glitch-rgb mt-4 max-w-3xl font-display text-3xl md:text-5xl">
           <span style={{ color: "#f7fafc" }}>Esse</span> <span style={{ color: "#00d9ff" }}>método</span> <span style={{ color: "#f7fafc" }}>vai funcionar com</span> <span style={{ color: "#ff006e" }}>você</span>.
         </h2>
       </Reveal>
       <div className="mt-8 grid gap-6 md:grid-cols-2">
-        <Reveal delay={120}>
+        <Reveal delay={120} variant="slide-left">
           <p className="text-soft">
             Quando forçamos algo que não gostamos, fica estressante e fácil de desistir. Quando
             fazemos algo que já temos interesse, é mais fácil manter o hábito.
           </p>
         </Reveal>
-        <Reveal delay={200}>
+        <Reveal delay={200} variant="slide-right">
           <p className="text-soft">
             Esse método de conversação em inglês através de jogos pega algo que você já gosta,
             jogar, para desenvolver e melhorar sua habilidade no idioma.
           </p>
         </Reveal>
       </div>
+      <ParticleField density={18} className="opacity-60" />
     </section>
   );
 }
 
 function Features() {
   return (
-    <section id="features" className="section-glow-magenta section-scanlines border-t border-hair bg-bg2/40">
+    <section id="features" className="section-glow-magenta section-scanlines bg-noise border-t border-hair bg-bg2/40">
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal><SectionLabel n="02">Diferenciais</SectionLabel></Reveal>
-        <Reveal delay={80}>
-          <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
+        <Reveal delay={80} variant="clip">
+          <h2 className="glitch-rgb mt-4 max-w-3xl font-display text-3xl md:text-5xl">
             <span style={{ color: "#f7fafc" }}>Aprenda</span> <span style={{ color: "#ff006e" }}>falando,</span> <span style={{ color: "#00d9ff" }}>não decorando</span>.
           </h2>
         </Reveal>
         <div className="mt-12 grid gap-4 md:grid-cols-3">
           {features.map((f, i) => (
-            <Reveal key={f.t} delay={i * 60}>
-              <div className="card-hair h-full p-6">
+            <Reveal key={f.t} delay={i * 60} variant="parallax">
+              <div className="card-hair card-tilt h-full p-6">
                 <div className="font-mono-alt text-xs text-muted">0{i + 1}</div>
                 <h3 className="mt-2 font-display text-lg text-foreground">
                   <GlitchText>{f.t}</GlitchText>
@@ -218,10 +220,10 @@ function Features() {
 
 function Fluxo() {
   return (
-    <section id="flow" className="section-glow-violet mx-auto max-w-6xl px-5 py-20">
+    <section id="flow" className="section-glow-violet bg-grid-parallax mx-auto max-w-6xl px-5 py-20">
       <Reveal><SectionLabel n="03">Estrutura da aula</SectionLabel></Reveal>
-      <Reveal delay={80}>
-        <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
+      <Reveal delay={80} variant="clip">
+        <h2 className="glitch-rgb mt-4 max-w-3xl font-display text-3xl md:text-5xl">
           <span style={{ color: "#f7fafc" }}>Como é o</span> <span style={{ color: "#ff006e" }}>fluxo</span> <span style={{ color: "#f7fafc" }}>da aula</span>.
         </h2>
       </Reveal>
@@ -230,8 +232,8 @@ function Fluxo() {
       </p>
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {fluxo.map((f, i) => (
-          <Reveal key={f.n} delay={i * 100}>
-            <div className="card-hair relative h-full overflow-hidden p-6">
+          <Reveal key={f.n} delay={i * 100} variant="parallax">
+            <div className="card-hair card-tilt relative h-full overflow-hidden p-6">
               <div
                 aria-hidden
                 className="pointer-events-none absolute -right-2 -top-6 font-display text-[6rem] leading-none text-[color:var(--bg3)]"
@@ -253,11 +255,11 @@ function Fluxo() {
 
 function Gratis() {
   return (
-    <section id="how" className="section-glow-cyan section-scanlines border-t border-hair bg-bg2/40">
+    <section id="how" className="section-glow-cyan section-scanlines bg-noise border-t border-hair bg-bg2/40">
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal><SectionLabel n="04">Como funciona</SectionLabel></Reveal>
-        <Reveal delay={80}>
-          <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
+        <Reveal delay={80} variant="clip">
+          <h2 className="glitch-rgb mt-4 max-w-3xl font-display text-3xl md:text-5xl">
             <span style={{ color: "#f7fafc" }}>Sua</span> <span style={{ color: "#00d9ff" }}>1ª aula</span> <span style={{ color: "#f7fafc" }}>é</span> <span style={{ color: "#ff006e" }}>gratuita</span>.
           </h2>
         </Reveal>
@@ -269,8 +271,8 @@ function Gratis() {
         </Reveal>
         <div className="mt-10 grid gap-4 md:grid-cols-4">
           {passos.map((p, i) => (
-            <Reveal key={p.n} delay={i * 80}>
-              <div className="card-hair h-full p-5">
+            <Reveal key={p.n} delay={i * 80} variant="parallax">
+              <div className="card-hair card-tilt h-full p-5">
                 <div className="font-mono-alt text-[11px] tracking-widest text-violet">{p.n}</div>
                 <h3 className="mt-2 font-display text-lg text-cyan">{p.t}</h3>
                 <p className="mt-2 text-sm text-soft">{p.d}</p>
@@ -285,10 +287,11 @@ function Gratis() {
 
 function Pricing() {
   return (
-    <section id="pricing" className="section-glow-magenta mx-auto max-w-6xl px-5 py-20">
+    <section id="pricing" className="section-glow-magenta bg-grid-parallax relative mx-auto max-w-6xl px-5 py-20">
+      <ParticleField density={22} className="opacity-40" />
       <Reveal><SectionLabel n="05">Preço</SectionLabel></Reveal>
-      <Reveal delay={80}>
-        <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
+      <Reveal delay={80} variant="clip">
+        <h2 className="glitch-rgb mt-4 max-w-3xl font-display text-3xl md:text-5xl">
           Simples,&nbsp;transparente e direto.
         </h2>
       </Reveal>
@@ -297,9 +300,9 @@ function Pricing() {
       </p>
       <div className="mt-10 grid gap-4 md:grid-cols-3">
         {pricing.map((p, i) => (
-          <Reveal key={p.name} delay={i * 100}>
+          <Reveal key={p.name} delay={i * 100} variant="parallax">
             <div
-              className={`card-hair relative flex h-full flex-col p-6 ${
+              className={`card-hair card-tilt relative flex h-full flex-col p-6 ${
                 p.featured ? "border-[color:var(--cyan)]" : ""
               }`}
             >
@@ -314,7 +317,7 @@ function Pricing() {
               <div className="mt-3 flex items-baseline gap-1">
                 <span className="font-mono-alt text-4xl font-semibold text-foreground">
                   <span className="text-magenta">¥</span>
-                  {p.price.replace("¥", "")}
+                  <ScrambleText text={p.price.replace("¥", "")} duration={800} />
                 </span>
               </div>
               <div className="mt-1 text-xs text-muted">
@@ -331,7 +334,7 @@ function Pricing() {
               </ul>
               <Link
                 to="/signup"
-                className={`mt-6 w-full ${p.featured ? "btn-primary" : "btn-outline"}`}
+                className={`mt-6 w-full ${p.featured ? "btn-primary btn-shine" : "btn-outline"}`}
               >
                 Comprar
               </Link>
@@ -348,18 +351,18 @@ function Pricing() {
 
 function Requisitos() {
   return (
-    <section id="requirements" className="section-glow-violet border-t border-hair bg-bg2/40">
+    <section id="requirements" className="section-glow-violet bg-noise border-t border-hair bg-bg2/40">
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal><SectionLabel n="06">Antes de começar</SectionLabel></Reveal>
-        <Reveal delay={80}>
-          <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
+        <Reveal delay={80} variant="clip">
+          <h2 className="glitch-rgb mt-4 max-w-3xl font-display text-3xl md:text-5xl">
             O que você <span className="text-cyan">precisa ter</span>.
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-3 md:grid-cols-2">
           {requisitos.map((r, i) => (
-            <Reveal key={r.t} delay={i * 60}>
-              <div className="card-hair flex items-start gap-4 p-5">
+            <Reveal key={r.t} delay={i * 60} variant={i % 2 === 0 ? "slide-left" : "slide-right"}>
+              <div className="card-hair card-tilt flex items-start gap-4 p-5">
                 <span className="mt-0.5 font-mono-alt text-xs text-cyan">[{String(i + 1).padStart(2, "0")}]</span>
                 <div>
                   <div className="font-display text-base">{r.t}</div>
@@ -424,14 +427,14 @@ function Sobre() {
 
 function CTA() {
   return (
-    <section id="cta" className="relative overflow-hidden border-y border-hair bg-bg2/40">
+    <section id="cta" className="hero-aurora relative overflow-hidden border-y border-hair bg-bg2/40">
       <ParticleField density={30} />
       <div className="relative mx-auto max-w-4xl px-5 py-24 text-center">
         <Reveal>
           <SectionLabel n="08">Interessou?</SectionLabel>
         </Reveal>
-        <Reveal delay={80}>
-          <h2 className="mt-6 font-display text-3xl md:text-5xl">
+        <Reveal delay={80} variant="clip">
+          <h2 className="glitch-rgb mt-6 font-display text-3xl md:text-5xl">
             <span style={{ color: "#f7fafc" }}>Comece sua primeira</span><br />
             <span style={{ color: "#00d9ff" }}>aula gratuita</span> <span style={{ color: "#ff006e" }}>já</span>.
           </h2>
@@ -444,7 +447,7 @@ function CTA() {
         </Reveal>
         <Reveal delay={200}>
           <div className="mt-8">
-            <Link to="/signup" className="btn-primary">Agendar aula experimental</Link>
+            <Link to="/signup" className="btn-primary btn-shine">Agendar aula experimental</Link>
           </div>
         </Reveal>
         <p className="mt-6 font-mono-alt text-xs text-muted">
@@ -458,10 +461,11 @@ function CTA() {
 function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="faq" className="section-glow-magenta mx-auto max-w-4xl px-5 py-20">
+    <section id="faq" className="section-glow-magenta bg-grid-parallax relative mx-auto max-w-4xl px-5 py-20">
+      <ParticleField density={16} className="opacity-40" />
       <Reveal><SectionLabel n="09">Perguntas frequentes</SectionLabel></Reveal>
-      <Reveal delay={80}>
-        <h2 className="mt-4 font-display text-3xl md:text-5xl">FAQ</h2>
+      <Reveal delay={80} variant="clip">
+        <h2 className="glitch-rgb mt-4 font-display text-3xl md:text-5xl">FAQ</h2>
       </Reveal>
       <p className="mt-4 text-soft">
         Se sua dúvida não estiver aqui, é só perguntar antes da aula experimental.
@@ -470,7 +474,7 @@ function FAQ() {
         {faq.map((f, i) => {
           const isOpen = open === i;
           return (
-            <div key={f.q} className="card-hair overflow-hidden">
+            <div key={f.q} className="card-hair card-tilt overflow-hidden">
               <button
                 type="button"
                 onClick={() => setOpen(isOpen ? null : i)}
