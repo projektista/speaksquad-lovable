@@ -195,7 +195,7 @@
   display: inline-block;
   width: 0.55em;
   height: 1em;
-  background: var(--cyan);
+  background: #ff006e;
   vertical-align: text-bottom;
   margin-left: 0.15em;
   animation: ss-caret-blink 1s steps(2) infinite;
