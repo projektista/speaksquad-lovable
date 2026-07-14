@@ -1,8 +1,8 @@
-import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { SectionLabel } from "@/components/fx/section-label";
 import { BracketFrame } from "@/components/fx/bracket-frame";
 import { ParticleField } from "@/components/fx/particle-field";
+import { BrandMark } from "@/components/fx/brand-mark";
 
 export function AuthFrame({
   code,
@@ -10,27 +10,23 @@ export function AuthFrame({
   subtitle,
   children,
   footer,
+  lang = "pt",
 }: {
   code: string;
   title: string;
   subtitle?: string;
   children: ReactNode;
   footer?: ReactNode;
+  lang?: "pt" | "jp";
 }) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-bg text-foreground">
       <ParticleField density={28} />
       <div className="relative mx-auto flex min-h-screen max-w-6xl items-center justify-center px-5 py-12">
         <div className="w-full max-w-md">
-          <Link to="/" className="mb-8 inline-flex items-center gap-2 font-display text-sm">
-            <span
-              className="inline-flex h-6 w-6 items-center justify-center rounded-[3px] text-[10px] font-bold text-[#04121a]"
-              style={{ background: "linear-gradient(135deg,#00d9ff,#ff006e)" }}
-            >
-              SS
-            </span>
-            speak<span className="text-cyan">squad</span>
-          </Link>
+          <div className="mb-8">
+            <BrandMark to={lang === "jp" ? "/jp" : "/"} size="sm" />
+          </div>
           <BracketFrame className="p-7">
             <SectionLabel n={code}>{title}</SectionLabel>
             <h1 className="mt-3 font-display text-2xl md:text-3xl">{title}</h1>
