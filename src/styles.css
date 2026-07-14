@@ -400,15 +400,213 @@
       color-mix(in oklab, var(--cyan) 4%, transparent) 4px
     );
     mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+    animation: ss-scanline-move 8s linear infinite;
   }
+}
+
+/* Animated parallax grid — sits behind sections that opt in */
+@utility bg-grid-parallax {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(0, 217, 255, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 0, 110, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 90%);
+    animation: ss-grid-drift 24s linear infinite;
+  }
+}
+
+/* Aurora nebula for hero — magenta + cyan blobs slowly drifting */
+@utility hero-aurora {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(35% 30% at 25% 30%, color-mix(in oklab, var(--cyan) 22%, transparent) 0%, transparent 60%),
+      radial-gradient(35% 30% at 75% 55%, color-mix(in oklab, var(--magenta) 20%, transparent) 0%, transparent 60%),
+      radial-gradient(28% 25% at 55% 85%, color-mix(in oklab, var(--violet) 18%, transparent) 0%, transparent 60%);
+    filter: blur(30px);
+    animation: ss-aurora 22s ease-in-out infinite alternate;
+  }
+}
+
+/* Subtle noise/grain overlay */
+@utility bg-noise {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.9'/></svg>");
+  }
+}
+
+/* 3D card tilt + accent border glow on hover */
+@utility card-tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(.2,.7,.2,1), box-shadow 0.35s ease, border-color 0.25s ease;
+  will-change: transform;
+  &:hover {
+    transform: perspective(900px) rotateX(3deg) rotateY(-4deg) translateY(-3px);
+    box-shadow:
+      0 24px 40px -20px color-mix(in oklab, var(--cyan) 40%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--magenta) 60%, transparent) inset;
+    border-color: color-mix(in oklab, var(--cyan) 70%, var(--border));
+  }
+}
+
+/* Shine sweep for buttons */
+@utility btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 20%,
+      color-mix(in oklab, var(--magenta) 55%, transparent) 50%,
+      transparent 80%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+  &:hover::after { transform: translateX(120%); }
+}
+
+/* Scroll progress bar (fixed top) */
+.ss-scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 100%;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--ss-scroll, 0));
+  background: linear-gradient(90deg, var(--magenta), var(--cyan));
+  box-shadow: 0 0 12px color-mix(in oklab, var(--cyan) 60%, transparent);
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Menu link — animated magenta underline */
+@utility link-underline {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    bottom: 6px;
+    height: 1px;
+    background: var(--magenta);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s cubic-bezier(.2,.7,.2,1);
+  }
+  &:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* Pulsing status badge */
+@utility badge-pulse {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  padding: 0.25rem 0.55rem;
+  border: 1px solid color-mix(in oklab, var(--magenta) 55%, transparent);
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--magenta) 8%, transparent);
+  animation: ss-badge-pulse 2.4s ease-in-out infinite;
+}
+
+/* Clip-path reveal for section titles */
+.ss-clip-reveal {
+  clip-path: inset(0 100% 0 0);
+  animation: ss-clip-in 0.9s cubic-bezier(.2,.7,.2,1) forwards;
+}
+
+/* Glitch RGB split on hover for headings */
+@utility glitch-rgb {
+  position: relative;
+  display: inline-block;
+  transition: text-shadow 0.15s ease;
+  &:hover {
+    text-shadow:
+      2px 0 0 var(--magenta),
+     -2px 0 0 var(--cyan),
+      0 0 12px color-mix(in oklab, var(--cyan) 40%, transparent);
+    animation: ss-glitch 0.35s steps(2) 1;
+  }
+}
+
+@keyframes ss-grid-drift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 56px 56px, -56px 56px; }
+}
+
+@keyframes ss-aurora {
+  0%   { transform: translate3d(0,0,0) scale(1); }
+  50%  { transform: translate3d(-2%, 1%, 0) scale(1.05); }
+  100% { transform: translate3d(2%, -1%, 0) scale(1.02); }
+}
+
+@keyframes ss-scanline-move {
+  from { background-position: 0 0; }
+  to   { background-position: 0 8px; }
+}
+
+@keyframes ss-badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--magenta) 55%, transparent); }
+  50%      { box-shadow: 0 0 0 6px color-mix(in oklab, var(--magenta) 0%, transparent); }
+}
+
+@keyframes ss-clip-in {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
 }
 
 .ss-reveal {
   opacity: 0;
 }
-.ss-reveal.is-visible {
-  animation: ss-fade-up 0.6s ease-out forwards;
-}
+.ss-reveal.is-visible.ss-reveal--fade-up { animation: ss-fade-up 0.65s cubic-bezier(.2,.7,.2,1) forwards; }
+.ss-reveal.is-visible.ss-reveal--fade    { animation: ss-fade 0.7s ease-out forwards; }
+.ss-reveal.is-visible.ss-reveal--slide-left  { animation: ss-slide-left 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
+.ss-reveal.is-visible.ss-reveal--slide-right { animation: ss-slide-right 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
+.ss-reveal.is-visible.ss-reveal--parallax    { animation: ss-parallax 0.9s cubic-bezier(.2,.7,.2,1) forwards; }
+.ss-reveal.is-visible.ss-reveal--clip        { animation: ss-clip-in 0.9s cubic-bezier(.2,.7,.2,1) forwards; opacity: 1; }
+
+@keyframes ss-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ss-slide-left  { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes ss-slide-right { from { opacity: 0; transform: translateX(24px);  } to { opacity: 1; transform: translateX(0); } }
+@keyframes ss-parallax    { from { opacity: 0; transform: translateY(28px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

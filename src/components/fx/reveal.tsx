@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState, createElement, type ReactNode, type CSSProperties, type ElementType } from "react";
 
+type Variant = "fade-up" | "fade" | "slide-left" | "slide-right" | "parallax" | "clip";
+
 type Props = {
   children: ReactNode;
   delay?: number;
   as?: ElementType;
   className?: string;
   style?: CSSProperties;
+  variant?: Variant;
 };
 
-export function Reveal({ children, delay = 0, as = "div", className = "", style }: Props) {
+export function Reveal({ children, delay = 0, as = "div", className = "", style, variant = "fade-up" }: Props) {
   const ref = useRef<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
 
@@ -35,7 +38,7 @@ export function Reveal({ children, delay = 0, as = "div", className = "", style 
     as,
     {
       ref,
-      className: `ss-reveal ${visible ? "is-visible" : ""} ${className}`.trim(),
+      className: `ss-reveal ss-reveal--${variant} ${visible ? "is-visible" : ""} ${className}`.trim(),
       style: { animationDelay: `${delay}ms`, ...style },
     },
     children,
