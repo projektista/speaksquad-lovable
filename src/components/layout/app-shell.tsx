@@ -1,33 +1,51 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { BrandMark } from "@/components/fx/brand-mark";
 
-const items = [
-  { to: "/dashboard", label: "Dashboard", code: "01" },
-  { to: "/schedule", label: "Agendar", code: "02" },
-  { to: "/lessons", label: "Aulas", code: "03" },
-  { to: "/credits", label: "Créditos", code: "04" },
-  { to: "/profile", label: "Perfil", code: "05" },
-] as const;
+type Lang = "pt" | "jp";
+
+const itemsByLang: Record<Lang, Array<{ to: string; label: string; code: string }>> = {
+  pt: [
+    { to: "/dashboard", label: "Dashboard", code: "01" },
+    { to: "/schedule", label: "Agendar", code: "02" },
+    { to: "/lessons", label: "Aulas", code: "03" },
+    { to: "/credits", label: "Créditos", code: "04" },
+    { to: "/profile", label: "Perfil", code: "05" },
+  ],
+  jp: [
+    { to: "/jp/dashboard", label: "ダッシュボード", code: "01" },
+    { to: "/jp/schedule", label: "予約", code: "02" },
+    { to: "/jp/lessons", label: "レッスン", code: "03" },
+    { to: "/jp/credits", label: "クレジット", code: "04" },
+    { to: "/jp/profile", label: "プロフィール", code: "05" },
+  ],
+};
 
 export function AppShell({
   title,
   subtitle,
   credits = 3,
   children,
+  lang = "pt",
 }: {
   title: string;
   subtitle?: string;
   credits?: number;
   children: ReactNode;
+  lang?: Lang;
 }) {
   const { location } = useRouterState();
+  const items = itemsByLang[lang];
+  const creditsLabel = lang === "jp" ? "残りクレジット" : "créditos_disponíveis";
+  const buyLabel = lang === "jp" ? "購入" : "Comprar";
+  const creditsHref = lang === "jp" ? "/jp/credits" : "/credits";
   return (
     <div className="min-h-screen bg-bg text-foreground">
       <div className="mx-auto flex max-w-6xl gap-6 px-4 py-6 md:py-10">
         <aside className="hidden w-56 shrink-0 md:block">
-          <Link to="/" className="mb-6 block font-display text-sm">
-            <span className="text-muted">// </span>speak<span className="text-cyan">squad</span>
-          </Link>
+          <div className="mb-6">
+            <BrandMark to={lang === "jp" ? "/jp" : "/"} size="sm" />
+          </div>
           <nav className="flex flex-col gap-1 font-mono-alt text-sm">
             {items.map((it) => {
               const active = location.pathname.startsWith(it.to);
@@ -51,10 +69,10 @@ export function AppShell({
             })}
           </nav>
           <div className="mt-8 rounded-[4px] border-hair bg-bg2 p-3 font-mono-alt text-xs">
-            <div className="text-muted">créditos_disponíveis</div>
+            <div className="text-muted">{creditsLabel}</div>
             <div className="mt-1 font-display text-2xl text-cyan">{credits}</div>
-            <Link to="/credits" className="btn-outline mt-3 w-full !py-2 text-[10px]">
-              Comprar
+            <Link to={creditsHref} className="btn-outline mt-3 w-full !py-2 text-[10px]">
+              {buyLabel}
             </Link>
           </div>
         </aside>
