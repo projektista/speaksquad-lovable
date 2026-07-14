@@ -26,7 +26,7 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
           { href: "#flow", label: "レッスンの流れ" },
           { href: "#pricing", label: "料金" },
           { href: "#faq", label: "FAQ" },
-          { href: "/contato", label: "お問い合わせ", isRoute: true },
+          { href: "/jp/contato", label: "お問い合わせ", isRoute: true },
         ]
       : [
           { href: "#method", label: "Método" },
@@ -94,10 +94,10 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
               JP
             </Link>
           </div>
-          <Link to="/login" className="btn-ghost link-underline ml-1">
+          <Link to={lang === "jp" ? "/jp/login" : "/login"} className="btn-ghost link-underline ml-1">
             {lang === "jp" ? "ログイン" : "Entrar"}
           </Link>
-          <Link to="/signup" className="btn-primary btn-shine ml-2 !py-2 !px-3 text-xs">
+          <Link to={lang === "jp" ? "/jp/signup" : "/signup"} className="btn-primary btn-shine ml-2 !py-2 !px-3 text-xs">
             {lang === "jp" ? "無料体験" : "Aula grátis"}
           </Link>
         </nav>
@@ -135,10 +135,10 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
                 JP
               </Link>
             </div>
-            <Link to="/login" className="btn-outline mt-2 justify-center">
+            <Link to={lang === "jp" ? "/jp/login" : "/login"} className="btn-outline mt-2 justify-center">
               {lang === "jp" ? "ログイン" : "Entrar"}
             </Link>
-            <Link to="/signup" className="btn-primary mt-1 justify-center">
+            <Link to={lang === "jp" ? "/jp/signup" : "/signup"} className="btn-primary mt-1 justify-center">
               {lang === "jp" ? "無料体験" : "Aula grátis"}
             </Link>
           </div>
