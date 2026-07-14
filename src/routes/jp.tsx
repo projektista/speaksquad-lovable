@@ -104,7 +104,7 @@ function HeroJP() {
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-5 pb-16 pt-14 md:grid-cols-[1.2fr_0.8fr] md:pb-24 md:pt-20">
         <div>
           <SectionLabel n="00">
-            <span className="text-cyan">&gt;_</span> LEVEL UP YOUR ENGLISH
+            <span className="text-magenta">&gt;_</span> LEVEL UP YOUR ENGLISH
           </SectionLabel>
           <h1 className="mt-5 font-display text-4xl leading-[1.1] md:text-6xl">
             <span className="block">ゲームで、</span>
@@ -147,7 +147,7 @@ function HeroJP() {
           </div>
           <div className="mt-6 flex items-center justify-between font-mono-alt text-[10px] uppercase tracking-widest text-muted">
             <span>tokyo · jst</span>
-            <span className="text-success">▊ online</span>
+            <span className="text-magenta">▊ online</span>
           </div>
         </BracketFrame>
       </div>
@@ -158,7 +158,7 @@ function HeroJP() {
 
 function MetodoJP() {
   return (
-    <section id="method" className="mx-auto max-w-6xl px-5 py-20">
+    <section id="method" className="section-glow-cyan mx-auto max-w-6xl px-5 py-20">
       <Reveal><SectionLabel n="01">メソッド</SectionLabel></Reveal>
       <Reveal delay={80}>
         <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
@@ -183,7 +183,7 @@ function MetodoJP() {
 
 function FeaturesJP() {
   return (
-    <section className="border-t border-hair bg-bg2/40">
+    <section className="section-glow-magenta section-scanlines border-t border-hair bg-bg2/40">
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal><SectionLabel n="02">特長</SectionLabel></Reveal>
         <Reveal delay={80}>
@@ -209,7 +209,7 @@ function FeaturesJP() {
 
 function FluxoJP() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20">
+    <section className="section-glow-violet mx-auto max-w-6xl px-5 py-20">
       <Reveal><SectionLabel n="03">レッスンの流れ</SectionLabel></Reveal>
       <Reveal delay={80}>
         <h2 className="mt-4 font-display text-3xl md:text-5xl">3つのパート。</h2>
@@ -226,7 +226,7 @@ function FluxoJP() {
               </div>
               <div className="relative">
                 <div className="font-mono-alt text-xs text-violet">PART {f.n}</div>
-                <h3 className="mt-2 font-display text-xl">{f.t}</h3>
+                <h3 className="mt-2 font-display text-xl text-cyan">{f.t}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-soft">{f.d}</p>
               </div>
             </div>
@@ -239,7 +239,7 @@ function FluxoJP() {
 
 function GratisJP() {
   return (
-    <section className="border-t border-hair bg-bg2/40">
+    <section className="section-glow-cyan section-scanlines border-t border-hair bg-bg2/40">
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal><SectionLabel n="04">流れ</SectionLabel></Reveal>
         <Reveal delay={80}>
@@ -252,7 +252,7 @@ function GratisJP() {
             <Reveal key={p.n} delay={i * 80}>
               <div className="card-hair h-full p-5">
                 <div className="font-mono-alt text-[11px] tracking-widest text-violet">{p.n}</div>
-                <h3 className="mt-2 font-display text-lg">{p.t}</h3>
+                <h3 className="mt-2 font-display text-lg text-cyan">{p.t}</h3>
                 <p className="mt-2 text-sm text-soft">{p.d}</p>
               </div>
             </Reveal>
@@ -265,7 +265,7 @@ function GratisJP() {
 
 function PricingJP() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20">
+    <section className="section-glow-magenta mx-auto max-w-6xl px-5 py-20">
       <Reveal><SectionLabel n="05">料金</SectionLabel></Reveal>
       <Reveal delay={80}>
         <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
@@ -316,7 +316,7 @@ function PricingJP() {
 
 function RequisitosJP() {
   return (
-    <section className="border-t border-hair bg-bg2/40">
+    <section className="section-glow-violet border-t border-hair bg-bg2/40">
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal><SectionLabel n="06">準備するもの</SectionLabel></Reveal>
         <Reveal delay={80}>
@@ -344,7 +344,7 @@ function RequisitosJP() {
 
 function SobreJP() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20">
+    <section className="section-glow-cyan mx-auto max-w-6xl px-5 py-20">
       <Reveal><SectionLabel n="07">紹介</SectionLabel></Reveal>
       <div className="mt-6 grid gap-8 md:grid-cols-[280px_1fr] md:gap-12">
         <Reveal>
