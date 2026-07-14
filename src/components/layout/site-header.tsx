@@ -67,11 +67,11 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
         <nav className="hidden items-center gap-1 md:flex">
           {nav.map((n) => (
             n.isRoute ? (
-              <Link key={n.href} to={n.href} className="btn-ghost">
+              <Link key={n.href} to={n.href} className="btn-ghost link-underline">
                 {n.label}
               </Link>
             ) : (
-              <a key={n.href} href={n.href} className="btn-ghost">
+              <a key={n.href} href={n.href} className="btn-ghost link-underline">
                 {n.label}
               </a>
             )
@@ -94,10 +94,10 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
               JP
             </Link>
           </div>
-          <Link to="/login" className="btn-ghost ml-1">
+          <Link to="/login" className="btn-ghost link-underline ml-1">
             {lang === "jp" ? "ログイン" : "Entrar"}
           </Link>
-          <Link to="/signup" className="btn-primary ml-2 !py-2 !px-3 text-xs">
+          <Link to="/signup" className="btn-primary btn-shine ml-2 !py-2 !px-3 text-xs">
             {lang === "jp" ? "無料体験" : "Aula grátis"}
           </Link>
         </nav>
