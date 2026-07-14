@@ -406,7 +406,7 @@ function CTAJP() {
 function FAQJP() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="faq" className="mx-auto max-w-4xl px-5 py-20">
+    <section id="faq" className="section-glow-magenta mx-auto max-w-4xl px-5 py-20">
       <Reveal><SectionLabel n="09">よくある質問</SectionLabel></Reveal>
       <Reveal delay={80}><h2 className="mt-4 font-display text-3xl md:text-5xl">FAQ</h2></Reveal>
       <div className="mt-8 space-y-2">
@@ -420,7 +420,7 @@ function FAQJP() {
                 className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
               >
                 <span className="font-display text-base">{f.q}</span>
-                <span className={`font-mono-alt text-cyan transition-transform ${isOpen ? "rotate-45" : ""}`}>+</span>
+                <span className={`font-mono-alt text-magenta transition-transform ${isOpen ? "rotate-45" : ""}`}>+</span>
               </button>
               <div className="grid transition-[grid-template-rows] duration-300" style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}>
                 <div className="overflow-hidden">
