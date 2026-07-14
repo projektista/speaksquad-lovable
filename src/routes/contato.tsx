@@ -31,28 +31,28 @@ function Contato() {
   return (
     <div className="min-h-screen bg-bg text-foreground">
       <SiteHeader lang="pt" />
-      <section className="section-glow-cyan relative overflow-hidden">
+      <section className="section-glow-cyan hero-aurora bg-noise relative overflow-hidden">
         <ParticleField density={28} />
         <div className="relative mx-auto max-w-5xl px-5 py-16 md:py-24">
-        <Reveal>
+        <Reveal variant="fade">
           <SectionLabel n="00">Contato</SectionLabel>
         </Reveal>
-        <Reveal delay={80}>
-          <h1 className="mt-4 font-display text-4xl leading-[1.05] md:text-6xl">
+        <Reveal delay={80} variant="clip">
+          <h1 className="glitch-rgb mt-4 font-display text-4xl leading-[1.05] md:text-6xl">
             <span style={{ color: "#f7fafc" }}>Vamos</span>{" "}
             <span style={{ color: "#00d9ff" }}>conversar</span>{" "}
             <span style={{ color: "#ff006e" }}>já</span>.
           </h1>
         </Reveal>
-        <Reveal delay={140}>
+        <Reveal delay={140} variant="fade-up">
           <p className="mt-6 max-w-xl text-soft">
             Dúvidas sobre método, agendamento ou pacotes? Escreva abaixo e respondemos em até 24h.
           </p>
         </Reveal>
 
         <div className="mt-12 grid gap-8 md:grid-cols-[1fr_320px]">
-          <Reveal delay={160}>
-            <BracketFrame className="p-6">
+          <Reveal delay={160} variant="slide-left">
+            <BracketFrame className="card-tilt p-6">
               {sent ? (
                 <div className="py-8 text-center font-mono-alt text-sm text-success">
                   ✓ Mensagem enviada. Obrigado — retornaremos em breve.
@@ -106,7 +106,7 @@ function Contato() {
                       placeholder="Escreva sua mensagem..."
                     />
                   </label>
-                  <button type="submit" className="btn-primary w-full justify-center">
+                  <button type="submit" className="btn-primary btn-shine w-full justify-center">
                     Enviar mensagem
                   </button>
                 </form>
@@ -114,17 +114,17 @@ function Contato() {
             </BracketFrame>
           </Reveal>
 
-          <Reveal delay={220}>
+          <Reveal delay={220} variant="slide-right">
             <div className="space-y-6 font-mono-alt text-sm">
-              <div className="card-hair p-5">
+              <div className="card-hair card-tilt p-5">
                 <div className="text-xs uppercase tracking-widest text-violet">Email</div>
                 <div className="mt-2 break-all text-soft">contato@speaksquad.jp</div>
               </div>
-              <div className="card-hair p-5">
+              <div className="card-hair card-tilt p-5">
                 <div className="text-xs uppercase tracking-widest text-violet">Horário</div>
                 <div className="mt-2 text-soft">Seg–Sex · 10h–20h (JST)</div>
               </div>
-              <div className="card-hair p-5">
+              <div className="card-hair card-tilt p-5">
                 <div className="text-xs uppercase tracking-widest text-violet">Base</div>
                 <div className="mt-2 text-soft">Tóquio · Japão</div>
               </div>
