@@ -15,6 +15,10 @@ import { Route as JpRouteImport } from './routes/jp'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as JpSignupRouteImport } from './routes/jp.signup'
+import { Route as JpLoginRouteImport } from './routes/jp.login'
+import { Route as JpDashboardRouteImport } from './routes/jp.dashboard'
+import { Route as JpContatoRouteImport } from './routes/jp.contato'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -46,37 +50,89 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JpSignupRoute = JpSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => JpRoute,
+} as any)
+const JpLoginRoute = JpLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => JpRoute,
+} as any)
+const JpDashboardRoute = JpDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => JpRoute,
+} as any)
+const JpContatoRoute = JpContatoRouteImport.update({
+  id: '/contato',
+  path: '/contato',
+  getParentRoute: () => JpRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRoute
-  '/jp': typeof JpRoute
+  '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/jp/contato': typeof JpContatoRoute
+  '/jp/dashboard': typeof JpDashboardRoute
+  '/jp/login': typeof JpLoginRoute
+  '/jp/signup': typeof JpSignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRoute
-  '/jp': typeof JpRoute
+  '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/jp/contato': typeof JpContatoRoute
+  '/jp/dashboard': typeof JpDashboardRoute
+  '/jp/login': typeof JpLoginRoute
+  '/jp/signup': typeof JpSignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRoute
-  '/jp': typeof JpRoute
+  '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/jp/contato': typeof JpContatoRoute
+  '/jp/dashboard': typeof JpDashboardRoute
+  '/jp/login': typeof JpLoginRoute
+  '/jp/signup': typeof JpSignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contato' | '/dashboard' | '/jp' | '/login' | '/signup'
+  fullPaths:
+    | '/'
+    | '/contato'
+    | '/dashboard'
+    | '/jp'
+    | '/login'
+    | '/signup'
+    | '/jp/contato'
+    | '/jp/dashboard'
+    | '/jp/login'
+    | '/jp/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contato' | '/dashboard' | '/jp' | '/login' | '/signup'
+  to:
+    | '/'
+    | '/contato'
+    | '/dashboard'
+    | '/jp'
+    | '/login'
+    | '/signup'
+    | '/jp/contato'
+    | '/jp/dashboard'
+    | '/jp/login'
+    | '/jp/signup'
   id:
     | '__root__'
     | '/'
@@ -85,13 +141,17 @@ export interface FileRouteTypes {
     | '/jp'
     | '/login'
     | '/signup'
+    | '/jp/contato'
+    | '/jp/dashboard'
+    | '/jp/login'
+    | '/jp/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContatoRoute: typeof ContatoRoute
   DashboardRoute: typeof DashboardRoute
-  JpRoute: typeof JpRoute
+  JpRoute: typeof JpRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
 }
@@ -140,14 +200,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jp/signup': {
+      id: '/jp/signup'
+      path: '/signup'
+      fullPath: '/jp/signup'
+      preLoaderRoute: typeof JpSignupRouteImport
+      parentRoute: typeof JpRoute
+    }
+    '/jp/login': {
+      id: '/jp/login'
+      path: '/login'
+      fullPath: '/jp/login'
+      preLoaderRoute: typeof JpLoginRouteImport
+      parentRoute: typeof JpRoute
+    }
+    '/jp/dashboard': {
+      id: '/jp/dashboard'
+      path: '/dashboard'
+      fullPath: '/jp/dashboard'
+      preLoaderRoute: typeof JpDashboardRouteImport
+      parentRoute: typeof JpRoute
+    }
+    '/jp/contato': {
+      id: '/jp/contato'
+      path: '/contato'
+      fullPath: '/jp/contato'
+      preLoaderRoute: typeof JpContatoRouteImport
+      parentRoute: typeof JpRoute
+    }
   }
 }
+
+interface JpRouteChildren {
+  JpContatoRoute: typeof JpContatoRoute
+  JpDashboardRoute: typeof JpDashboardRoute
+  JpLoginRoute: typeof JpLoginRoute
+  JpSignupRoute: typeof JpSignupRoute
+}
+
+const JpRouteChildren: JpRouteChildren = {
+  JpContatoRoute: JpContatoRoute,
+  JpDashboardRoute: JpDashboardRoute,
+  JpLoginRoute: JpLoginRoute,
+  JpSignupRoute: JpSignupRoute,
+}
+
+const JpRouteWithChildren = JpRoute._addFileChildren(JpRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContatoRoute: ContatoRoute,
   DashboardRoute: DashboardRoute,
-  JpRoute: JpRoute,
+  JpRoute: JpRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
 }
