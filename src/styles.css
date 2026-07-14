@@ -332,6 +332,77 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes ss-float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -14px, 0); }
+}
+
+/* Ambient section backgrounds — subtle cyberpunk depth per section */
+@utility section-glow-cyan {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(60% 55% at 15% 20%, color-mix(in oklab, var(--cyan) 14%, transparent) 0%, transparent 60%),
+      radial-gradient(45% 50% at 90% 80%, color-mix(in oklab, var(--magenta) 10%, transparent) 0%, transparent 65%);
+    animation: ss-float-slow 14s ease-in-out infinite;
+  }
+}
+@utility section-glow-magenta {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(55% 55% at 85% 15%, color-mix(in oklab, var(--magenta) 14%, transparent) 0%, transparent 60%),
+      radial-gradient(50% 55% at 10% 90%, color-mix(in oklab, var(--violet) 10%, transparent) 0%, transparent 65%);
+    animation: ss-float-slow 18s ease-in-out infinite;
+  }
+}
+@utility section-glow-violet {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(50% 50% at 50% 0%, color-mix(in oklab, var(--violet) 14%, transparent) 0%, transparent 65%),
+      radial-gradient(60% 55% at 50% 100%, color-mix(in oklab, var(--cyan) 8%, transparent) 0%, transparent 70%);
+    animation: ss-float-slow 20s ease-in-out infinite;
+  }
+}
+@utility section-scanlines {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 3px,
+      color-mix(in oklab, var(--cyan) 4%, transparent) 3px,
+      color-mix(in oklab, var(--cyan) 4%, transparent) 4px
+    );
+    mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+  }
+}
+
 .ss-reveal {
   opacity: 0;
 }

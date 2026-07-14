@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SectionLabel } from "@/components/fx/section-label";
 import { Reveal } from "@/components/fx/reveal";
 import { BracketFrame } from "@/components/fx/bracket-frame";
+import { ParticleField } from "@/components/fx/particle-field";
 
 export const Route = createFileRoute("/contato")({
   head: () => ({
@@ -30,7 +31,9 @@ function Contato() {
   return (
     <div className="min-h-screen bg-bg text-foreground">
       <SiteHeader lang="pt" />
-      <section className="mx-auto max-w-5xl px-5 py-16 md:py-24">
+      <section className="section-glow-cyan relative overflow-hidden">
+        <ParticleField density={28} />
+        <div className="relative mx-auto max-w-5xl px-5 py-16 md:py-24">
         <Reveal>
           <SectionLabel n="00">Contato</SectionLabel>
         </Reveal>
@@ -127,6 +130,7 @@ function Contato() {
               </div>
             </div>
           </Reveal>
+        </div>
         </div>
       </section>
       <SiteFooter lang="pt" />

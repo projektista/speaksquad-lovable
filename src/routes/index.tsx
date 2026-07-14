@@ -104,7 +104,7 @@ function Hero() {
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-5 pb-16 pt-14 md:grid-cols-[1.2fr_0.8fr] md:pb-24 md:pt-20">
         <div>
           <SectionLabel n="00">
-            <span className="text-cyan">&gt;_</span> LEVEL UP YOUR ENGLISH
+            <span className="text-magenta">&gt;_</span> LEVEL UP YOUR ENGLISH
           </SectionLabel>
           <h1 className="mt-5 font-display text-4xl leading-[1.05] md:text-6xl">
             <span className="block" style={{ color: "#f7fafc" }}>APRENDA INGLÊS</span>
@@ -150,7 +150,7 @@ function Hero() {
           </div>
           <div className="mt-6 flex items-center justify-between font-mono-alt text-[10px] uppercase tracking-widest text-muted">
             <span>{"\n"}</span>
-            <span className="text-success">▊ online</span>
+            <span className="text-magenta">▊ online</span>
           </div>
         </BracketFrame>
       </div>
@@ -161,7 +161,7 @@ function Hero() {
 
 function Metodo() {
   return (
-    <section id="method" className="relative mx-auto max-w-6xl px-5 py-20">
+    <section id="method" className="section-glow-cyan relative mx-auto max-w-6xl px-5 py-20">
       <Reveal>
         <SectionLabel n="01">O método</SectionLabel>
       </Reveal>
@@ -190,7 +190,7 @@ function Metodo() {
 
 function Features() {
   return (
-    <section id="features" className="border-t border-hair bg-bg2/40">
+    <section id="features" className="section-glow-magenta section-scanlines border-t border-hair bg-bg2/40">
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal><SectionLabel n="02">Diferenciais</SectionLabel></Reveal>
         <Reveal delay={80}>
@@ -218,7 +218,7 @@ function Features() {
 
 function Fluxo() {
   return (
-    <section id="flow" className="mx-auto max-w-6xl px-5 py-20">
+    <section id="flow" className="section-glow-violet mx-auto max-w-6xl px-5 py-20">
       <Reveal><SectionLabel n="03">Estrutura da aula</SectionLabel></Reveal>
       <Reveal delay={80}>
         <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
@@ -240,7 +240,7 @@ function Fluxo() {
               </div>
               <div className="relative">
                 <div className="font-mono-alt text-xs text-violet">PARTE {f.n}</div>
-                <h3 className="mt-2 font-display text-xl">{f.t}</h3>
+                <h3 className="mt-2 font-display text-xl text-cyan">{f.t}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-soft">{f.d}</p>
               </div>
             </div>
@@ -253,7 +253,7 @@ function Fluxo() {
 
 function Gratis() {
   return (
-    <section id="how" className="border-t border-hair bg-bg2/40">
+    <section id="how" className="section-glow-cyan section-scanlines border-t border-hair bg-bg2/40">
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal><SectionLabel n="04">Como funciona</SectionLabel></Reveal>
         <Reveal delay={80}>
@@ -272,7 +272,7 @@ function Gratis() {
             <Reveal key={p.n} delay={i * 80}>
               <div className="card-hair h-full p-5">
                 <div className="font-mono-alt text-[11px] tracking-widest text-violet">{p.n}</div>
-                <h3 className="mt-2 font-display text-lg">{p.t}</h3>
+                <h3 className="mt-2 font-display text-lg text-cyan">{p.t}</h3>
                 <p className="mt-2 text-sm text-soft">{p.d}</p>
               </div>
             </Reveal>
@@ -285,7 +285,7 @@ function Gratis() {
 
 function Pricing() {
   return (
-    <section id="pricing" className="mx-auto max-w-6xl px-5 py-20">
+    <section id="pricing" className="section-glow-magenta mx-auto max-w-6xl px-5 py-20">
       <Reveal><SectionLabel n="05">Preço</SectionLabel></Reveal>
       <Reveal delay={80}>
         <h2 className="mt-4 max-w-3xl font-display text-3xl md:text-5xl">
@@ -348,7 +348,7 @@ function Pricing() {
 
 function Requisitos() {
   return (
-    <section id="requirements" className="border-t border-hair bg-bg2/40">
+    <section id="requirements" className="section-glow-violet border-t border-hair bg-bg2/40">
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal><SectionLabel n="06">Antes de começar</SectionLabel></Reveal>
         <Reveal delay={80}>
@@ -376,7 +376,7 @@ function Requisitos() {
 
 function Sobre() {
   return (
-    <section id="about" className="mx-auto max-w-6xl px-5 py-20">
+    <section id="about" className="section-glow-cyan mx-auto max-w-6xl px-5 py-20">
       <Reveal><SectionLabel n="07">Sobre</SectionLabel></Reveal>
       <div className="mt-6 grid gap-8 md:grid-cols-[280px_1fr] md:gap-12">
         <Reveal>
@@ -458,7 +458,7 @@ function CTA() {
 function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <section id="faq" className="mx-auto max-w-4xl px-5 py-20">
+    <section id="faq" className="section-glow-magenta mx-auto max-w-4xl px-5 py-20">
       <Reveal><SectionLabel n="09">Perguntas frequentes</SectionLabel></Reveal>
       <Reveal delay={80}>
         <h2 className="mt-4 font-display text-3xl md:text-5xl">FAQ</h2>
@@ -478,7 +478,7 @@ function FAQ() {
               >
                 <span className="font-display text-base">{f.q}</span>
                 <span
-                  className={`font-mono-alt text-cyan transition-transform ${isOpen ? "rotate-45" : ""}`}
+                  className={`font-mono-alt text-magenta transition-transform ${isOpen ? "rotate-45" : ""}`}
                 >
                   +
                 </span>
