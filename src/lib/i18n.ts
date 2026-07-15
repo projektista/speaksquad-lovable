@@ -239,6 +239,13 @@ export type SignupContent = {
   login: string;
   minecraftTag: string;
   fortniteTag: string;
+  confirmPassword: string;
+  confirmPasswordPlaceholder: string;
+  passwordMismatch: string;
+  minecraftGamertag: string;
+  fortniteNickname: string;
+  gameRequired: string;
+  gamertagRequired: string;
 };
 
 export const signupContent: Record<Lang, SignupContent> = {
@@ -272,6 +279,13 @@ export const signupContent: Record<Lang, SignupContent> = {
     login: "Entrar",
     minecraftTag: "survival · pvp",
     fortniteTag: "battle royale",
+    confirmPassword: "Confirmar senha",
+    confirmPasswordPlaceholder: "Digite a senha novamente",
+    passwordMismatch: "As senhas não coincidem",
+    minecraftGamertag: "MINECRAFT GAMERTAG",
+    fortniteNickname: "Nickname no FORTNITE",
+    gameRequired: "Escolha pelo menos um jogo",
+    gamertagRequired: "Preencha o nome de usuário do jogo escolhido",
   },
   jp: {
     metaTitle: "新規登録 — SpeakSquad",
@@ -303,6 +317,13 @@ export const signupContent: Record<Lang, SignupContent> = {
     login: "ログイン",
     minecraftTag: "survival · pvp",
     fortniteTag: "battle royale",
+    confirmPassword: "パスワード確認",
+    confirmPasswordPlaceholder: "もう一度パスワードを入力",
+    passwordMismatch: "パスワードが一致しません",
+    minecraftGamertag: "MINECRAFT GAMERTAG",
+    fortniteNickname: "FORTNITE ニックネーム",
+    gameRequired: "少なくとも1つのゲームを選択してください",
+    gamertagRequired: "選択したゲームのユーザー名を入力してください",
   },
 };
 
