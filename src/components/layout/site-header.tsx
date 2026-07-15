@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { LangSwitcher } from "@/components/layout/lang-switcher";
 
 type Lang = "pt" | "jp";
 
@@ -36,12 +37,6 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
           { href: "/contato", label: "CONTATO", isRoute: true },
         ];
 
-  const setLang = (l: Lang) => {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("speaksquad_lang", l === "jp" ? "ja" : "pt-BR");
-    }
-  };
-
   return (
     <header
       className={`sticky top-0 z-40 border-b border-hair transition-colors ${
@@ -77,23 +72,7 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
             )
           ))}
           <span className="mx-2 h-4 w-px bg-[color:var(--border2)]" />
-          <div className="flex items-center gap-1 font-mono-alt text-xs text-muted">
-            <Link
-              to="/"
-              onClick={() => setLang("pt")}
-              className={lang === "pt" ? "text-cyan" : "hover:text-magenta"}
-            >
-              PT
-            </Link>
-            <span>/</span>
-            <Link
-              to="/jp"
-              onClick={() => setLang("jp")}
-              className={lang === "jp" ? "text-cyan" : "hover:text-magenta"}
-            >
-              JP
-            </Link>
-          </div>
+          <LangSwitcher lang={lang} />
           <Link to={lang === "jp" ? "/jp/login" : "/login"} className="btn-ghost link-underline ml-1">
             {lang === "jp" ? "ログイン" : "Entrar"}
           </Link>
@@ -127,13 +106,8 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
               )
             ))}
             <div className="hair-divider my-2" />
-            <div className="flex items-center gap-3 px-1 font-mono-alt text-xs">
-              <Link to="/" onClick={() => setLang("pt")} className="text-cyan">
-                PT
-              </Link>
-              <Link to="/jp" onClick={() => setLang("jp")} className="text-muted hover:text-magenta">
-                JP
-              </Link>
+            <div className="px-1">
+              <LangSwitcher lang={lang} variant="mobile" />
             </div>
             <Link to={lang === "jp" ? "/jp/login" : "/login"} className="btn-outline mt-2 justify-center">
               {lang === "jp" ? "ログイン" : "Entrar"}
