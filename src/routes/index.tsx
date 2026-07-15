@@ -1,14 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SectionLabel } from "@/components/fx/section-label";
-import { TypingText } from "@/components/fx/typing-text";
-import { Reveal } from "@/components/fx/reveal";
-import { ParticleField } from "@/components/fx/particle-field";
-import { BracketFrame } from "@/components/fx/bracket-frame";
-import { GlitchText } from "@/components/fx/glitch-text";
-import { ScrambleText } from "@/components/fx/scramble-text";
-import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { LandingPage } from "@/components/landing/landing-page";
+import { ptContent } from "@/components/landing/landing-content";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,6 +26,10 @@ export const Route = createFileRoute("/")({
   }),
   component: LandingPT,
 });
+
+function LandingPT() {
+  return <LandingPage content={ptContent} lang="pt" />;
+}
 
 const features = [
   { t: "Professor dedicado", d: "Um professor que conhece seu progresso, seu nível e seus jogos favoritos. Ele atua como tutor, dando instruções específicas para você." },
