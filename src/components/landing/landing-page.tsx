@@ -10,6 +10,7 @@ import { BracketFrame } from "@/components/fx/bracket-frame";
 import { GlitchText } from "@/components/fx/glitch-text";
 import { ScrambleText } from "@/components/fx/scramble-text";
 import type { LandingContent } from "./landing-content";
+import { useLangAutoDetect } from "@/lib/i18n";
 
 const COLOR: Record<"white" | "cyan" | "magenta", string> = {
   white: "#f7fafc",
@@ -52,6 +53,7 @@ export function LandingPage({
   content: LandingContent;
   lang: "pt" | "jp";
 }) {
+  useLangAutoDetect();
   return (
     <div className="min-h-screen bg-bg text-foreground" lang={content.htmlLang}>
       <SiteHeader lang={lang} />
