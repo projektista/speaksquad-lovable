@@ -40,7 +40,7 @@ export const getTeacherOverview = createServerFn({ method: "GET" })
       context.supabase
         .from("lessons")
         .select("id, scheduled_at, mode, status, student_id, feedback")
-        .in("status", ["completed", "cancelled_student", "cancelled_teacher"])
+        .in("status", ["completed", "student_cancelled", "teacher_cancelled", "late_cancel", "no_show"])
         .order("scheduled_at", { ascending: false })
         .limit(5),
     ]);
@@ -123,7 +123,7 @@ export const updateTeacherProfile = createServerFn({ method: "POST" })
   .inputValidator((data: { name?: string; bio?: string }) => data)
   .handler(async ({ data, context }) => {
     await assertTeacher(context);
-    const patch: Record<string, unknown> = {};
+    const patch: { name?: string; bio?: string | null } = {};
     if (data.name !== undefined) patch.name = data.name;
     if (data.bio !== undefined) patch.bio = data.bio;
     await context.supabase.from("profiles").update(patch).eq("id", context.userId);
