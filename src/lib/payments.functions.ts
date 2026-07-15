@@ -83,7 +83,6 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         return_url: data.returnUrl,
         customer: customerId,
         payment_intent_data: { description: product.name },
-        automatic_tax: { enabled: true },
         metadata: {
           userId,
           packageCode: data.packageCode,
