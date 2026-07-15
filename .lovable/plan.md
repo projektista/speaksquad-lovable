@@ -1,73 +1,102 @@
-## Escopo
+# Plano — Vercel + Funcionalidades Completas
 
-Substituir o modelo atual (`credits.balance/reserved` como inteiros) por **lotes de créditos com expiração**, ligar Stripe (sandbox) para venda dos 3 pacotes, e completar o fluxo de agendamento com cancelamento 6h + regra de +7 dias no cancelamento pelo professor.
+Escopo grande. Vou entregar em **4 fases** para manter cada etapa verificável. Você aprova o plano e eu executo tudo em sequência sem parar entre fases (a menos que apareça bloqueio real, ex.: secret que precisa ser adicionado por você).
 
-## Pacotes de crédito (Japão, JPY)
+---
 
-| Pacote | Créditos | Preço | Expiração |
-|---|---|---|---|
-| Aula avulsa | 1 | ¥2.800 | 30 dias |
-| Pacote 5 | 5 | ¥13.000 | 45 dias |
-| Pacote 10 | 10 | ¥24.000 | 90 dias |
+## Fase 1 — Migração para Vercel
 
-## Modelo de dados (nova migração)
+O projeto hoje roda TanStack Start no runtime Cloudflare Workers (via `@lovable.dev/vite-tanstack-config` + nitro). Para Vercel:
 
-Aposentar `credits.balance/reserved` como fonte da verdade e usar uma tabela de lotes:
+1. Trocar preset do nitro para `vercel` no `vite.config.ts`.
+2. Verificar cada server function e a rota `api/public/payments/webhook.ts` — a maioria já usa APIs Web-standard (fetch, crypto.subtle), compatíveis com Vercel Edge/Node.
+3. Criar `vercel.json` mínimo se necessário (roteamento SSR).
+4. Documentar em `README.md` variáveis de ambiente que você precisa configurar no Vercel:
+   - `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
+   - `LOVABLE_API_KEY`, `STRIPE_SANDBOX_API_KEY`, `PAYMENTS_SANDBOX_WEBHOOK_SECRET`
+   - `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_PAYMENTS_CLIENT_TOKEN`
 
-- **`credit_lots`** — um registro por crédito unitário. Colunas: `id`, `user_id`, `purchase_id` (fk), `expires_at`, `status` (`available|reserved|consumed|expired|refunded`), `reserved_for_lesson_id?`, `consumed_at?`. Cada compra de N créditos gera N linhas.
-- **`credit_purchases`** — `id`, `user_id`, `package_code` (`single|pack5|pack10`), `credits`, `amount_jpy`, `stripe_session_id`, `stripe_payment_intent`, `status` (`pending|paid|refunded`), `expires_at` (data-base do lote).
-- **`credit_transactions`** — mantém, agora com `type` incluindo `purchase|consumption|refund|expiration|extension`.
-- **Views auxiliares**: `v_user_credit_summary` (available, reserved, next_expiration) para leituras rápidas do dashboard.
-- Manter `credits` como cache derivado OU remover — vou remover e ler direto dos lotes via view (menos bugs de sincronização).
+**Aviso:** o backend continua sendo Lovable Cloud (Supabase gerenciado). A Vercel só hospeda o frontend + server functions. Isso é o padrão e funciona bem.
 
-**FIFO ao reservar**: `SELECT ... FROM credit_lots WHERE user_id=? AND status='available' ORDER BY expires_at ASC LIMIT 1 FOR UPDATE SKIP LOCKED` → marca `reserved` e grava `reserved_for_lesson_id`.
+Você fará o deploy no Vercel manualmente (conectando o repo). Eu deixo tudo pronto para `vercel deploy` funcionar direto.
 
-## Server functions atualizadas
+---
 
-- `bookLesson` — reserva o lote que expira primeiro.
-- `cancelLessonAsStudent` — ≥6h: libera o lote (volta a `available` com `expires_at` original). <6h: marca lote como `consumed`, cria transaction `consumption`.
-- `cancelLessonAsTeacher` — libera o lote **e estende `expires_at` em +7 dias** a partir de `now()` (ou mantém o original se já for maior). Cria transaction `extension`.
-- `markLessonCompleted` — consome o lote reservado.
-- `getMyOverview` — passa a devolver `available`, `reserved`, `nextExpiration` (data + qtd que expira nela).
+## Fase 2 — Signup revisado + criação de professor
 
-## Página /credits (nova)
+**Signup (`/signup` e `/jp/signup`):**
+- Adicionar campo **confirmação de senha** (obrigatório, deve bater).
+- Substituir botões de jogo por **checkboxes** (Minecraft / Fortnite, múltipla seleção, mínimo 1).
+- Ao marcar Minecraft → campo `MINECRAFT GAMERTAG:` obrigatório.
+- Ao marcar Fortnite → campo `Nickname no FORTNITE:` obrigatório.
+- Salvar em `profiles`: adicionar colunas `minecraft_gamertag`, `fortnite_nickname`, `games` (array). Migração incluída.
 
-- Lista os 3 pacotes com preço e expiração.
-- Botão "Comprar" → server fn `createCheckoutSession` (Stripe) → redireciona.
-- Aba histórico: transações + lotes ativos com data de expiração destacada (verde >14d, amarelo 7-14d, vermelho <7d).
+**Virar professor:**
+- Você cria a conta em `/signup` com `projektista@gmail.com`.
+- Eu adiciono migração que insere role `teacher` E `admin` para esse email (via lookup em `auth.users`).
 
-## Stripe
+---
 
-- Ativar seamless (`enable_stripe_payments`) — Japão, sem full compliance handling (Japão não é suportado); vai como `automatic_tax` (calcula/coleta, você declara).
-- 3 produtos criados via `batch_create_product` com tax code apropriado (`txcd_10000000` para digital services).
-- Webhook `/api/public/webhooks/stripe`: verifica assinatura, marca `credit_purchases.status='paid'`, gera N linhas em `credit_lots` com `expires_at = paid_at + interval do pacote`, cria transaction `purchase`.
+## Fase 3 — Dashboard do aluno + Página da aula
 
-## Expiração + notificação
+**Dashboard aluno (`/dashboard`, `/jp/dashboard`):**
+- Card **Créditos**: disponível / reservado / próxima expiração + botão "Histórico" (modal com `credit_purchases` + `credit_transactions`).
+- Card **Próxima aula**: data, modo, link para `/lessons/:id`.
+- Card **Perfil**: editar nome, bio, nível, gamertags.
+- Card **Aulas concluídas**: contador + link para histórico.
 
-- **Cron diário 02:00 JST** (`pg_cron` + `pg_net`) chama `/api/public/hooks/expire-credits`:
-  - Marca lotes vencidos como `expired`, cria transaction.
-  - 7 dias antes / 1 dia antes: enfileira email via Lovable email (Resend nativo do Cloud) — precisa de domínio verificado; enquanto isso manda pra `hugo@` como fallback ou usa remetente padrão do Cloud.
-- Alternativa se não quiser configurar email agora: só marca `expired` silenciosamente + banner no dashboard "X créditos expiram em Y dias".
+**Página da aula (`/lessons/:id`):**
+- Detalhes (data, professor, Zoom URL, status).
+- **Chat com polling** (5s): tabela nova `lesson_messages` (sender, content, created_at).
+- **Ações do professor** (só visível para role teacher):
+  - `Finalizar` → status=completed, chama `consume_credit_lot`.
+  - `Cancelar` (cancelamento normal, prof) → status=cancelled_teacher, chama `release_credit_lot` com extensão.
+  - `Imprevisto` (no-show/last-minute do aluno) → status=cancelled_student, chama `consume_credit_lot`.
+- **Ações do aluno**:
+  - `Cancelar` (só se > 6h antes conforme política já memorizada) → `release_credit_lot`.
 
-## Admin
+---
 
-- `/admin/students` mostra lotes ativos + próxima expiração por aluno.
-- `/admin/finance` soma `purchase` por período em JPY.
-- Ação manual "adicionar créditos" (para casos especiais) — cria lote com expiração custom.
+## Fase 4 — Dashboard do professor + páginas extras
 
-## Ordem de execução
+**Menu especial do professor** (aparece no header quando role=teacher): Dashboard · Agendamento · Todas as aulas · Editar perfil.
 
-1. **Migração** — novo schema de lotes (destrói `credits`, cria `credit_lots`, `credit_purchases`, view).
-2. **Server fns** — reescrever `booking.functions.ts` para FIFO; adaptar dashboard.
-3. **Stripe** — habilitar, criar produtos, checkout + webhook, página `/credits`.
-4. **Cron de expiração** — job + rota + notificação (email fica pra depois se precisar de domínio).
-5. **Admin** — visão de lotes por aluno + finanças.
+**Dashboard professor (`/teacher`):**
+- Aulas de hoje, próximas 5, últimas 5 concluídas com status.
 
-## Perguntas rápidas antes de começar
+**Agendamento (`/teacher/agendamento`):**
+- Calendário semanal (domingo a sábado, colunas), 24 linhas de 1h (00:00–24:00).
+- Clicar em célula alterna estado. 3 estados cíclicos:
+  - **Cinza** (indisponível — padrão)
+  - **Ciano** (disponível para agendamento)
+  - **Violeta** (bloqueado/férias) — *(magenta reservo para "aula marcada" read-only)*
+- Persistência em `teacher_availability` (já existe) + `availability_exceptions`.
+- Navegação semana anterior/próxima.
 
-Nenhuma nova pergunta bloqueante — vou seguir com:
-- Email de notificação usando remetente padrão do Lovable Cloud (`notifications@…`) até você configurar domínio próprio.
-- Timezone JST em todas as expirações (calculadas em UTC, exibidas em JST).
-- Cancelamento pelo professor: `expires_at = GREATEST(expires_at_original, now() + 7 days)`.
+**Todas as aulas (`/teacher/aulas`):**
+- Lista paginada de todas as aulas do professor com filtros (status, aluno).
 
-Confirma que posso executar nessa ordem?
+**Editar perfil professor (`/teacher/perfil`):**
+- Nome, bio, foto (opcional futuro), especialidades.
+
+---
+
+## Detalhes técnicos
+
+- **Migrações necessárias:**
+  - `profiles`: `minecraft_gamertag text`, `fortnite_nickname text`, `games text[]`.
+  - `lesson_messages`: id, lesson_id, sender_id, content, created_at + RLS (aluno e professor da aula veem/inserem).
+  - Insert `user_roles` (teacher, admin) para `projektista@gmail.com` — condicional a existência do usuário.
+- **Server functions novas:** `getLessonDetail`, `postLessonMessage`, `getLessonMessages`, `finalizeLesson`, `cancelLessonTeacher`, `noShowLesson`, `cancelLessonStudent`, `getTeacherWeek`, `upsertAvailabilitySlot`, `getTeacherAllLessons`, `getTeacherOverview`, `updateProfile`, `updateTeacherProfile`, `getCreditHistory`.
+- **Componentes de página** ficam em `src/components/pages/` (bilíngue via dicionários em `src/lib/i18n.ts`, seguindo memória do projeto).
+- **Rotas PT e JP** espelhadas para todas as novas páginas.
+
+---
+
+## O que NÃO está incluído
+
+- Foto de perfil / upload de avatar (posso adicionar depois).
+- Sistema de notificações/lembretes por email antes da aula (posso adicionar depois com Lovable Email).
+- Pagamento em produção (continua sandbox até você fazer go-live no Stripe).
+
+Confirma e eu executo as 4 fases em sequência.
