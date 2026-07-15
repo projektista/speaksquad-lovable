@@ -1,6 +1,7 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { BrandMark } from "@/components/fx/brand-mark";
+import { supabase } from "@/integrations/supabase/client";
 
 type Lang = "pt" | "jp";
 
@@ -39,6 +40,14 @@ export function AppShell({
   const creditsLabel = lang === "jp" ? "残りクレジット" : "créditos_disponíveis";
   const buyLabel = lang === "jp" ? "購入" : "Comprar";
   const creditsHref = lang === "jp" ? "/jp/credits" : "/credits";
+  const navigate = useNavigate();
+  const signOutLabel = lang === "jp" ? "ログアウト" : "Sair";
+
+  async function onSignOut() {
+    await supabase.auth.signOut();
+    navigate({ to: lang === "jp" ? "/jp" : "/" });
+  }
+
   return (
     <div className="min-h-screen bg-bg text-foreground">
       <div className="mx-auto flex max-w-6xl gap-6 px-4 py-6 md:py-10">
@@ -75,6 +84,13 @@ export function AppShell({
               {buyLabel}
             </Link>
           </div>
+          <button
+            type="button"
+            onClick={onSignOut}
+            className="mt-4 w-full rounded-[4px] border border-hair px-3 py-2 text-left font-mono-alt text-xs text-muted transition-colors hover:border-[color:var(--magenta)] hover:text-magenta"
+          >
+            ← {signOutLabel}
+          </button>
         </aside>
 
         <main className="min-w-0 flex-1">
