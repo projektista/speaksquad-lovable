@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as JpRouteImport } from './routes/jp'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as IndexRouteImport } from './routes/index'
@@ -30,6 +31,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JpRoute = JpRouteImport.update({
+  id: '/jp',
+  path: '/jp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -46,35 +52,36 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const JpIndexRoute = JpIndexRouteImport.update({
-  id: '/jp/',
-  path: '/jp/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => JpRoute,
 } as any)
 const JpSignupRoute = JpSignupRouteImport.update({
-  id: '/jp/signup',
-  path: '/jp/signup',
-  getParentRoute: () => rootRouteImport,
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => JpRoute,
 } as any)
 const JpLoginRoute = JpLoginRouteImport.update({
-  id: '/jp/login',
-  path: '/jp/login',
-  getParentRoute: () => rootRouteImport,
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => JpRoute,
 } as any)
 const JpDashboardRoute = JpDashboardRouteImport.update({
-  id: '/jp/dashboard',
-  path: '/jp/dashboard',
-  getParentRoute: () => rootRouteImport,
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => JpRoute,
 } as any)
 const JpContatoRoute = JpContatoRouteImport.update({
-  id: '/jp/contato',
-  path: '/jp/contato',
-  getParentRoute: () => rootRouteImport,
+  id: '/contato',
+  path: '/contato',
+  getParentRoute: () => JpRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRoute
+  '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/jp/contato': typeof JpContatoRoute
@@ -100,6 +107,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRoute
+  '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/jp/contato': typeof JpContatoRoute
@@ -114,6 +122,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contato'
     | '/dashboard'
+    | '/jp'
     | '/login'
     | '/signup'
     | '/jp/contato'
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contato'
     | '/dashboard'
+    | '/jp'
     | '/login'
     | '/signup'
     | '/jp/contato'
@@ -151,13 +161,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContatoRoute: typeof ContatoRoute
   DashboardRoute: typeof DashboardRoute
+  JpRoute: typeof JpRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
-  JpContatoRoute: typeof JpContatoRoute
-  JpDashboardRoute: typeof JpDashboardRoute
-  JpLoginRoute: typeof JpLoginRoute
-  JpSignupRoute: typeof JpSignupRoute
-  JpIndexRoute: typeof JpIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -174,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jp': {
+      id: '/jp'
+      path: '/jp'
+      fullPath: '/jp'
+      preLoaderRoute: typeof JpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -199,53 +212,67 @@ declare module '@tanstack/react-router' {
     }
     '/jp/': {
       id: '/jp/'
-      path: '/jp'
+      path: '/'
       fullPath: '/jp/'
       preLoaderRoute: typeof JpIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof JpRoute
     }
     '/jp/signup': {
       id: '/jp/signup'
-      path: '/jp/signup'
+      path: '/signup'
       fullPath: '/jp/signup'
       preLoaderRoute: typeof JpSignupRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof JpRoute
     }
     '/jp/login': {
       id: '/jp/login'
-      path: '/jp/login'
+      path: '/login'
       fullPath: '/jp/login'
       preLoaderRoute: typeof JpLoginRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof JpRoute
     }
     '/jp/dashboard': {
       id: '/jp/dashboard'
-      path: '/jp/dashboard'
+      path: '/dashboard'
       fullPath: '/jp/dashboard'
       preLoaderRoute: typeof JpDashboardRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof JpRoute
     }
     '/jp/contato': {
       id: '/jp/contato'
-      path: '/jp/contato'
+      path: '/contato'
       fullPath: '/jp/contato'
       preLoaderRoute: typeof JpContatoRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof JpRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ContatoRoute: ContatoRoute,
-  DashboardRoute: DashboardRoute,
-  LoginRoute: LoginRoute,
-  SignupRoute: SignupRoute,
+interface JpRouteChildren {
+  JpContatoRoute: typeof JpContatoRoute
+  JpDashboardRoute: typeof JpDashboardRoute
+  JpLoginRoute: typeof JpLoginRoute
+  JpSignupRoute: typeof JpSignupRoute
+  JpIndexRoute: typeof JpIndexRoute
+}
+
+const JpRouteChildren: JpRouteChildren = {
   JpContatoRoute: JpContatoRoute,
   JpDashboardRoute: JpDashboardRoute,
   JpLoginRoute: JpLoginRoute,
   JpSignupRoute: JpSignupRoute,
   JpIndexRoute: JpIndexRoute,
+}
+
+const JpRouteWithChildren = JpRoute._addFileChildren(JpRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  ContatoRoute: ContatoRoute,
+  DashboardRoute: DashboardRoute,
+  JpRoute: JpRouteWithChildren,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
