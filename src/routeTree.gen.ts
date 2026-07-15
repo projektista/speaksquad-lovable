@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as JpRouteImport } from './routes/jp'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -17,6 +18,7 @@ import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JpIndexRouteImport } from './routes/jp.index'
 import { Route as JpSignupRouteImport } from './routes/jp.signup'
+import { Route as JpScheduleRouteImport } from './routes/jp.schedule'
 import { Route as JpLoginRouteImport } from './routes/jp.login'
 import { Route as JpDashboardRouteImport } from './routes/jp.dashboard'
 import { Route as JpContatoRouteImport } from './routes/jp.contato'
@@ -24,6 +26,11 @@ import { Route as JpContatoRouteImport } from './routes/jp.contato'
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScheduleRoute = ScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -61,6 +68,11 @@ const JpSignupRoute = JpSignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => JpRoute,
 } as any)
+const JpScheduleRoute = JpScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => JpRoute,
+} as any)
 const JpLoginRoute = JpLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -83,10 +95,12 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
+  '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
   '/jp/contato': typeof JpContatoRoute
   '/jp/dashboard': typeof JpDashboardRoute
   '/jp/login': typeof JpLoginRoute
+  '/jp/schedule': typeof JpScheduleRoute
   '/jp/signup': typeof JpSignupRoute
   '/jp/': typeof JpIndexRoute
 }
@@ -95,10 +109,12 @@ export interface FileRoutesByTo {
   '/contato': typeof ContatoRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
   '/jp/contato': typeof JpContatoRoute
   '/jp/dashboard': typeof JpDashboardRoute
   '/jp/login': typeof JpLoginRoute
+  '/jp/schedule': typeof JpScheduleRoute
   '/jp/signup': typeof JpSignupRoute
   '/jp': typeof JpIndexRoute
 }
@@ -109,10 +125,12 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
+  '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
   '/jp/contato': typeof JpContatoRoute
   '/jp/dashboard': typeof JpDashboardRoute
   '/jp/login': typeof JpLoginRoute
+  '/jp/schedule': typeof JpScheduleRoute
   '/jp/signup': typeof JpSignupRoute
   '/jp/': typeof JpIndexRoute
 }
@@ -124,10 +142,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/jp'
     | '/login'
+    | '/schedule'
     | '/signup'
     | '/jp/contato'
     | '/jp/dashboard'
     | '/jp/login'
+    | '/jp/schedule'
     | '/jp/signup'
     | '/jp/'
   fileRoutesByTo: FileRoutesByTo
@@ -136,10 +156,12 @@ export interface FileRouteTypes {
     | '/contato'
     | '/dashboard'
     | '/login'
+    | '/schedule'
     | '/signup'
     | '/jp/contato'
     | '/jp/dashboard'
     | '/jp/login'
+    | '/jp/schedule'
     | '/jp/signup'
     | '/jp'
   id:
@@ -149,10 +171,12 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/jp'
     | '/login'
+    | '/schedule'
     | '/signup'
     | '/jp/contato'
     | '/jp/dashboard'
     | '/jp/login'
+    | '/jp/schedule'
     | '/jp/signup'
     | '/jp/'
   fileRoutesById: FileRoutesById
@@ -163,6 +187,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   JpRoute: typeof JpRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ScheduleRoute: typeof ScheduleRoute
   SignupRoute: typeof SignupRoute
 }
 
@@ -173,6 +198,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schedule': {
+      id: '/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof ScheduleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -224,6 +256,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JpSignupRouteImport
       parentRoute: typeof JpRoute
     }
+    '/jp/schedule': {
+      id: '/jp/schedule'
+      path: '/schedule'
+      fullPath: '/jp/schedule'
+      preLoaderRoute: typeof JpScheduleRouteImport
+      parentRoute: typeof JpRoute
+    }
     '/jp/login': {
       id: '/jp/login'
       path: '/login'
@@ -252,6 +291,7 @@ interface JpRouteChildren {
   JpContatoRoute: typeof JpContatoRoute
   JpDashboardRoute: typeof JpDashboardRoute
   JpLoginRoute: typeof JpLoginRoute
+  JpScheduleRoute: typeof JpScheduleRoute
   JpSignupRoute: typeof JpSignupRoute
   JpIndexRoute: typeof JpIndexRoute
 }
@@ -260,6 +300,7 @@ const JpRouteChildren: JpRouteChildren = {
   JpContatoRoute: JpContatoRoute,
   JpDashboardRoute: JpDashboardRoute,
   JpLoginRoute: JpLoginRoute,
+  JpScheduleRoute: JpScheduleRoute,
   JpSignupRoute: JpSignupRoute,
   JpIndexRoute: JpIndexRoute,
 }
@@ -272,6 +313,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   JpRoute: JpRouteWithChildren,
   LoginRoute: LoginRoute,
+  ScheduleRoute: ScheduleRoute,
   SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
