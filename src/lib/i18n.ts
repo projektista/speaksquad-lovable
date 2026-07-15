@@ -360,3 +360,48 @@ export const dashboardContent: Record<Lang, DashboardContent> = {
     scheduleCta: "レッスンを予約",
   },
 };
+export type ScheduleContent = {
+  metaTitle: string;
+  title: string;
+  subtitle: string;
+  weekLabel: string;
+  modeLabel: string;
+  modes: { minecraft: string; fortnite: string };
+  slotsLabel: string;
+  noSlots: string;
+  confirmCta: string;
+  confirmedMsg: string;
+  days: string[];
+  monthLabel: string;
+};
+
+export const scheduleContent: Record<Lang, ScheduleContent> = {
+  pt: {
+    metaTitle: "Agendar — SpeakSquad",
+    title: "Agendar aula",
+    subtitle: "Escolha um horário aberto do Hugo esta semana.",
+    weekLabel: "// semana_atual",
+    modeLabel: "modo_da_aula",
+    modes: { minecraft: "Minecraft · Survival", fortnite: "Fortnite · BR" },
+    slotsLabel: "horários_disponíveis",
+    noSlots: "Sem horários neste dia.",
+    confirmCta: "Confirmar agendamento",
+    confirmedMsg: "✓ Aula confirmada. Você receberá um email com o link.",
+    days: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
+    monthLabel: "Julho 2026",
+  },
+  jp: {
+    metaTitle: "予約 — SpeakSquad",
+    title: "レッスンを予約",
+    subtitle: "今週の空き時間からお選びください。",
+    weekLabel: "// 今週",
+    modeLabel: "レッスンモード",
+    modes: { minecraft: "Minecraft · Survival", fortnite: "Fortnite · BR" },
+    slotsLabel: "空き時間",
+    noSlots: "この日は空きがありません。",
+    confirmCta: "予約を確定",
+    confirmedMsg: "✓ 予約完了。詳細をメールでお送りします。",
+    days: ["月", "火", "水", "木", "金", "土", "日"],
+    monthLabel: "2026年7月",
+  },
+};
