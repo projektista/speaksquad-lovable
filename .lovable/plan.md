@@ -1,86 +1,73 @@
-## Objetivo
+## Escopo
 
-Ligar o front-end existente a um backend real (Lovable Cloud) que suporte: cadastro de aluno, compra de créditos, agendamento com hold de crédito, política de cancelamento definida, e um dashboard administrativo para o professor gerenciar disponibilidade e aulas.
+Substituir o modelo atual (`credits.balance/reserved` como inteiros) por **lotes de créditos com expiração**, ligar Stripe (sandbox) para venda dos 3 pacotes, e completar o fluxo de agendamento com cancelamento 6h + regra de +7 dias no cancelamento pelo professor.
 
-## Política de cancelamento (confirmada)
+## Pacotes de crédito (Japão, JPY)
 
-- Crédito é **reservado** ao agendar, não descontado.
-- Aluno cancela **≥ 6h** antes → reserva liberada, crédito volta.
-- Aluno cancela **< 6h** antes ou **no-show** → crédito consumido.
-- Professor cancela **a qualquer momento** → crédito sempre volta.
-- Aula `completed` → crédito consumido (1 `deduction`).
+| Pacote | Créditos | Preço | Expiração |
+|---|---|---|---|
+| Aula avulsa | 1 | ¥2.800 | 30 dias |
+| Pacote 5 | 5 | ¥13.000 | 45 dias |
+| Pacote 10 | 10 | ¥24.000 | 90 dias |
 
-## Etapas
+## Modelo de dados (nova migração)
 
-### 1. Ativar Lovable Cloud
-Habilita banco (Postgres + RLS), auth e edge functions. Sem isso não há persistência.
+Aposentar `credits.balance/reserved` como fonte da verdade e usar uma tabela de lotes:
 
-### 2. Schema (migração SQL)
+- **`credit_lots`** — um registro por crédito unitário. Colunas: `id`, `user_id`, `purchase_id` (fk), `expires_at`, `status` (`available|reserved|consumed|expired|refunded`), `reserved_for_lesson_id?`, `consumed_at?`. Cada compra de N créditos gera N linhas.
+- **`credit_purchases`** — `id`, `user_id`, `package_code` (`single|pack5|pack10`), `credits`, `amount_jpy`, `stripe_session_id`, `stripe_payment_intent`, `status` (`pending|paid|refunded`), `expires_at` (data-base do lote).
+- **`credit_transactions`** — mantém, agora com `type` incluindo `purchase|consumption|refund|expiration|extension`.
+- **Views auxiliares**: `v_user_credit_summary` (available, reserved, next_expiration) para leituras rápidas do dashboard.
+- Manter `credits` como cache derivado OU remover — vou remover e ler direto dos lotes via view (menos bugs de sincronização).
 
-Tabelas em `public`:
+**FIFO ao reservar**: `SELECT ... FROM credit_lots WHERE user_id=? AND status='available' ORDER BY expires_at ASC LIMIT 1 FOR UPDATE SKIP LOCKED` → marca `reserved` e grava `reserved_for_lesson_id`.
 
-- `profiles` (id = auth.uid, name, level, bio, preferred_game, role: `student|admin`)
-- `user_roles` + enum `app_role` + função `has_role` (padrão de segurança)
-- `credits` (user_id, balance int, reserved int) — 1 linha por aluno
-- `credit_transactions` (user_id, lesson_id?, type: `purchase|deduction|refund`, amount, stripe_session_id?)
-- `teacher_availability` (id, weekday 0–6, start_time, end_time, active) — regras recorrentes do Hugo
-- `availability_exceptions` (date, start_time?, end_time?, blocked bool) — folgas/aberturas pontuais
-- `lessons` (id, student_id, scheduled_at UNIQUE, duration_min=50, mode: `minecraft|fortnite`, status: `scheduled|completed|late_cancel|no_show|student_cancelled|teacher_cancelled`, meet_url?, feedback?, vocabulary_notes?, cancelled_at?, cancelled_by?)
-- RLS: aluno vê/edita só o próprio; admin (via `has_role`) vê tudo. `GRANT`s explícitos para `authenticated` + `service_role`.
+## Server functions atualizadas
 
-### 3. Server functions (`createServerFn` + `requireSupabaseAuth`)
+- `bookLesson` — reserva o lote que expira primeiro.
+- `cancelLessonAsStudent` — ≥6h: libera o lote (volta a `available` com `expires_at` original). <6h: marca lote como `consumed`, cria transaction `consumption`.
+- `cancelLessonAsTeacher` — libera o lote **e estende `expires_at` em +7 dias** a partir de `now()` (ou mantém o original se já for maior). Cria transaction `extension`.
+- `markLessonCompleted` — consome o lote reservado.
+- `getMyOverview` — passa a devolver `available`, `reserved`, `nextExpiration` (data + qtd que expira nela).
 
-- `listAvailableSlots({ from, to })` — cruza `teacher_availability` + `availability_exceptions` − `lessons` ocupadas.
-- `bookLesson({ scheduled_at, mode })` — valida slot, checa `balance - reserved >= 1`, incrementa `reserved`, cria `lesson` (status `scheduled`). Transação atômica.
-- `cancelLessonAsStudent({ lesson_id })` — se `scheduled_at - now >= 6h`: libera `reserved`, status `student_cancelled`. Senão: `reserved--`, `balance--`, cria `deduction`, status `late_cancel`.
-- `cancelLessonAsTeacher({ lesson_id })` — sempre libera `reserved`, status `teacher_cancelled` (admin only).
-- `markLessonCompleted({ lesson_id, feedback?, vocabulary_notes? })` — admin only. `reserved--`, `balance--`, cria `deduction`, status `completed`.
-- `markNoShow({ lesson_id })` — admin only. Igual a late_cancel mas status `no_show`.
-- Admin CRUD: `upsertAvailabilityRule`, `deleteAvailabilityRule`, `addAvailabilityException`, `listAllLessons`, `listStudents`.
+## Página /credits (nova)
 
-### 4. Créditos & Stripe
+- Lista os 3 pacotes com preço e expiração.
+- Botão "Comprar" → server fn `createCheckoutSession` (Stripe) → redireciona.
+- Aba histórico: transações + lotes ativos com data de expiração destacada (verde >14d, amarelo 7-14d, vermelho <7d).
 
-- Habilitar Lovable Payments (Stripe seamless) — passo separado quando o usuário confirmar.
-- Produto: pacote de créditos (ex.: 1, 4, 8 créditos).
-- Webhook `/api/public/webhooks/stripe` → verifica assinatura, cria `credit_transactions` (purchase) e incrementa `balance`.
-- Página `/credits` (nova) para comprar.
+## Stripe
 
-### 5. Rotas novas / atualizadas
+- Ativar seamless (`enable_stripe_payments`) — Japão, sem full compliance handling (Japão não é suportado); vai como `automatic_tax` (calcula/coleta, você declara).
+- 3 produtos criados via `batch_create_product` com tax code apropriado (`txcd_10000000` para digital services).
+- Webhook `/api/public/webhooks/stripe`: verifica assinatura, marca `credit_purchases.status='paid'`, gera N linhas em `credit_lots` com `expires_at = paid_at + interval do pacote`, cria transaction `purchase`.
 
-- `/schedule` e `/jp/schedule` — trocar mock por `listAvailableSlots` + `bookLesson`.
-- `/lessons/$id` e `/jp/lessons/$id` — página única por aula (link do Meet, modo, status, botão cancelar com aviso da regra 6h, feedback pós-aula em read-only p/ aluno).
-- `/credits` e `/jp/credits` — compra e histórico de transações.
+## Expiração + notificação
 
-### 6. Admin (`/admin/*`, gate por `has_role('admin')`)
+- **Cron diário 02:00 JST** (`pg_cron` + `pg_net`) chama `/api/public/hooks/expire-credits`:
+  - Marca lotes vencidos como `expired`, cria transaction.
+  - 7 dias antes / 1 dia antes: enfileira email via Lovable email (Resend nativo do Cloud) — precisa de domínio verificado; enquanto isso manda pra `hugo@` como fallback ou usa remetente padrão do Cloud.
+- Alternativa se não quiser configurar email agora: só marca `expired` silenciosamente + banner no dashboard "X créditos expiram em Y dias".
 
-Layout `AdminShell` (já existe). Páginas:
+## Admin
 
-- `/admin` — overview: próximas 5 aulas, créditos totais em circulação.
-- `/admin/availability` — editor de regras semanais + exceções por data.
-- `/admin/schedule` — calendário com todas as aulas futuras; clique abre `/admin/lessons/$id`.
-- `/admin/lessons/$id` — detalhe da aula: marcar `completed` / `no_show` / cancelar, editar `feedback` e `vocabulary_notes`.
-- `/admin/students` — lista com nome, nível, créditos, última aula.
-- `/admin/finance` — soma de `purchase` e `deduction` por período.
+- `/admin/students` mostra lotes ativos + próxima expiração por aluno.
+- `/admin/finance` soma `purchase` por período em JPY.
+- Ação manual "adicionar créditos" (para casos especiais) — cria lote com expiração custom.
 
-### 7. Auth real
+## Ordem de execução
 
-Ligar `LoginPage` / `SignupPage` ao Supabase Auth (email+senha). Signup cria linha em `profiles` e `credits` (balance 0). Gate `_authenticated/` já é gerenciado.
+1. **Migração** — novo schema de lotes (destrói `credits`, cria `credit_lots`, `credit_purchases`, view).
+2. **Server fns** — reescrever `booking.functions.ts` para FIFO; adaptar dashboard.
+3. **Stripe** — habilitar, criar produtos, checkout + webhook, página `/credits`.
+4. **Cron de expiração** — job + rota + notificação (email fica pra depois se precisar de domínio).
+5. **Admin** — visão de lotes por aluno + finanças.
 
-## Ordem de execução sugerida
+## Perguntas rápidas antes de começar
 
-1. Ativar Cloud + schema + RLS + roles.
-2. Auth real (login/signup) + `_authenticated` para `/dashboard`, `/schedule`, `/lessons/*`, `/credits`.
-3. Server fns de disponibilidade e booking (sem Stripe ainda — créditos podem ser adicionados manualmente para teste).
-4. Admin de disponibilidade + admin de aulas.
-5. Página `/lessons/$id` com cancelamento (regra 6h).
-6. Habilitar Stripe + `/credits` + webhook.
-7. Marcação de `completed` / `no_show` pelo professor.
+Nenhuma nova pergunta bloqueante — vou seguir com:
+- Email de notificação usando remetente padrão do Lovable Cloud (`notifications@…`) até você configurar domínio próprio.
+- Timezone JST em todas as expirações (calculadas em UTC, exibidas em JST).
+- Cancelamento pelo professor: `expires_at = GREATEST(expires_at_original, now() + 7 days)`.
 
-## Perguntas antes de começar
-
-1. **Pacotes de crédito**: quantos e a que preço (ex.: 1 crédito ¥3.000, 4 por ¥11.000, 8 por ¥20.000)?
-2. **Duração da aula**: fixa em 50 min (docs) ou configurável?
-3. **Fuso**: tudo em JST no banco (`timestamptz` armazenado UTC, exibido JST)?
-4. **Meet link**: você cola manualmente ao criar a aula, ou geramos um placeholder e você edita depois?
-
-Posso começar pela etapa 1 (Cloud + schema) assim que confirmar essas 4 respostas — ou já sigo com defaults (¥3k/¥11k/¥20k, 50min fixo, JST, Meet manual) se preferir.
+Confirma que posso executar nessa ordem?

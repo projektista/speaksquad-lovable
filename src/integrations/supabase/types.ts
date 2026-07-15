@@ -44,6 +44,116 @@ export type Database = {
         }
         Relationships: []
       }
+      credit_lots: {
+        Row: {
+          consumed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          note: string | null
+          purchase_id: string | null
+          reserved_for_lesson_id: string | null
+          source: string
+          status: Database["public"]["Enums"]["credit_lot_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          consumed_at?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          note?: string | null
+          purchase_id?: string | null
+          reserved_for_lesson_id?: string | null
+          source?: string
+          status?: Database["public"]["Enums"]["credit_lot_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          consumed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          note?: string | null
+          purchase_id?: string | null
+          reserved_for_lesson_id?: string | null
+          source?: string
+          status?: Database["public"]["Enums"]["credit_lot_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_lots_purchase_id_fkey"
+            columns: ["purchase_id"]
+            isOneToOne: false
+            referencedRelation: "credit_purchases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_lots_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v_user_credit_summary"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      credit_purchases: {
+        Row: {
+          amount_jpy: number
+          created_at: string
+          credits: number
+          expiry_days: number
+          id: string
+          package_code: Database["public"]["Enums"]["credit_package_code"]
+          paid_at: string | null
+          status: Database["public"]["Enums"]["purchase_status"]
+          stripe_payment_intent: string | null
+          stripe_session_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_jpy: number
+          created_at?: string
+          credits: number
+          expiry_days: number
+          id?: string
+          package_code: Database["public"]["Enums"]["credit_package_code"]
+          paid_at?: string | null
+          status?: Database["public"]["Enums"]["purchase_status"]
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_jpy?: number
+          created_at?: string
+          credits?: number
+          expiry_days?: number
+          id?: string
+          package_code?: Database["public"]["Enums"]["credit_package_code"]
+          paid_at?: string | null
+          status?: Database["public"]["Enums"]["purchase_status"]
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_purchases_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v_user_credit_summary"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       credit_transactions: {
         Row: {
           amount: number
@@ -77,6 +187,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "credit_transactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v_user_credit_summary"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "credit_tx_lesson_fk"
             columns: ["lesson_id"]
             isOneToOne: false
@@ -84,27 +201,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      credits: {
-        Row: {
-          balance: number
-          reserved: number
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          balance?: number
-          reserved?: number
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          balance?: number
-          reserved?: number
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
       }
       lessons: {
         Row: {
@@ -156,7 +252,15 @@ export type Database = {
           updated_at?: string
           vocabulary_notes?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "lessons_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "v_user_credit_summary"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -186,7 +290,15 @@ export type Database = {
           preferred_game?: Database["public"]["Enums"]["game_mode"] | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "v_user_credit_summary"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
       teacher_availability: {
         Row: {
@@ -237,13 +349,30 @@ export type Database = {
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "v_user_credit_summary"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
     }
     Views: {
-      [_ in never]: never
+      v_user_credit_summary: {
+        Row: {
+          available: number | null
+          next_expiration: string | null
+          reserved: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      consume_credit_lot: { Args: { _lesson_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -251,10 +380,25 @@ export type Database = {
         }
         Returns: boolean
       }
+      release_credit_lot: {
+        Args: { _extend_days?: number; _lesson_id: string }
+        Returns: string
+      }
+      reserve_credit_lot: {
+        Args: { _lesson_id: string; _user_id: string }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin" | "student"
       cancelled_by_actor: "student" | "teacher" | "system"
+      credit_lot_status:
+        | "available"
+        | "reserved"
+        | "consumed"
+        | "expired"
+        | "refunded"
+      credit_package_code: "single" | "pack5" | "pack10"
       english_level: "beginner" | "intermediate" | "advanced"
       game_mode: "minecraft" | "fortnite"
       lesson_status:
@@ -264,7 +408,14 @@ export type Database = {
         | "late_cancel"
         | "no_show"
         | "teacher_cancelled"
-      transaction_type: "purchase" | "deduction" | "refund"
+      purchase_status: "pending" | "paid" | "refunded" | "failed"
+      transaction_type:
+        | "purchase"
+        | "deduction"
+        | "refund"
+        | "consumption"
+        | "expiration"
+        | "extension"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -394,6 +545,14 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "student"],
       cancelled_by_actor: ["student", "teacher", "system"],
+      credit_lot_status: [
+        "available",
+        "reserved",
+        "consumed",
+        "expired",
+        "refunded",
+      ],
+      credit_package_code: ["single", "pack5", "pack10"],
       english_level: ["beginner", "intermediate", "advanced"],
       game_mode: ["minecraft", "fortnite"],
       lesson_status: [
@@ -404,7 +563,15 @@ export const Constants = {
         "no_show",
         "teacher_cancelled",
       ],
-      transaction_type: ["purchase", "deduction", "refund"],
+      purchase_status: ["pending", "paid", "refunded", "failed"],
+      transaction_type: [
+        "purchase",
+        "deduction",
+        "refund",
+        "consumption",
+        "expiration",
+        "extension",
+      ],
     },
   },
 } as const
