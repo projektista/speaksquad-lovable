@@ -1,69 +1,86 @@
+## Objetivo
 
-# Próximos passos para o deploy do SpeakSquad
+Ligar o front-end existente a um backend real (Lovable Cloud) que suporte: cadastro de aluno, compra de créditos, agendamento com hold de crédito, política de cancelamento definida, e um dashboard administrativo para o professor gerenciar disponibilidade e aulas.
 
-## Contexto importante (leia antes)
+## Política de cancelamento (confirmada)
 
-Os documentos que você enviou (`BACKEND_API.md`, `INFRAESTRUTURA.md`, `SCHEMA.md`, `STRIPE.md`, `ACESSOS_E_CREDENCIAIS.md`) descrevem uma arquitetura **anterior**:
+- Crédito é **reservado** ao agendar, não descontado.
+- Aluno cancela **≥ 6h** antes → reserva liberada, crédito volta.
+- Aluno cancela **< 6h** antes ou **no-show** → crédito consumido.
+- Professor cancela **a qualquer momento** → crédito sempre volta.
+- Aula `completed` → crédito consumido (1 `deduction`).
 
-- Frontend estático (HTML puro) na Vercel
-- Backend Express separado no Render
-- Supabase próprio (projeto `speaksquad` em Tóquio)
+## Etapas
 
-O **projeto atual no Lovable é diferente**:
+### 1. Ativar Lovable Cloud
+Habilita banco (Postgres + RLS), auth e edge functions. Sem isso não há persistência.
 
-- **TanStack Start** (React 19 + Vite 7) — SSR/full-stack num único app
-- **Lovable Cloud** já ativado (Supabase gerenciado pelo Lovable, não é o mesmo projeto Supabase antigo)
-- Backend vive dentro do próprio app como *server functions* — **não precisa mais** de um serviço Express separado no Render
+### 2. Schema (migração SQL)
 
-Ou seja: a stack ficou mais simples. Você pode **descontinuar Render + backend Express** e **descontinuar o Supabase antigo** — o Lovable Cloud cobre auth + banco + funções de servidor.
+Tabelas em `public`:
 
-Antes de seguir, precisamos alinhar duas decisões (respondo depois na próxima mensagem):
+- `profiles` (id = auth.uid, name, level, bio, preferred_game, role: `student|admin`)
+- `user_roles` + enum `app_role` + função `has_role` (padrão de segurança)
+- `credits` (user_id, balance int, reserved int) — 1 linha por aluno
+- `credit_transactions` (user_id, lesson_id?, type: `purchase|deduction|refund`, amount, stripe_session_id?)
+- `teacher_availability` (id, weekday 0–6, start_time, end_time, active) — regras recorrentes do Hugo
+- `availability_exceptions` (date, start_time?, end_time?, blocked bool) — folgas/aberturas pontuais
+- `lessons` (id, student_id, scheduled_at UNIQUE, duration_min=50, mode: `minecraft|fortnite`, status: `scheduled|completed|late_cancel|no_show|student_cancelled|teacher_cancelled`, meet_url?, feedback?, vocabulary_notes?, cancelled_at?, cancelled_by?)
+- RLS: aluno vê/edita só o próprio; admin (via `has_role`) vê tudo. `GRANT`s explícitos para `authenticated` + `service_role`.
 
-1. **Migrar dados do Supabase antigo** para o Lovable Cloud, ou começar limpo (o projeto ainda não tem alunos reais)?
-2. **Onde hospedar?** As opções realistas para TanStack Start com SSR:
-   - **Cloudflare Workers** (preset padrão do template, sem cold start, free tier generoso) — recomendado
-   - **Vercel** (funciona, mas exige trocar o preset do Nitro para `vercel`)
-   - **Publicar via Lovable** (`*.lovable.app`, um clique, sem GitHub/Vercel)
+### 3. Server functions (`createServerFn` + `requireSupabaseAuth`)
 
-## Roteiro (independente da hospedagem escolhida)
+- `listAvailableSlots({ from, to })` — cruza `teacher_availability` + `availability_exceptions` − `lessons` ocupadas.
+- `bookLesson({ scheduled_at, mode })` — valida slot, checa `balance - reserved >= 1`, incrementa `reserved`, cria `lesson` (status `scheduled`). Transação atômica.
+- `cancelLessonAsStudent({ lesson_id })` — se `scheduled_at - now >= 6h`: libera `reserved`, status `student_cancelled`. Senão: `reserved--`, `balance--`, cria `deduction`, status `late_cancel`.
+- `cancelLessonAsTeacher({ lesson_id })` — sempre libera `reserved`, status `teacher_cancelled` (admin only).
+- `markLessonCompleted({ lesson_id, feedback?, vocabulary_notes? })` — admin only. `reserved--`, `balance--`, cria `deduction`, status `completed`.
+- `markNoShow({ lesson_id })` — admin only. Igual a late_cancel mas status `no_show`.
+- Admin CRUD: `upsertAvailabilityRule`, `deleteAvailabilityRule`, `addAvailabilityException`, `listAllLessons`, `listStudents`.
 
-### 1. Preparar o schema no Lovable Cloud
-Aplicar as tabelas do `schema_completo.sql` como migrations do Lovable Cloud, adaptando:
-- Trocar `role` na tabela `profiles` por uma tabela `user_roles` + enum `app_role` + função `has_role()` (padrão de segurança do Lovable — evita escalonamento de privilégio)
-- Adicionar `GRANT` explícitos em todas as tabelas do schema `public` (obrigatório no Lovable Cloud)
-- Manter RLS, triggers de `updated_at`, e a função `is_admin()` reescrita em cima de `has_role()`
+### 4. Créditos & Stripe
 
-### 2. Autenticação
-- Ativar email/senha no Lovable Cloud Auth
-- Página `/signup` e `/login` já existem — ligar aos hooks do Supabase client já gerado (`@/integrations/supabase/client`)
-- Trigger no signup para criar `profiles` + `credits` zerados automaticamente
+- Habilitar Lovable Payments (Stripe seamless) — passo separado quando o usuário confirmar.
+- Produto: pacote de créditos (ex.: 1, 4, 8 créditos).
+- Webhook `/api/public/webhooks/stripe` → verifica assinatura, cria `credit_transactions` (purchase) e incrementa `balance`.
+- Página `/credits` (nova) para comprar.
 
-### 3. Server functions (substituem o backend Express)
-Reimplementar cada rota do `BACKEND_API.md` como `createServerFn` em `src/lib/`:
-- `getMe` / `updateMe` — perfil + créditos (com `requireSupabaseAuth`)
-- `listAvailability` / `bookLesson` / `cancelLesson`
-- `createCheckoutSession` (Stripe) — usa server function
-- Webhook do Stripe → rota pública em `src/routes/api/public/stripe-webhook.ts` com verificação de assinatura
+### 5. Rotas novas / atualizadas
 
-### 4. Stripe
-- Guardar `STRIPE_SECRET_KEY` e `STRIPE_WEBHOOK_SECRET` via `add_secret` (secrets do Lovable Cloud, não `.env`)
-- Criar os 3 produtos (¥2.000, ¥8.500, ¥14.000) direto no dashboard Stripe
-- Publishable key vai como `VITE_STRIPE_PUBLISHABLE_KEY` no código
+- `/schedule` e `/jp/schedule` — trocar mock por `listAvailableSlots` + `bookLesson`.
+- `/lessons/$id` e `/jp/lessons/$id` — página única por aula (link do Meet, modo, status, botão cancelar com aviso da regra 6h, feedback pós-aula em read-only p/ aluno).
+- `/credits` e `/jp/credits` — compra e histórico de transações.
 
-### 5. SEO e i18n
-- A rota `/jp` já existe — garantir `hreflang` no `head()` de cada rota (pt-BR ↔ ja ↔ x-default)
-- Preencher `title`/`description`/`og:*` em cada rota (hoje só o root está setado)
+### 6. Admin (`/admin/*`, gate por `has_role('admin')`)
 
-### 6. Hospedagem
-Depois de tudo acima, publicar:
-- **Se Lovable:** botão Publish (já configurado) → sai em `speaksquad.lovable.app` em ~1 min. Depois conecta domínio custom em Project Settings → Domains.
-- **Se Cloudflare/Vercel:** o GitHub sync já está de pé; basta importar o repo lá e configurar env vars (as mesmas secrets do Lovable Cloud precisam ser replicadas no provedor).
+Layout `AdminShell` (já existe). Páginas:
 
-### 7. Domínio
-Comprar/apontar o domínio final (ex.: `speaksquad.com` ou `.jp`) — configuração de DNS depende do provedor escolhido no passo 6.
+- `/admin` — overview: próximas 5 aulas, créditos totais em circulação.
+- `/admin/availability` — editor de regras semanais + exceções por data.
+- `/admin/schedule` — calendário com todas as aulas futuras; clique abre `/admin/lessons/$id`.
+- `/admin/lessons/$id` — detalhe da aula: marcar `completed` / `no_show` / cancelar, editar `feedback` e `vocabulary_notes`.
+- `/admin/students` — lista com nome, nível, créditos, última aula.
+- `/admin/finance` — soma de `purchase` e `deduction` por período.
 
-## Perguntas para você antes de eu montar o plano definitivo
+### 7. Auth real
 
-1. **Migrar dados do Supabase antigo** ou começar do zero no Lovable Cloud?
-2. **Onde hospedar:** Lovable (mais simples), Cloudflare Workers (recomendado técnico) ou Vercel (o que estava planejado)?
-3. **Stripe:** já quer integrar agora ou deixar para depois do MVP no ar?
+Ligar `LoginPage` / `SignupPage` ao Supabase Auth (email+senha). Signup cria linha em `profiles` e `credits` (balance 0). Gate `_authenticated/` já é gerenciado.
+
+## Ordem de execução sugerida
+
+1. Ativar Cloud + schema + RLS + roles.
+2. Auth real (login/signup) + `_authenticated` para `/dashboard`, `/schedule`, `/lessons/*`, `/credits`.
+3. Server fns de disponibilidade e booking (sem Stripe ainda — créditos podem ser adicionados manualmente para teste).
+4. Admin de disponibilidade + admin de aulas.
+5. Página `/lessons/$id` com cancelamento (regra 6h).
+6. Habilitar Stripe + `/credits` + webhook.
+7. Marcação de `completed` / `no_show` pelo professor.
+
+## Perguntas antes de começar
+
+1. **Pacotes de crédito**: quantos e a que preço (ex.: 1 crédito ¥3.000, 4 por ¥11.000, 8 por ¥20.000)?
+2. **Duração da aula**: fixa em 50 min (docs) ou configurável?
+3. **Fuso**: tudo em JST no banco (`timestamptz` armazenado UTC, exibido JST)?
+4. **Meet link**: você cola manualmente ao criar a aula, ou geramos um placeholder e você edita depois?
+
+Posso começar pela etapa 1 (Cloud + schema) assim que confirmar essas 4 respostas — ou já sigo com defaults (¥3k/¥11k/¥20k, 50min fixo, JST, Meet manual) se preferir.
