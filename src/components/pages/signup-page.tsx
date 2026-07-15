@@ -9,9 +9,12 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
+  const [pw2, setPw2] = useState("");
   const [level, setLevel] = useState("");
   const [bio, setBio] = useState("");
-  const [game, setGame] = useState<"minecraft" | "fortnite" | null>(null);
+  const [games, setGames] = useState<Array<"minecraft" | "fortnite">>([]);
+  const [minecraftTag, setMinecraftTag] = useState("");
+  const [fortniteTag, setFortniteTag] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sentMsg, setSentMsg] = useState<string | null>(null);
@@ -31,6 +34,22 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
     e.preventDefault();
     setError(null);
     setSentMsg(null);
+    if (pw !== pw2) {
+      setError(content.passwordMismatch);
+      return;
+    }
+    if (games.length === 0) {
+      setError(content.gameRequired);
+      return;
+    }
+    if (games.includes("minecraft") && !minecraftTag.trim()) {
+      setError(content.gamertagRequired);
+      return;
+    }
+    if (games.includes("fortnite") && !fortniteTag.trim()) {
+      setError(content.gamertagRequired);
+      return;
+    }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -45,9 +64,7 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       setLoading(false);
       return;
     }
-    // If confirm-email is on, session will be null
     if (data.session) {
-      // Update profile with extras
       if (data.user) {
         await supabase
           .from("profiles")
@@ -59,7 +76,10 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
               | "advanced"
               | null,
             bio: bio || null,
-            preferred_game: game,
+            preferred_game: games[0],
+            games,
+            minecraft_gamertag: minecraftTag.trim() || null,
+            fortnite_nickname: fortniteTag.trim() || null,
           })
           .eq("id", data.user.id);
       }
@@ -159,6 +179,18 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
               ))}
             </div>
           </Field>
+          <Field label={content.confirmPassword}>
+            <input
+              type="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              value={pw2}
+              onChange={(e) => setPw2(e.target.value)}
+              placeholder={content.confirmPasswordPlaceholder}
+              className={inputCls}
+            />
+          </Field>
         </section>
 
         <div className="hair-divider" />
@@ -197,12 +229,16 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
           <Field label={content.game}>
             <div className="grid grid-cols-2 gap-3">
               {(["minecraft", "fortnite"] as const).map((g) => {
-                const active = game === g;
+                const active = games.includes(g);
                 return (
                   <button
                     type="button"
                     key={g}
-                    onClick={() => setGame(g)}
+                    onClick={() =>
+                      setGames((cur) =>
+                        cur.includes(g) ? cur.filter((x) => x !== g) : [...cur, g],
+                      )
+                    }
                     className={`card-hair p-4 text-left transition-all ${
                       active ? "border-[color:var(--cyan)] bg-[color:var(--bg3)]" : ""
                     }`}
@@ -218,6 +254,34 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
                 );
               })}
             </div>
+            {games.includes("minecraft") && (
+              <div className="mt-3">
+                <Field label={content.minecraftGamertag}>
+                  <input
+                    type="text"
+                    required
+                    value={minecraftTag}
+                    onChange={(e) => setMinecraftTag(e.target.value)}
+                    placeholder="ex.: SteveGamer2026"
+                    className={inputCls}
+                  />
+                </Field>
+              </div>
+            )}
+            {games.includes("fortnite") && (
+              <div className="mt-3">
+                <Field label={content.fortniteNickname}>
+                  <input
+                    type="text"
+                    required
+                    value={fortniteTag}
+                    onChange={(e) => setFortniteTag(e.target.value)}
+                    placeholder="ex.: NinjaBR"
+                    className={inputCls}
+                  />
+                </Field>
+              </div>
+            )}
           </Field>
         </section>
 
