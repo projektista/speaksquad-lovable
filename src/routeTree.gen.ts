@@ -21,8 +21,13 @@ import { Route as JpLoginRouteImport } from './routes/jp.login'
 import { Route as JpContatoRouteImport } from './routes/jp.contato'
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCreditsRouteImport } from './routes/_authenticated/credits'
 import { Route as AuthenticatedJpScheduleRouteImport } from './routes/_authenticated/jp.schedule'
 import { Route as AuthenticatedJpDashboardRouteImport } from './routes/_authenticated/jp.dashboard'
+import { Route as AuthenticatedJpCreditsRouteImport } from './routes/_authenticated/jp.credits'
+import { Route as AuthenticatedCheckoutReturnRouteImport } from './routes/_authenticated/checkout.return'
+import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as AuthenticatedJpCheckoutReturnRouteImport } from './routes/_authenticated/jp.checkout.return'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -83,6 +88,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCreditsRoute = AuthenticatedCreditsRouteImport.update({
+  id: '/credits',
+  path: '/credits',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedJpScheduleRoute = AuthenticatedJpScheduleRouteImport.update({
   id: '/jp/schedule',
   path: '/jp/schedule',
@@ -94,6 +104,29 @@ const AuthenticatedJpDashboardRoute =
     path: '/jp/dashboard',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedJpCreditsRoute = AuthenticatedJpCreditsRouteImport.update({
+  id: '/jp/credits',
+  path: '/jp/credits',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCheckoutReturnRoute =
+  AuthenticatedCheckoutReturnRouteImport.update({
+    id: '/checkout/return',
+    path: '/checkout/return',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const ApiPublicPaymentsWebhookRoute =
+  ApiPublicPaymentsWebhookRouteImport.update({
+    id: '/api/public/payments/webhook',
+    path: '/api/public/payments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedJpCheckoutReturnRoute =
+  AuthenticatedJpCheckoutReturnRouteImport.update({
+    id: '/jp/checkout/return',
+    path: '/jp/checkout/return',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,28 +134,38 @@ export interface FileRoutesByFullPath {
   '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/schedule': typeof AuthenticatedScheduleRoute
   '/jp/contato': typeof JpContatoRoute
   '/jp/login': typeof JpLoginRoute
   '/jp/signup': typeof JpSignupRoute
   '/jp/': typeof JpIndexRoute
+  '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
+  '/jp/credits': typeof AuthenticatedJpCreditsRoute
   '/jp/dashboard': typeof AuthenticatedJpDashboardRoute
   '/jp/schedule': typeof AuthenticatedJpScheduleRoute
+  '/jp/checkout/return': typeof AuthenticatedJpCheckoutReturnRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/schedule': typeof AuthenticatedScheduleRoute
   '/jp/contato': typeof JpContatoRoute
   '/jp/login': typeof JpLoginRoute
   '/jp/signup': typeof JpSignupRoute
   '/jp': typeof JpIndexRoute
+  '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
+  '/jp/credits': typeof AuthenticatedJpCreditsRoute
   '/jp/dashboard': typeof AuthenticatedJpDashboardRoute
   '/jp/schedule': typeof AuthenticatedJpScheduleRoute
+  '/jp/checkout/return': typeof AuthenticatedJpCheckoutReturnRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -132,14 +175,19 @@ export interface FileRoutesById {
   '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/_authenticated/credits': typeof AuthenticatedCreditsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/jp/contato': typeof JpContatoRoute
   '/jp/login': typeof JpLoginRoute
   '/jp/signup': typeof JpSignupRoute
   '/jp/': typeof JpIndexRoute
+  '/_authenticated/checkout/return': typeof AuthenticatedCheckoutReturnRoute
+  '/_authenticated/jp/credits': typeof AuthenticatedJpCreditsRoute
   '/_authenticated/jp/dashboard': typeof AuthenticatedJpDashboardRoute
   '/_authenticated/jp/schedule': typeof AuthenticatedJpScheduleRoute
+  '/_authenticated/jp/checkout/return': typeof AuthenticatedJpCheckoutReturnRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -149,28 +197,38 @@ export interface FileRouteTypes {
     | '/jp'
     | '/login'
     | '/signup'
+    | '/credits'
     | '/dashboard'
     | '/schedule'
     | '/jp/contato'
     | '/jp/login'
     | '/jp/signup'
     | '/jp/'
+    | '/checkout/return'
+    | '/jp/credits'
     | '/jp/dashboard'
     | '/jp/schedule'
+    | '/jp/checkout/return'
+    | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/contato'
     | '/login'
     | '/signup'
+    | '/credits'
     | '/dashboard'
     | '/schedule'
     | '/jp/contato'
     | '/jp/login'
     | '/jp/signup'
     | '/jp'
+    | '/checkout/return'
+    | '/jp/credits'
     | '/jp/dashboard'
     | '/jp/schedule'
+    | '/jp/checkout/return'
+    | '/api/public/payments/webhook'
   id:
     | '__root__'
     | '/'
@@ -179,14 +237,19 @@ export interface FileRouteTypes {
     | '/jp'
     | '/login'
     | '/signup'
+    | '/_authenticated/credits'
     | '/_authenticated/dashboard'
     | '/_authenticated/schedule'
     | '/jp/contato'
     | '/jp/login'
     | '/jp/signup'
     | '/jp/'
+    | '/_authenticated/checkout/return'
+    | '/_authenticated/jp/credits'
     | '/_authenticated/jp/dashboard'
     | '/_authenticated/jp/schedule'
+    | '/_authenticated/jp/checkout/return'
+    | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -196,6 +259,7 @@ export interface RootRouteChildren {
   JpRoute: typeof JpRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
+  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -284,6 +348,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/credits': {
+      id: '/_authenticated/credits'
+      path: '/credits'
+      fullPath: '/credits'
+      preLoaderRoute: typeof AuthenticatedCreditsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/jp/schedule': {
       id: '/_authenticated/jp/schedule'
       path: '/jp/schedule'
@@ -298,21 +369,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedJpDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/jp/credits': {
+      id: '/_authenticated/jp/credits'
+      path: '/jp/credits'
+      fullPath: '/jp/credits'
+      preLoaderRoute: typeof AuthenticatedJpCreditsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/checkout/return': {
+      id: '/_authenticated/checkout/return'
+      path: '/checkout/return'
+      fullPath: '/checkout/return'
+      preLoaderRoute: typeof AuthenticatedCheckoutReturnRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/payments/webhook': {
+      id: '/api/public/payments/webhook'
+      path: '/api/public/payments/webhook'
+      fullPath: '/api/public/payments/webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/jp/checkout/return': {
+      id: '/_authenticated/jp/checkout/return'
+      path: '/jp/checkout/return'
+      fullPath: '/jp/checkout/return'
+      preLoaderRoute: typeof AuthenticatedJpCheckoutReturnRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCreditsRoute: typeof AuthenticatedCreditsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
+  AuthenticatedCheckoutReturnRoute: typeof AuthenticatedCheckoutReturnRoute
+  AuthenticatedJpCreditsRoute: typeof AuthenticatedJpCreditsRoute
   AuthenticatedJpDashboardRoute: typeof AuthenticatedJpDashboardRoute
   AuthenticatedJpScheduleRoute: typeof AuthenticatedJpScheduleRoute
+  AuthenticatedJpCheckoutReturnRoute: typeof AuthenticatedJpCheckoutReturnRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCreditsRoute: AuthenticatedCreditsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
+  AuthenticatedCheckoutReturnRoute: AuthenticatedCheckoutReturnRoute,
+  AuthenticatedJpCreditsRoute: AuthenticatedJpCreditsRoute,
   AuthenticatedJpDashboardRoute: AuthenticatedJpDashboardRoute,
   AuthenticatedJpScheduleRoute: AuthenticatedJpScheduleRoute,
+  AuthenticatedJpCheckoutReturnRoute: AuthenticatedJpCheckoutReturnRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -341,17 +448,8 @@ const rootRouteChildren: RootRouteChildren = {
   JpRoute: JpRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
+  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
