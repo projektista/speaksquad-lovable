@@ -13,11 +13,16 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as JpRouteImport } from './routes/jp'
 import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as JpIndexRouteImport } from './routes/jp.index'
 import { Route as JpSignupRouteImport } from './routes/jp.signup'
 import { Route as JpLoginRouteImport } from './routes/jp.login'
 import { Route as JpContatoRouteImport } from './routes/jp.contato'
+import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedJpScheduleRouteImport } from './routes/_authenticated/jp.schedule'
+import { Route as AuthenticatedJpDashboardRouteImport } from './routes/_authenticated/jp.dashboard'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -37,6 +42,10 @@ const JpRoute = JpRouteImport.update({
 const ContatoRoute = ContatoRouteImport.update({
   id: '/contato',
   path: '/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -64,6 +73,27 @@ const JpContatoRoute = JpContatoRouteImport.update({
   path: '/contato',
   getParentRoute: () => JpRoute,
 } as any)
+const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedJpScheduleRoute = AuthenticatedJpScheduleRouteImport.update({
+  id: '/jp/schedule',
+  path: '/jp/schedule',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedJpDashboardRoute =
+  AuthenticatedJpDashboardRouteImport.update({
+    id: '/jp/dashboard',
+    path: '/jp/dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -71,32 +101,45 @@ export interface FileRoutesByFullPath {
   '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/schedule': typeof AuthenticatedScheduleRoute
   '/jp/contato': typeof JpContatoRoute
   '/jp/login': typeof JpLoginRoute
   '/jp/signup': typeof JpSignupRoute
   '/jp/': typeof JpIndexRoute
+  '/jp/dashboard': typeof AuthenticatedJpDashboardRoute
+  '/jp/schedule': typeof AuthenticatedJpScheduleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/schedule': typeof AuthenticatedScheduleRoute
   '/jp/contato': typeof JpContatoRoute
   '/jp/login': typeof JpLoginRoute
   '/jp/signup': typeof JpSignupRoute
   '/jp': typeof JpIndexRoute
+  '/jp/dashboard': typeof AuthenticatedJpDashboardRoute
+  '/jp/schedule': typeof AuthenticatedJpScheduleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/contato': typeof ContatoRoute
   '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/jp/contato': typeof JpContatoRoute
   '/jp/login': typeof JpLoginRoute
   '/jp/signup': typeof JpSignupRoute
   '/jp/': typeof JpIndexRoute
+  '/_authenticated/jp/dashboard': typeof AuthenticatedJpDashboardRoute
+  '/_authenticated/jp/schedule': typeof AuthenticatedJpScheduleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -106,35 +149,49 @@ export interface FileRouteTypes {
     | '/jp'
     | '/login'
     | '/signup'
+    | '/dashboard'
+    | '/schedule'
     | '/jp/contato'
     | '/jp/login'
     | '/jp/signup'
     | '/jp/'
+    | '/jp/dashboard'
+    | '/jp/schedule'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/contato'
     | '/login'
     | '/signup'
+    | '/dashboard'
+    | '/schedule'
     | '/jp/contato'
     | '/jp/login'
     | '/jp/signup'
     | '/jp'
+    | '/jp/dashboard'
+    | '/jp/schedule'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/contato'
     | '/jp'
     | '/login'
     | '/signup'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/schedule'
     | '/jp/contato'
     | '/jp/login'
     | '/jp/signup'
     | '/jp/'
+    | '/_authenticated/jp/dashboard'
+    | '/_authenticated/jp/schedule'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   ContatoRoute: typeof ContatoRoute
   JpRoute: typeof JpRouteWithChildren
   LoginRoute: typeof LoginRoute
@@ -169,6 +226,13 @@ declare module '@tanstack/react-router' {
       path: '/contato'
       fullPath: '/contato'
       preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -206,8 +270,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JpContatoRouteImport
       parentRoute: typeof JpRoute
     }
+    '/_authenticated/schedule': {
+      id: '/_authenticated/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof AuthenticatedScheduleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/jp/schedule': {
+      id: '/_authenticated/jp/schedule'
+      path: '/jp/schedule'
+      fullPath: '/jp/schedule'
+      preLoaderRoute: typeof AuthenticatedJpScheduleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/jp/dashboard': {
+      id: '/_authenticated/jp/dashboard'
+      path: '/jp/dashboard'
+      fullPath: '/jp/dashboard'
+      preLoaderRoute: typeof AuthenticatedJpDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
+  AuthenticatedJpDashboardRoute: typeof AuthenticatedJpDashboardRoute
+  AuthenticatedJpScheduleRoute: typeof AuthenticatedJpScheduleRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
+  AuthenticatedJpDashboardRoute: AuthenticatedJpDashboardRoute,
+  AuthenticatedJpScheduleRoute: AuthenticatedJpScheduleRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface JpRouteChildren {
   JpContatoRoute: typeof JpContatoRoute
@@ -227,6 +336,7 @@ const JpRouteWithChildren = JpRoute._addFileChildren(JpRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   ContatoRoute: ContatoRoute,
   JpRoute: JpRouteWithChildren,
   LoginRoute: LoginRoute,
