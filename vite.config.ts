@@ -12,4 +12,9 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Deploy target: Vercel. Nitro produces a Vercel-compatible output in `.vercel/output`
+  // that Vercel picks up automatically when the project's root is this repo.
+  nitro: {
+    preset: "vercel",
+  },
 });

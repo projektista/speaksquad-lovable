@@ -202,6 +202,45 @@ export type Database = {
           },
         ]
       }
+      lesson_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          lesson_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          lesson_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_messages_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "v_user_credit_summary"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       lessons: {
         Row: {
           cancelled_at: string | null
@@ -267,7 +306,10 @@ export type Database = {
           bio: string | null
           created_at: string
           english_level: Database["public"]["Enums"]["english_level"] | null
+          fortnite_nickname: string | null
+          games: string[]
           id: string
+          minecraft_gamertag: string | null
           name: string
           preferred_game: Database["public"]["Enums"]["game_mode"] | null
           updated_at: string
@@ -276,7 +318,10 @@ export type Database = {
           bio?: string | null
           created_at?: string
           english_level?: Database["public"]["Enums"]["english_level"] | null
+          fortnite_nickname?: string | null
+          games?: string[]
           id: string
+          minecraft_gamertag?: string | null
           name?: string
           preferred_game?: Database["public"]["Enums"]["game_mode"] | null
           updated_at?: string
@@ -285,7 +330,10 @@ export type Database = {
           bio?: string | null
           created_at?: string
           english_level?: Database["public"]["Enums"]["english_level"] | null
+          fortnite_nickname?: string | null
+          games?: string[]
           id?: string
+          minecraft_gamertag?: string | null
           name?: string
           preferred_game?: Database["public"]["Enums"]["game_mode"] | null
           updated_at?: string
@@ -390,7 +438,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "student"
+      app_role: "admin" | "student" | "teacher"
       cancelled_by_actor: "student" | "teacher" | "system"
       credit_lot_status:
         | "available"
@@ -543,7 +591,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "student"],
+      app_role: ["admin", "student", "teacher"],
       cancelled_by_actor: ["student", "teacher", "system"],
       credit_lot_status: [
         "available",
