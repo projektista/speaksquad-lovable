@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
+import { verifyWebhook } from "@/lib/stripe.server";
 import type { Database } from "@/integrations/supabase/types";
 
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
@@ -104,14 +104,8 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const rawEnv = new URL(request.url).searchParams.get("env");
-        if (rawEnv !== "sandbox" && rawEnv !== "live") {
-          console.error("Webhook received with invalid env param:", rawEnv);
-          return Response.json({ received: true, ignored: "invalid env" });
-        }
-        const env: StripeEnv = rawEnv;
         try {
-          const event = await verifyWebhook(request, env);
+          const event = await verifyWebhook(request);
           switch (event.type) {
             case "checkout.session.completed":
             case "checkout.session.async_payment_succeeded":
