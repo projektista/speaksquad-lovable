@@ -13,36 +13,26 @@ Este projeto está configurado para gerar output no formato Vercel (via `nitro: 
 
 No Vercel → Project Settings → Environment Variables, adicione todas em **Production** e **Preview**:
 
-### Supabase (Lovable Cloud)
+### Supabase (seu projeto próprio)
 - `SUPABASE_URL`
-- `SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_PUBLISHABLE_KEY`
-- `VITE_SUPABASE_PROJECT_ID`
+- `VITE_SUPABASE_ANON_KEY`
 
-### Lovable AI Gateway (para o proxy Stripe)
-- `LOVABLE_API_KEY`
-
-### Stripe (sandbox)
-- `STRIPE_SANDBOX_API_KEY`
-- `PAYMENTS_SANDBOX_WEBHOOK_SECRET`
-- `VITE_PAYMENTS_CLIENT_TOKEN`
-
-### Stripe (produção — só após go-live)
-- `STRIPE_LIVE_API_KEY`
-- `PAYMENTS_LIVE_WEBHOOK_SECRET`
-
-Os valores atuais estão disponíveis no Lovable → Cloud → Secrets (ou peça exportação).
+### Stripe (sua conta própria)
+- `STRIPE_SECRET_KEY` (`sk_test_...` em preview / `sk_live_...` em produção)
+- `STRIPE_WEBHOOK_SECRET` (`whsec_...`)
+- `VITE_STRIPE_PUBLISHABLE_KEY` (`pk_test_...` / `pk_live_...`)
 
 ## 3. Webhook do Stripe
-Depois do primeiro deploy, atualize a URL do webhook Stripe (dashboard Stripe → Developers → Webhooks) para apontar para:
+Depois do primeiro deploy, aponte o webhook do Stripe (Developers → Webhooks) para:
 
 ```
-https://SEU-DOMINIO.vercel.app/api/public/payments/webhook?env=sandbox
+https://SEU-DOMINIO.vercel.app/api/public/payments/webhook
 ```
 
-(e o equivalente `?env=live` no webhook de produção).
+A rota agora ignora o parâmetro `?env=`; o ambiente é definido pela chave `STRIPE_SECRET_KEY` que estiver configurada no deploy.
 
 ## 4. Domínio custom
 Configure em Vercel → Domains como de costume.
