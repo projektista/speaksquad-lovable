@@ -51,7 +51,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((data: {
     packageCode: "single" | "pack5" | "pack10";
     returnUrl: string;
-    environment: StripeEnv;
+    environment?: StripeEnv;
   }) => {
     if (!PACKAGES[data.packageCode]) throw new Error("Invalid package");
     return data;
