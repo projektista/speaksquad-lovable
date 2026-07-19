@@ -105,7 +105,7 @@ export const bookLesson = createServerFn({ method: "POST" })
     if (!summary || (summary.available ?? 0) < 1) throw new Error("Sem créditos disponíveis.");
 
     // Insert lesson
-    const { data: lesson, error: insErr } = await supabase
+    const { data: lesson, error: insErr } = await (supabase as any)
       .from("lessons")
       .insert({
         student_id: userId,
