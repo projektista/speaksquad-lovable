@@ -144,7 +144,7 @@ export const getTeacherAvailabilityRange = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertTeacher(context);
     const [slotsRes, lessonsRes] = await Promise.all([
-      context.supabase
+      (context.supabase as any)
         .from("teacher_availability_slots")
         .select("id, starts_at, status")
         .eq("teacher_id", context.userId)
@@ -153,13 +153,13 @@ export const getTeacherAvailabilityRange = createServerFn({ method: "POST" })
       context.supabase
         .from("lessons")
         .select("id, scheduled_at, status, student_id")
-        .in("status", ["scheduled", "confirmed"])
+        .in("status", ["scheduled"])
         .gte("scheduled_at", data.from)
         .lt("scheduled_at", data.to),
     ]);
     return {
-      slots: slotsRes.data ?? [],
-      lessons: lessonsRes.data ?? [],
+      slots: (slotsRes.data ?? []) as Array<{ id: string; starts_at: string; status: string }>,
+      lessons: (lessonsRes.data ?? []) as Array<{ id: string; scheduled_at: string; status: string; student_id: string }>,
     };
   });
 
@@ -173,12 +173,12 @@ export const setSlot = createServerFn({ method: "POST" })
       .from("lessons")
       .select("id, status")
       .eq("scheduled_at", data.starts_at)
-      .in("status", ["scheduled", "confirmed"])
+      .in("status", ["scheduled"])
       .maybeSingle();
     if (lesson) throw new Error("Slot já reservado por uma aula.");
 
     if (data.state === "off") {
-      await context.supabase
+      await (context.supabase as any)
         .from("teacher_availability_slots")
         .delete()
         .eq("teacher_id", context.userId)
@@ -186,7 +186,7 @@ export const setSlot = createServerFn({ method: "POST" })
       return { ok: true };
     }
 
-    await context.supabase
+    await (context.supabase as any)
       .from("teacher_availability_slots")
       .upsert(
         {
