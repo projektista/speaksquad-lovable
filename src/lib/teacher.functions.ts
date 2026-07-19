@@ -129,3 +129,73 @@ export const updateTeacherProfile = createServerFn({ method: "POST" })
     await context.supabase.from("profiles").update(patch).eq("id", context.userId);
     return { ok: true };
   });
+
+/* ------------------------------------------------------------------ */
+/* Date-based availability slots                                      */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Returns slots + booked lessons for the teacher within [from, to).
+ * Booked lessons come from the `lessons` table with active status.
+ */
+export const getTeacherAvailabilityRange = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { from: string; to: string }) => data)
+  .handler(async ({ data, context }) => {
+    await assertTeacher(context);
+    const [slotsRes, lessonsRes] = await Promise.all([
+      (context.supabase as any)
+        .from("teacher_availability_slots")
+        .select("id, starts_at, status")
+        .eq("teacher_id", context.userId)
+        .gte("starts_at", data.from)
+        .lt("starts_at", data.to),
+      context.supabase
+        .from("lessons")
+        .select("id, scheduled_at, status, student_id")
+        .in("status", ["scheduled"])
+        .gte("scheduled_at", data.from)
+        .lt("scheduled_at", data.to),
+    ]);
+    return {
+      slots: (slotsRes.data ?? []) as Array<{ id: string; starts_at: string; status: string }>,
+      lessons: (lessonsRes.data ?? []) as Array<{ id: string; scheduled_at: string; status: string; student_id: string }>,
+    };
+  });
+
+export const setSlot = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { starts_at: string; state: "available" | "blocked" | "off" }) => data)
+  .handler(async ({ data, context }) => {
+    await assertTeacher(context);
+    // If a lesson exists on this slot, block changes.
+    const { data: lesson } = await context.supabase
+      .from("lessons")
+      .select("id, status")
+      .eq("scheduled_at", data.starts_at)
+      .in("status", ["scheduled"])
+      .maybeSingle();
+    if (lesson) throw new Error("Slot já reservado por uma aula.");
+
+    if (data.state === "off") {
+      await (context.supabase as any)
+        .from("teacher_availability_slots")
+        .delete()
+        .eq("teacher_id", context.userId)
+        .eq("starts_at", data.starts_at);
+      return { ok: true };
+    }
+
+    await (context.supabase as any)
+      .from("teacher_availability_slots")
+      .upsert(
+        {
+          teacher_id: context.userId,
+          starts_at: data.starts_at,
+          status: data.state,
+          duration_min: 60,
+        },
+        { onConflict: "teacher_id,starts_at" },
+      );
+    return { ok: true };
+  });

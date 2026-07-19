@@ -40,6 +40,30 @@ export const getLessonDetail = createServerFn({ method: "POST" })
     };
   });
 
+/**
+ * Returns the last N completed lessons (with feedback/vocab) for a given student,
+ * excluding the current lesson. Used by the lesson detail page ("previous notes").
+ */
+export const getPreviousLessonsNotes = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { studentId: string; excludeLessonId: string; limit?: number; offset?: number }) => data)
+  .handler(async ({ data, context }) => {
+    const roles = await getRoles(context);
+    const isTeacher = roles.includes("teacher") || roles.includes("admin");
+    if (!isTeacher && data.studentId !== context.userId) throw new Error("Forbidden");
+    const limit = Math.min(data.limit ?? 3, 20);
+    const offset = data.offset ?? 0;
+    const { data: rows } = await context.supabase
+      .from("lessons")
+      .select("id, scheduled_at, mode, feedback, vocabulary_notes")
+      .eq("student_id", data.studentId)
+      .eq("status", "completed")
+      .neq("id", data.excludeLessonId)
+      .order("scheduled_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+    return rows ?? [];
+  });
+
 export const getLessonMessages = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { lessonId: string }) => data)

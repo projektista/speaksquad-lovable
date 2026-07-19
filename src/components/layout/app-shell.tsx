@@ -6,28 +6,28 @@ import { useRoles } from "@/hooks/use-role";
 
 type Lang = "pt" | "jp";
 
-const itemsByLang: Record<Lang, Array<{ to: string; label: string; code: string }>> = {
+const studentItemsByLang: Record<Lang, Array<{ to: string; label: string }>> = {
   pt: [
-    { to: "/dashboard", label: "Dashboard", code: "01" },
-    { to: "/schedule", label: "Agendar", code: "02" },
-    { to: "/lessons", label: "Aulas", code: "03" },
-    { to: "/credits", label: "Créditos", code: "04" },
-    { to: "/profile", label: "Perfil", code: "05" },
+    { to: "/dashboard", label: "Dashboard" },
+    { to: "/schedule", label: "Agendar" },
+    { to: "/lessons", label: "Aulas" },
+    { to: "/credits", label: "Créditos" },
+    { to: "/profile", label: "Perfil" },
   ],
   jp: [
-    { to: "/jp/dashboard", label: "ダッシュボード", code: "01" },
-    { to: "/jp/schedule", label: "予約", code: "02" },
-    { to: "/jp/lessons", label: "レッスン", code: "03" },
-    { to: "/jp/credits", label: "クレジット", code: "04" },
-    { to: "/jp/profile", label: "プロフィール", code: "05" },
+    { to: "/jp/dashboard", label: "ダッシュボード" },
+    { to: "/jp/schedule", label: "予約" },
+    { to: "/jp/lessons", label: "レッスン" },
+    { to: "/jp/credits", label: "クレジット" },
+    { to: "/jp/profile", label: "プロフィール" },
   ],
 };
 
-const teacherItems: Array<{ to: string; label: string; code: string }> = [
-  { to: "/teacher/dashboard", label: "Dashboard Pro", code: "T1" },
-  { to: "/teacher/agendamento", label: "Agendamento", code: "T2" },
-  { to: "/teacher/aulas", label: "Todas as aulas", code: "T3" },
-  { to: "/teacher/perfil", label: "Perfil professor", code: "T4" },
+const teacherItems: Array<{ to: string; label: string }> = [
+  { to: "/teacher/dashboard", label: "Dashboard" },
+  { to: "/teacher/agendamento", label: "Agenda" },
+  { to: "/teacher/aulas", label: "Aulas" },
+  { to: "/teacher/perfil", label: "Perfil" },
 ];
 
 export function AppShell({
@@ -44,8 +44,9 @@ export function AppShell({
   lang?: Lang;
 }) {
   const { location } = useRouterState();
-  const items = itemsByLang[lang];
   const { isTeacher } = useRoles();
+  const items = isTeacher ? teacherItems : studentItemsByLang[lang];
+  const accent = isTeacher ? "magenta" : "cyan";
   const creditsLabel = lang === "jp" ? "残りクレジット" : "créditos_disponíveis";
   const buyLabel = lang === "jp" ? "購入" : "Comprar";
   const creditsHref = lang === "jp" ? "/jp/credits" : "/credits";
@@ -64,64 +65,45 @@ export function AppShell({
           <div className="mb-6">
             <BrandMark to={lang === "jp" ? "/jp" : "/"} size="sm" />
           </div>
+          {isTeacher && (
+            <div className="mb-2 px-2 font-mono-alt text-[10px] uppercase tracking-widest text-magenta">
+              // teacher_console
+            </div>
+          )}
           <nav className="flex flex-col gap-1 font-mono-alt text-sm">
             {items.map((it) => {
-              const active = location.pathname.startsWith(it.to);
+              const active =
+                location.pathname === it.to || location.pathname.startsWith(it.to + "/");
+              const activeBorder =
+                accent === "magenta"
+                  ? "border-[color:var(--magenta)] bg-[color:var(--bg3)] text-magenta"
+                  : "border-[color:var(--cyan)] bg-[color:var(--bg3)] text-cyan";
+              const cursor = accent === "magenta" ? "text-magenta" : "text-cyan";
               return (
                 <Link
                   key={it.to}
                   to={it.to}
                   className={`flex items-center justify-between rounded-[4px] border px-3 py-2 transition-colors ${
                     active
-                      ? "border-[color:var(--cyan)] bg-[color:var(--bg3)] text-cyan"
+                      ? activeBorder
                       : "border-transparent text-muted hover:border-hair hover:text-foreground"
                   }`}
                 >
-                  <span>
-                    <span className="mr-2 text-muted">{it.code}</span>
-                    {it.label}
-                  </span>
-                  {active && <span className="text-cyan">▊</span>}
+                  <span>{it.label}</span>
+                  {active && <span className={cursor}>▊</span>}
                 </Link>
               );
             })}
           </nav>
-          {isTeacher && (
-            <>
-              <div className="mt-6 mb-2 px-2 font-mono-alt text-[10px] uppercase tracking-widest text-magenta">
-                // teacher_menu
-              </div>
-              <nav className="flex flex-col gap-1 font-mono-alt text-sm">
-                {teacherItems.map((it) => {
-                  const active = location.pathname.startsWith(it.to);
-                  return (
-                    <Link
-                      key={it.to}
-                      to={it.to}
-                      className={`flex items-center justify-between rounded-[4px] border px-3 py-2 transition-colors ${
-                        active
-                          ? "border-[color:var(--magenta)] bg-[color:var(--bg3)] text-magenta"
-                          : "border-transparent text-muted hover:border-hair hover:text-foreground"
-                      }`}
-                    >
-                      <span>
-                        <span className="mr-2 text-muted">{it.code}</span>
-                        {it.label}
-                      </span>
-                      {active && <span className="text-magenta">▊</span>}
-                    </Link>
-                  );
-                })}
-              </nav>
-            </>
+          {!isTeacher && (
+            <div className="mt-8 rounded-[4px] border border-hair bg-bg2 p-3 font-mono-alt text-xs">
+              <div className="text-muted">{creditsLabel}</div>
+              <div className="mt-1 font-display text-2xl text-cyan">{credits}</div>
+              <Link to={creditsHref} className="btn-outline mt-3 w-full !py-2 text-[10px]">
+                {buyLabel}
+              </Link>
+            </div>
           )}
-          <div className="mt-8 rounded-[4px] border-hair bg-bg2 p-3 font-mono-alt text-xs">
-            <div className="text-muted">{creditsLabel}</div>
-            <div className="mt-1 font-display text-2xl text-cyan">{credits}</div>
-            <Link to={creditsHref} className="btn-outline mt-3 w-full !py-2 text-[10px]">
-              {buyLabel}
-            </Link>
-          </div>
           <button
             type="button"
             onClick={onSignOut}
