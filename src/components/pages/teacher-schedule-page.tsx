@@ -80,9 +80,8 @@ export function TeacherSchedulePage() {
     const iso = toIso(day, hour);
     const cur = cellState(day, hour);
     if (cur === "booked") return;
-    // Block past slots
     if (new Date(iso).getTime() <= Date.now()) return;
-    const next = nextState(cur);
+    const next = nextState(cur) as "off" | "available" | "blocked";
     setBusy(iso);
     try {
       await setSlot({ data: { starts_at: iso, state: next } });
