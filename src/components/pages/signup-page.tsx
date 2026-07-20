@@ -27,8 +27,8 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
     if (/[^A-Za-z0-9]/.test(pw)) s++;
     return s;
   }, [pw]);
-  const loginTo = lang === "jp" ? "/jp/login" : "/login";
-  const dashTo = lang === "jp" ? "/jp/dashboard" : "/dashboard";
+  const loginTo = lang === "jp" ? "/login" : "/ptbr/login";
+  const dashTo = lang === "jp" ? "/dashboard" : "/ptbr/dashboard";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
