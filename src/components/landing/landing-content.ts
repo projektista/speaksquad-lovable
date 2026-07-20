@@ -249,7 +249,7 @@ export const ptContent: LandingContent = {
 
 export const jpContent: LandingContent = {
   htmlLang: "ja",
-  signupPath: "/jp/signup",
+  signupPath: "/signup",
   hero: {
     label: "LEVEL UP YOUR ENGLISH",
     titleLine1: "ゲームで、",
@@ -341,9 +341,9 @@ export const jpContent: LandingContent = {
     popularBadge: "[ 人気 ]",
     buyCta: "購入する",
     tiers: [
-      { name: "単発", price: "¥2.000", per: "1レッスン", features: ["50分レッスン × 1", "有効期限なし", "柔軟な予約"], footer: "契約なし。入会金なし。", featured: false, save: null },
-      { name: "5回パック", price: "¥8.500", per: "1回あたり ¥1.700", save: "15%オフ", features: ["50分レッスン × 5", "有効期限なし", "柔軟な予約", "優先予約"], footer: "まずは無料体験から。", featured: true },
-      { name: "10回パック", price: "¥14.000", per: "1回あたり ¥1.400", save: "30%オフ", features: ["50分レッスン × 10", "有効期限なし", "柔軟な予約", "優先予約"], footer: "契約なし。隠れた費用なし。", featured: false },
+      { name: "単発", price: "¥2.800", per: "1レッスン", features: ["50分レッスン × 1", "有効期限 20日", "柔軟な予約"], footer: "契約なし。入会金なし。", featured: false, save: null },
+      { name: "5回パック", price: "¥13.000", per: "1回あたり ¥2.600", save: "約7%オフ", features: ["50分レッスン × 5", "有効期限 45日", "柔軟な予約", "優先予約"], footer: "まずは無料体験から。", featured: true },
+      { name: "10回パック", price: "¥24.000", per: "1回あたり ¥2.400", save: "約14%オフ", features: ["50分レッスン × 10", "有効期限 90日", "柔軟な予約", "優先予約"], footer: "契約なし。隠れた費用なし。", featured: false },
     ],
   },
   requisitos: {
