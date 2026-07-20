@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SchedulePage } from "@/components/pages/schedule-page";
 import { scheduleContent } from "@/lib/i18n";
 
-export const Route = createFileRoute("/_authenticated/schedule")({
+export const Route = createFileRoute("/_authenticated/ptbr/schedule")({
   head: () => ({
     meta: [
       { title: scheduleContent.pt.metaTitle },

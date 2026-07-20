@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SignupPage } from "@/components/pages/signup-page";
 import { signupContent } from "@/lib/i18n";
 
-export const Route = createFileRoute("/jp/signup")({
+export const Route = createFileRoute("/signup")({
   head: () => ({
     meta: [
       { title: signupContent.jp.metaTitle },

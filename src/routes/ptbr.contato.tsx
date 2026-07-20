@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ContactPage } from "@/components/pages/contact-page";
 import { contactContent } from "@/lib/i18n";
 
-export const Route = createFileRoute("/contato")({
+export const Route = createFileRoute("/ptbr/contato")({
   head: () => ({
     meta: [
       { title: contactContent.pt.metaTitle },

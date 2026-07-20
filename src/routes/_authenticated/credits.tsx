@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CreditsPage } from "@/components/pages/credits-page";
 
-export const Route = createFileRoute("/_authenticated/jp/credits")({
+export const Route = createFileRoute("/_authenticated/credits")({
   head: () => ({
     meta: [
       { title: "クレジット · SpeakSquad" },

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LandingPage } from "@/components/landing/landing-page";
 import { ptContent } from "@/components/landing/landing-content";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/ptbr/")({
   head: () => ({
     meta: [
       { title: "SpeakSquad — Aprenda inglês jogando Minecraft e Fortnite" },

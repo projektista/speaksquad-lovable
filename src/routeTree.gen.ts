@@ -11,14 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as JpRouteImport } from './routes/jp'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as JpIndexRouteImport } from './routes/jp.index'
-import { Route as JpSignupRouteImport } from './routes/jp.signup'
-import { Route as JpLoginRouteImport } from './routes/jp.login'
-import { Route as JpContatoRouteImport } from './routes/jp.contato'
+import { Route as PtbrIndexRouteImport } from './routes/ptbr.index'
+import { Route as PtbrSignupRouteImport } from './routes/ptbr.signup'
+import { Route as PtbrLoginRouteImport } from './routes/ptbr.login'
+import { Route as PtbrContatoRouteImport } from './routes/ptbr.contato'
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCreditsRouteImport } from './routes/_authenticated/credits'
@@ -26,14 +25,14 @@ import { Route as AuthenticatedTeacherPerfilRouteImport } from './routes/_authen
 import { Route as AuthenticatedTeacherDashboardRouteImport } from './routes/_authenticated/teacher.dashboard'
 import { Route as AuthenticatedTeacherAulasRouteImport } from './routes/_authenticated/teacher.aulas'
 import { Route as AuthenticatedTeacherAgendamentoRouteImport } from './routes/_authenticated/teacher.agendamento'
+import { Route as AuthenticatedPtbrScheduleRouteImport } from './routes/_authenticated/ptbr.schedule'
+import { Route as AuthenticatedPtbrDashboardRouteImport } from './routes/_authenticated/ptbr.dashboard'
+import { Route as AuthenticatedPtbrCreditsRouteImport } from './routes/_authenticated/ptbr.credits'
 import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authenticated/lessons.$id'
-import { Route as AuthenticatedJpScheduleRouteImport } from './routes/_authenticated/jp.schedule'
-import { Route as AuthenticatedJpDashboardRouteImport } from './routes/_authenticated/jp.dashboard'
-import { Route as AuthenticatedJpCreditsRouteImport } from './routes/_authenticated/jp.credits'
 import { Route as AuthenticatedCheckoutReturnRouteImport } from './routes/_authenticated/checkout.return'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
-import { Route as AuthenticatedJpLessonsIdRouteImport } from './routes/_authenticated/jp.lessons.$id'
-import { Route as AuthenticatedJpCheckoutReturnRouteImport } from './routes/_authenticated/jp.checkout.return'
+import { Route as AuthenticatedPtbrLessonsIdRouteImport } from './routes/_authenticated/ptbr.lessons.$id'
+import { Route as AuthenticatedPtbrCheckoutReturnRouteImport } from './routes/_authenticated/ptbr.checkout.return'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -43,11 +42,6 @@ const SignupRoute = SignupRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JpRoute = JpRouteImport.update({
-  id: '/jp',
-  path: '/jp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContatoRoute = ContatoRouteImport.update({
@@ -64,25 +58,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JpIndexRoute = JpIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => JpRoute,
+const PtbrIndexRoute = PtbrIndexRouteImport.update({
+  id: '/ptbr/',
+  path: '/ptbr/',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const JpSignupRoute = JpSignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => JpRoute,
+const PtbrSignupRoute = PtbrSignupRouteImport.update({
+  id: '/ptbr/signup',
+  path: '/ptbr/signup',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const JpLoginRoute = JpLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => JpRoute,
+const PtbrLoginRoute = PtbrLoginRouteImport.update({
+  id: '/ptbr/login',
+  path: '/ptbr/login',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const JpContatoRoute = JpContatoRouteImport.update({
-  id: '/contato',
-  path: '/contato',
-  getParentRoute: () => JpRoute,
+const PtbrContatoRoute = PtbrContatoRouteImport.update({
+  id: '/ptbr/contato',
+  path: '/ptbr/contato',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
   id: '/schedule',
@@ -123,25 +117,27 @@ const AuthenticatedTeacherAgendamentoRoute =
     path: '/teacher/agendamento',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPtbrScheduleRoute =
+  AuthenticatedPtbrScheduleRouteImport.update({
+    id: '/ptbr/schedule',
+    path: '/ptbr/schedule',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPtbrDashboardRoute =
+  AuthenticatedPtbrDashboardRouteImport.update({
+    id: '/ptbr/dashboard',
+    path: '/ptbr/dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPtbrCreditsRoute =
+  AuthenticatedPtbrCreditsRouteImport.update({
+    id: '/ptbr/credits',
+    path: '/ptbr/credits',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLessonsIdRoute = AuthenticatedLessonsIdRouteImport.update({
   id: '/lessons/$id',
   path: '/lessons/$id',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedJpScheduleRoute = AuthenticatedJpScheduleRouteImport.update({
-  id: '/jp/schedule',
-  path: '/jp/schedule',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedJpDashboardRoute =
-  AuthenticatedJpDashboardRouteImport.update({
-    id: '/jp/dashboard',
-    path: '/jp/dashboard',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedJpCreditsRoute = AuthenticatedJpCreditsRouteImport.update({
-  id: '/jp/credits',
-  path: '/jp/credits',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCheckoutReturnRoute =
@@ -156,43 +152,42 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
-const AuthenticatedJpLessonsIdRoute =
-  AuthenticatedJpLessonsIdRouteImport.update({
-    id: '/jp/lessons/$id',
-    path: '/jp/lessons/$id',
+const AuthenticatedPtbrLessonsIdRoute =
+  AuthenticatedPtbrLessonsIdRouteImport.update({
+    id: '/ptbr/lessons/$id',
+    path: '/ptbr/lessons/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedJpCheckoutReturnRoute =
-  AuthenticatedJpCheckoutReturnRouteImport.update({
-    id: '/jp/checkout/return',
-    path: '/jp/checkout/return',
+const AuthenticatedPtbrCheckoutReturnRoute =
+  AuthenticatedPtbrCheckoutReturnRouteImport.update({
+    id: '/ptbr/checkout/return',
+    path: '/ptbr/checkout/return',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
-  '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/schedule': typeof AuthenticatedScheduleRoute
-  '/jp/contato': typeof JpContatoRoute
-  '/jp/login': typeof JpLoginRoute
-  '/jp/signup': typeof JpSignupRoute
-  '/jp/': typeof JpIndexRoute
+  '/ptbr/contato': typeof PtbrContatoRoute
+  '/ptbr/login': typeof PtbrLoginRoute
+  '/ptbr/signup': typeof PtbrSignupRoute
+  '/ptbr/': typeof PtbrIndexRoute
   '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
-  '/jp/credits': typeof AuthenticatedJpCreditsRoute
-  '/jp/dashboard': typeof AuthenticatedJpDashboardRoute
-  '/jp/schedule': typeof AuthenticatedJpScheduleRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
+  '/ptbr/credits': typeof AuthenticatedPtbrCreditsRoute
+  '/ptbr/dashboard': typeof AuthenticatedPtbrDashboardRoute
+  '/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
   '/teacher/agendamento': typeof AuthenticatedTeacherAgendamentoRoute
   '/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
-  '/jp/checkout/return': typeof AuthenticatedJpCheckoutReturnRoute
-  '/jp/lessons/$id': typeof AuthenticatedJpLessonsIdRoute
+  '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
+  '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -203,21 +198,21 @@ export interface FileRoutesByTo {
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/schedule': typeof AuthenticatedScheduleRoute
-  '/jp/contato': typeof JpContatoRoute
-  '/jp/login': typeof JpLoginRoute
-  '/jp/signup': typeof JpSignupRoute
-  '/jp': typeof JpIndexRoute
+  '/ptbr/contato': typeof PtbrContatoRoute
+  '/ptbr/login': typeof PtbrLoginRoute
+  '/ptbr/signup': typeof PtbrSignupRoute
+  '/ptbr': typeof PtbrIndexRoute
   '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
-  '/jp/credits': typeof AuthenticatedJpCreditsRoute
-  '/jp/dashboard': typeof AuthenticatedJpDashboardRoute
-  '/jp/schedule': typeof AuthenticatedJpScheduleRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
+  '/ptbr/credits': typeof AuthenticatedPtbrCreditsRoute
+  '/ptbr/dashboard': typeof AuthenticatedPtbrDashboardRoute
+  '/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
   '/teacher/agendamento': typeof AuthenticatedTeacherAgendamentoRoute
   '/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
-  '/jp/checkout/return': typeof AuthenticatedJpCheckoutReturnRoute
-  '/jp/lessons/$id': typeof AuthenticatedJpLessonsIdRoute
+  '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
+  '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
@@ -225,27 +220,26 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/contato': typeof ContatoRoute
-  '/jp': typeof JpRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/_authenticated/credits': typeof AuthenticatedCreditsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
-  '/jp/contato': typeof JpContatoRoute
-  '/jp/login': typeof JpLoginRoute
-  '/jp/signup': typeof JpSignupRoute
-  '/jp/': typeof JpIndexRoute
+  '/ptbr/contato': typeof PtbrContatoRoute
+  '/ptbr/login': typeof PtbrLoginRoute
+  '/ptbr/signup': typeof PtbrSignupRoute
+  '/ptbr/': typeof PtbrIndexRoute
   '/_authenticated/checkout/return': typeof AuthenticatedCheckoutReturnRoute
-  '/_authenticated/jp/credits': typeof AuthenticatedJpCreditsRoute
-  '/_authenticated/jp/dashboard': typeof AuthenticatedJpDashboardRoute
-  '/_authenticated/jp/schedule': typeof AuthenticatedJpScheduleRoute
   '/_authenticated/lessons/$id': typeof AuthenticatedLessonsIdRoute
+  '/_authenticated/ptbr/credits': typeof AuthenticatedPtbrCreditsRoute
+  '/_authenticated/ptbr/dashboard': typeof AuthenticatedPtbrDashboardRoute
+  '/_authenticated/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
   '/_authenticated/teacher/agendamento': typeof AuthenticatedTeacherAgendamentoRoute
   '/_authenticated/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/_authenticated/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/_authenticated/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
-  '/_authenticated/jp/checkout/return': typeof AuthenticatedJpCheckoutReturnRoute
-  '/_authenticated/jp/lessons/$id': typeof AuthenticatedJpLessonsIdRoute
+  '/_authenticated/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
+  '/_authenticated/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
@@ -253,27 +247,26 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/contato'
-    | '/jp'
     | '/login'
     | '/signup'
     | '/credits'
     | '/dashboard'
     | '/schedule'
-    | '/jp/contato'
-    | '/jp/login'
-    | '/jp/signup'
-    | '/jp/'
+    | '/ptbr/contato'
+    | '/ptbr/login'
+    | '/ptbr/signup'
+    | '/ptbr/'
     | '/checkout/return'
-    | '/jp/credits'
-    | '/jp/dashboard'
-    | '/jp/schedule'
     | '/lessons/$id'
+    | '/ptbr/credits'
+    | '/ptbr/dashboard'
+    | '/ptbr/schedule'
     | '/teacher/agendamento'
     | '/teacher/aulas'
     | '/teacher/dashboard'
     | '/teacher/perfil'
-    | '/jp/checkout/return'
-    | '/jp/lessons/$id'
+    | '/ptbr/checkout/return'
+    | '/ptbr/lessons/$id'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -284,48 +277,47 @@ export interface FileRouteTypes {
     | '/credits'
     | '/dashboard'
     | '/schedule'
-    | '/jp/contato'
-    | '/jp/login'
-    | '/jp/signup'
-    | '/jp'
+    | '/ptbr/contato'
+    | '/ptbr/login'
+    | '/ptbr/signup'
+    | '/ptbr'
     | '/checkout/return'
-    | '/jp/credits'
-    | '/jp/dashboard'
-    | '/jp/schedule'
     | '/lessons/$id'
+    | '/ptbr/credits'
+    | '/ptbr/dashboard'
+    | '/ptbr/schedule'
     | '/teacher/agendamento'
     | '/teacher/aulas'
     | '/teacher/dashboard'
     | '/teacher/perfil'
-    | '/jp/checkout/return'
-    | '/jp/lessons/$id'
+    | '/ptbr/checkout/return'
+    | '/ptbr/lessons/$id'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/contato'
-    | '/jp'
     | '/login'
     | '/signup'
     | '/_authenticated/credits'
     | '/_authenticated/dashboard'
     | '/_authenticated/schedule'
-    | '/jp/contato'
-    | '/jp/login'
-    | '/jp/signup'
-    | '/jp/'
+    | '/ptbr/contato'
+    | '/ptbr/login'
+    | '/ptbr/signup'
+    | '/ptbr/'
     | '/_authenticated/checkout/return'
-    | '/_authenticated/jp/credits'
-    | '/_authenticated/jp/dashboard'
-    | '/_authenticated/jp/schedule'
     | '/_authenticated/lessons/$id'
+    | '/_authenticated/ptbr/credits'
+    | '/_authenticated/ptbr/dashboard'
+    | '/_authenticated/ptbr/schedule'
     | '/_authenticated/teacher/agendamento'
     | '/_authenticated/teacher/aulas'
     | '/_authenticated/teacher/dashboard'
     | '/_authenticated/teacher/perfil'
-    | '/_authenticated/jp/checkout/return'
-    | '/_authenticated/jp/lessons/$id'
+    | '/_authenticated/ptbr/checkout/return'
+    | '/_authenticated/ptbr/lessons/$id'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -333,9 +325,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   ContatoRoute: typeof ContatoRoute
-  JpRoute: typeof JpRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
+  PtbrContatoRoute: typeof PtbrContatoRoute
+  PtbrLoginRoute: typeof PtbrLoginRoute
+  PtbrSignupRoute: typeof PtbrSignupRoute
+  PtbrIndexRoute: typeof PtbrIndexRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -353,13 +348,6 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/jp': {
-      id: '/jp'
-      path: '/jp'
-      fullPath: '/jp'
-      preLoaderRoute: typeof JpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contato': {
@@ -383,33 +371,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/jp/': {
-      id: '/jp/'
-      path: '/'
-      fullPath: '/jp/'
-      preLoaderRoute: typeof JpIndexRouteImport
-      parentRoute: typeof JpRoute
+    '/ptbr/': {
+      id: '/ptbr/'
+      path: '/ptbr'
+      fullPath: '/ptbr/'
+      preLoaderRoute: typeof PtbrIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/jp/signup': {
-      id: '/jp/signup'
-      path: '/signup'
-      fullPath: '/jp/signup'
-      preLoaderRoute: typeof JpSignupRouteImport
-      parentRoute: typeof JpRoute
+    '/ptbr/signup': {
+      id: '/ptbr/signup'
+      path: '/ptbr/signup'
+      fullPath: '/ptbr/signup'
+      preLoaderRoute: typeof PtbrSignupRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/jp/login': {
-      id: '/jp/login'
-      path: '/login'
-      fullPath: '/jp/login'
-      preLoaderRoute: typeof JpLoginRouteImport
-      parentRoute: typeof JpRoute
+    '/ptbr/login': {
+      id: '/ptbr/login'
+      path: '/ptbr/login'
+      fullPath: '/ptbr/login'
+      preLoaderRoute: typeof PtbrLoginRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/jp/contato': {
-      id: '/jp/contato'
-      path: '/contato'
-      fullPath: '/jp/contato'
-      preLoaderRoute: typeof JpContatoRouteImport
-      parentRoute: typeof JpRoute
+    '/ptbr/contato': {
+      id: '/ptbr/contato'
+      path: '/ptbr/contato'
+      fullPath: '/ptbr/contato'
+      preLoaderRoute: typeof PtbrContatoRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/schedule': {
       id: '/_authenticated/schedule'
@@ -460,32 +448,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeacherAgendamentoRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ptbr/schedule': {
+      id: '/_authenticated/ptbr/schedule'
+      path: '/ptbr/schedule'
+      fullPath: '/ptbr/schedule'
+      preLoaderRoute: typeof AuthenticatedPtbrScheduleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ptbr/dashboard': {
+      id: '/_authenticated/ptbr/dashboard'
+      path: '/ptbr/dashboard'
+      fullPath: '/ptbr/dashboard'
+      preLoaderRoute: typeof AuthenticatedPtbrDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ptbr/credits': {
+      id: '/_authenticated/ptbr/credits'
+      path: '/ptbr/credits'
+      fullPath: '/ptbr/credits'
+      preLoaderRoute: typeof AuthenticatedPtbrCreditsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/lessons/$id': {
       id: '/_authenticated/lessons/$id'
       path: '/lessons/$id'
       fullPath: '/lessons/$id'
       preLoaderRoute: typeof AuthenticatedLessonsIdRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/jp/schedule': {
-      id: '/_authenticated/jp/schedule'
-      path: '/jp/schedule'
-      fullPath: '/jp/schedule'
-      preLoaderRoute: typeof AuthenticatedJpScheduleRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/jp/dashboard': {
-      id: '/_authenticated/jp/dashboard'
-      path: '/jp/dashboard'
-      fullPath: '/jp/dashboard'
-      preLoaderRoute: typeof AuthenticatedJpDashboardRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/jp/credits': {
-      id: '/_authenticated/jp/credits'
-      path: '/jp/credits'
-      fullPath: '/jp/credits'
-      preLoaderRoute: typeof AuthenticatedJpCreditsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/checkout/return': {
@@ -502,18 +490,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/jp/lessons/$id': {
-      id: '/_authenticated/jp/lessons/$id'
-      path: '/jp/lessons/$id'
-      fullPath: '/jp/lessons/$id'
-      preLoaderRoute: typeof AuthenticatedJpLessonsIdRouteImport
+    '/_authenticated/ptbr/lessons/$id': {
+      id: '/_authenticated/ptbr/lessons/$id'
+      path: '/ptbr/lessons/$id'
+      fullPath: '/ptbr/lessons/$id'
+      preLoaderRoute: typeof AuthenticatedPtbrLessonsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/jp/checkout/return': {
-      id: '/_authenticated/jp/checkout/return'
-      path: '/jp/checkout/return'
-      fullPath: '/jp/checkout/return'
-      preLoaderRoute: typeof AuthenticatedJpCheckoutReturnRouteImport
+    '/_authenticated/ptbr/checkout/return': {
+      id: '/_authenticated/ptbr/checkout/return'
+      path: '/ptbr/checkout/return'
+      fullPath: '/ptbr/checkout/return'
+      preLoaderRoute: typeof AuthenticatedPtbrCheckoutReturnRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
@@ -524,16 +512,16 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedCheckoutReturnRoute: typeof AuthenticatedCheckoutReturnRoute
-  AuthenticatedJpCreditsRoute: typeof AuthenticatedJpCreditsRoute
-  AuthenticatedJpDashboardRoute: typeof AuthenticatedJpDashboardRoute
-  AuthenticatedJpScheduleRoute: typeof AuthenticatedJpScheduleRoute
   AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
+  AuthenticatedPtbrCreditsRoute: typeof AuthenticatedPtbrCreditsRoute
+  AuthenticatedPtbrDashboardRoute: typeof AuthenticatedPtbrDashboardRoute
+  AuthenticatedPtbrScheduleRoute: typeof AuthenticatedPtbrScheduleRoute
   AuthenticatedTeacherAgendamentoRoute: typeof AuthenticatedTeacherAgendamentoRoute
   AuthenticatedTeacherAulasRoute: typeof AuthenticatedTeacherAulasRoute
   AuthenticatedTeacherDashboardRoute: typeof AuthenticatedTeacherDashboardRoute
   AuthenticatedTeacherPerfilRoute: typeof AuthenticatedTeacherPerfilRoute
-  AuthenticatedJpCheckoutReturnRoute: typeof AuthenticatedJpCheckoutReturnRoute
-  AuthenticatedJpLessonsIdRoute: typeof AuthenticatedJpLessonsIdRoute
+  AuthenticatedPtbrCheckoutReturnRoute: typeof AuthenticatedPtbrCheckoutReturnRoute
+  AuthenticatedPtbrLessonsIdRoute: typeof AuthenticatedPtbrLessonsIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -541,56 +529,33 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedCheckoutReturnRoute: AuthenticatedCheckoutReturnRoute,
-  AuthenticatedJpCreditsRoute: AuthenticatedJpCreditsRoute,
-  AuthenticatedJpDashboardRoute: AuthenticatedJpDashboardRoute,
-  AuthenticatedJpScheduleRoute: AuthenticatedJpScheduleRoute,
   AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
+  AuthenticatedPtbrCreditsRoute: AuthenticatedPtbrCreditsRoute,
+  AuthenticatedPtbrDashboardRoute: AuthenticatedPtbrDashboardRoute,
+  AuthenticatedPtbrScheduleRoute: AuthenticatedPtbrScheduleRoute,
   AuthenticatedTeacherAgendamentoRoute: AuthenticatedTeacherAgendamentoRoute,
   AuthenticatedTeacherAulasRoute: AuthenticatedTeacherAulasRoute,
   AuthenticatedTeacherDashboardRoute: AuthenticatedTeacherDashboardRoute,
   AuthenticatedTeacherPerfilRoute: AuthenticatedTeacherPerfilRoute,
-  AuthenticatedJpCheckoutReturnRoute: AuthenticatedJpCheckoutReturnRoute,
-  AuthenticatedJpLessonsIdRoute: AuthenticatedJpLessonsIdRoute,
+  AuthenticatedPtbrCheckoutReturnRoute: AuthenticatedPtbrCheckoutReturnRoute,
+  AuthenticatedPtbrLessonsIdRoute: AuthenticatedPtbrLessonsIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface JpRouteChildren {
-  JpContatoRoute: typeof JpContatoRoute
-  JpLoginRoute: typeof JpLoginRoute
-  JpSignupRoute: typeof JpSignupRoute
-  JpIndexRoute: typeof JpIndexRoute
-}
-
-const JpRouteChildren: JpRouteChildren = {
-  JpContatoRoute: JpContatoRoute,
-  JpLoginRoute: JpLoginRoute,
-  JpSignupRoute: JpSignupRoute,
-  JpIndexRoute: JpIndexRoute,
-}
-
-const JpRouteWithChildren = JpRoute._addFileChildren(JpRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   ContatoRoute: ContatoRoute,
-  JpRoute: JpRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
+  PtbrContatoRoute: PtbrContatoRoute,
+  PtbrLoginRoute: PtbrLoginRoute,
+  PtbrSignupRoute: PtbrSignupRoute,
+  PtbrIndexRoute: PtbrIndexRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

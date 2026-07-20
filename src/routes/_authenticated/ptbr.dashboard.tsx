@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { DashboardPage } from "@/components/pages/dashboard-page";
 import { dashboardContent } from "@/lib/i18n";
 
-export const Route = createFileRoute("/_authenticated/dashboard")({
+export const Route = createFileRoute("/_authenticated/ptbr/dashboard")({
   head: () => ({
     meta: [
       { title: dashboardContent.pt.metaTitle },
