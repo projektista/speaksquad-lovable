@@ -455,3 +455,220 @@ export const scheduleContent: Record<Lang, ScheduleContent> = {
     monthLabel: "2026年7月",
   },
 };
+
+/* ------------------------------------------------------------------ */
+/* Lessons list (student)                                              */
+/* ------------------------------------------------------------------ */
+
+export type LessonsListContent = {
+  metaTitle: string;
+  title: string;
+  subtitle: string;
+  empty: string;
+  scheduleCta: string;
+  filterAll: string;
+  filterUpcoming: string;
+  filterPast: string;
+  open: string;
+  statusLabels: Record<string, string>;
+};
+
+export const lessonsListContent: Record<Lang, LessonsListContent> = {
+  pt: {
+    metaTitle: "Minhas aulas — SpeakSquad",
+    title: "Aulas",
+    subtitle: "Suas aulas agendadas e histórico.",
+    empty: "Você ainda não tem aulas. Que tal agendar a primeira?",
+    scheduleCta: "Agendar aula",
+    filterAll: "Todas",
+    filterUpcoming: "Próximas",
+    filterPast: "Anteriores",
+    open: "Abrir",
+    statusLabels: {
+      scheduled: "agendada",
+      completed: "concluída",
+      student_cancelled: "cancelada por você",
+      teacher_cancelled: "cancelada pelo professor",
+      late_cancel: "cancelamento tardio",
+      no_show: "no-show",
+    },
+  },
+  jp: {
+    metaTitle: "レッスン一覧 — SpeakSquad",
+    title: "レッスン",
+    subtitle: "予約済みのレッスンと履歴。",
+    empty: "まだレッスンがありません。予約してみましょう。",
+    scheduleCta: "レッスンを予約",
+    filterAll: "すべて",
+    filterUpcoming: "今後",
+    filterPast: "過去",
+    open: "開く",
+    statusLabels: {
+      scheduled: "予約済み",
+      completed: "完了",
+      student_cancelled: "自分でキャンセル",
+      teacher_cancelled: "先生がキャンセル",
+      late_cancel: "遅いキャンセル",
+      no_show: "ノーショー",
+    },
+  },
+};
+
+/* ------------------------------------------------------------------ */
+/* Profile                                                              */
+/* ------------------------------------------------------------------ */
+
+export type ProfileContent = {
+  metaTitle: string;
+  title: string;
+  subtitle: string;
+  nameLabel: string;
+  emailLabel: string;
+  levelLabel: string;
+  bioLabel: string;
+  bioPlaceholder: string;
+  minecraftLabel: string;
+  fortniteLabel: string;
+  save: string;
+  saved: string;
+  levelOptions: { value: string; label: string }[];
+};
+
+export const profileContent: Record<Lang, ProfileContent> = {
+  pt: {
+    metaTitle: "Perfil — SpeakSquad",
+    title: "Perfil",
+    subtitle: "Seus dados e nicknames de jogo.",
+    nameLabel: "Nome",
+    emailLabel: "Email",
+    levelLabel: "Nível de inglês",
+    bioLabel: "Breve apresentação",
+    bioPlaceholder: "Conte um pouco sobre você...",
+    minecraftLabel: "Minecraft gamertag",
+    fortniteLabel: "Nickname no Fortnite",
+    save: "Salvar",
+    saved: "✓ Perfil atualizado.",
+    levelOptions: [
+      { value: "beginner", label: "Beginner" },
+      { value: "intermediate", label: "Intermediate" },
+      { value: "advanced", label: "Advanced" },
+    ],
+  },
+  jp: {
+    metaTitle: "プロフィール — SpeakSquad",
+    title: "プロフィール",
+    subtitle: "情報とゲームID。",
+    nameLabel: "お名前",
+    emailLabel: "メール",
+    levelLabel: "英語レベル",
+    bioLabel: "自己紹介",
+    bioPlaceholder: "少し教えてください...",
+    minecraftLabel: "Minecraft ゲーマータグ",
+    fortniteLabel: "Fortnite ニックネーム",
+    save: "保存",
+    saved: "✓ 更新しました。",
+    levelOptions: [
+      { value: "beginner", label: "Beginner" },
+      { value: "intermediate", label: "Intermediate" },
+      { value: "advanced", label: "Advanced" },
+    ],
+  },
+};
+
+/* ------------------------------------------------------------------ */
+/* Lesson detail                                                        */
+/* ------------------------------------------------------------------ */
+
+export type LessonDetailContent = {
+  metaTitle: string;
+  loading: string;
+  statusLabel: string;
+  modeLabel: string;
+  durationLabel: string;
+  minutes: string;
+  openZoom: string;
+  studentLabel: string;
+  teacherLabel: string;
+  feedbackLabel: string;
+  vocabularyLabel: string;
+  teacherActions: string;
+  finalize: string;
+  cancelMine: string;
+  markNoShow: string;
+  studentCancel: string;
+  cancelPolicy: string;
+  chatTitle: string;
+  chatEmpty: string;
+  chatPlaceholder: string;
+  send: string;
+  historyTitle: string;
+  historyEmpty: string;
+  expand: string;
+  collapse: string;
+  bioMissing: string;
+  feedbackPlaceholder: string;
+  vocabPlaceholder: string;
+};
+
+export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
+  pt: {
+    metaTitle: "Aula · SpeakSquad",
+    loading: "carregando...",
+    statusLabel: "status",
+    modeLabel: "modo",
+    durationLabel: "duração",
+    minutes: "min",
+    openZoom: "Abrir Zoom",
+    studentLabel: "aluno",
+    teacherLabel: "professor",
+    feedbackLabel: "feedback",
+    vocabularyLabel: "vocabulário",
+    teacherActions: "// ações_do_professor",
+    finalize: "Finalizar",
+    cancelMine: "Cancelar (meu)",
+    markNoShow: "Imprevisto (no-show)",
+    studentCancel: "Cancelar aula",
+    cancelPolicy: "Política: cancelamentos com mais de 6h antes retornam o crédito. Depois disso, o crédito é consumido.",
+    chatTitle: "// chat (atualiza a cada 5s)",
+    chatEmpty: "Sem mensagens ainda.",
+    chatPlaceholder: "Mensagem...",
+    send: "Enviar",
+    historyTitle: "// aulas_anteriores",
+    historyEmpty: "Nenhuma aula anterior concluída.",
+    expand: "expandir",
+    collapse: "recolher",
+    bioMissing: "Sem biografia ainda.",
+    feedbackPlaceholder: "feedback (opcional)",
+    vocabPlaceholder: "vocabulário aprendido (opcional)",
+  },
+  jp: {
+    metaTitle: "レッスン · SpeakSquad",
+    loading: "読み込み中...",
+    statusLabel: "ステータス",
+    modeLabel: "モード",
+    durationLabel: "時間",
+    minutes: "分",
+    openZoom: "Zoomを開く",
+    studentLabel: "生徒",
+    teacherLabel: "先生",
+    feedbackLabel: "フィードバック",
+    vocabularyLabel: "語彙",
+    teacherActions: "// 先生のアクション",
+    finalize: "完了",
+    cancelMine: "キャンセル(自分)",
+    markNoShow: "ノーショー",
+    studentCancel: "レッスンをキャンセル",
+    cancelPolicy: "ポリシー: 6時間前までのキャンセルはクレジット返却。それ以降は消費されます。",
+    chatTitle: "// チャット(5秒ごと更新)",
+    chatEmpty: "メッセージはまだありません。",
+    chatPlaceholder: "メッセージ...",
+    send: "送信",
+    historyTitle: "// 過去のレッスン",
+    historyEmpty: "完了した過去のレッスンはありません。",
+    expand: "展開",
+    collapse: "たたむ",
+    bioMissing: "自己紹介はまだありません。",
+    feedbackPlaceholder: "フィードバック(任意)",
+    vocabPlaceholder: "学んだ語彙(任意)",
+  },
+};
