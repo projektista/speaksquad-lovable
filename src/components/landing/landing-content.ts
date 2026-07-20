@@ -95,7 +95,7 @@ export type LandingContent = {
 
 export const ptContent: LandingContent = {
   htmlLang: "pt-BR",
-  signupPath: "/signup",
+  signupPath: "/ptbr/signup",
   hero: {
     label: "LEVEL UP YOUR ENGLISH",
     titleLine1: "APRENDA INGLÊS",
