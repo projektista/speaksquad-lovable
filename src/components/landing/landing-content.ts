@@ -10,7 +10,7 @@ export type PricingTier = {
 
 export type LandingContent = {
   htmlLang: string;
-  signupPath: "/signup" | "/jp/signup";
+  signupPath: "/signup" | "/ptbr/signup";
   hero: {
     label: string;
     titleLine1: string;
