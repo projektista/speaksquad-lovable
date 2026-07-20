@@ -238,7 +238,7 @@ export const ptContent: LandingContent = {
     intro: "Se sua dúvida não estiver aqui, é só perguntar antes da aula experimental.",
     items: [
       { q: "Meu filho precisa já saber inglês para começar?", a: "Não. Atendemos desde quem nunca estudou até níveis avançados. Na aula experimental avaliamos o nível atual e ajustamos o ritmo a partir daí." },
-      { q: "Os créditos expiram?", a: "Não. Uma vez comprado, o crédito é seu, sem prazo de validade." },
+      { q: "Os créditos expiram?", a: "Sim. Aula avulsa expira em 20 dias, pacote de 5 em 45 dias e pacote de 10 em 90 dias — para incentivar o uso frequente." },
       { q: "Posso cancelar ou remarcar uma aula agendada?", a: "Sim, com antecedência mínima informada no agendamento. Avisos de última hora podem consumir o crédito da aula." },
       { q: "Dois irmãos podem fazer aula juntos?", a: "Preferimos aulas individuais. É comum as crianças caírem no português entre si durante a aula, o que reduz o tempo real de prática em inglês." },
       { q: "Preciso ter o jogo comprado antes da aula experimental?", a: "Sim, o aluno precisa ter Minecraft ou Fortnite instalado e funcionando no dispositivo que for usar." },
@@ -390,7 +390,7 @@ export const jpContent: LandingContent = {
     intro: "ここに答えがない質問は、体験レッスンの前に気軽にお問い合わせください。",
     items: [
       { q: "英語が全く話せなくても大丈夫ですか?", a: "はい。初心者から上級者まで対応します。無料体験でレベルを確認し、そこから進度を調整します。" },
-      { q: "クレジットに有効期限はありますか?", a: "ありません。購入したクレジットは期限なくいつでもご利用いただけます。" },
+      { q: "クレジットに有効期限はありますか?", a: "はい。単発は20日、5回パックは45日、10回パックは90日で有効期限が切れます。継続利用を促すための設定です。" },
       { q: "予約のキャンセル・変更はできますか?", a: "予約時に案内する期限内であれば可能です。直前のキャンセルはクレジットを消費する場合があります。" },
       { q: "兄弟で一緒にレッスンできますか?", a: "個別レッスンを推奨します。兄弟だと日本語で話してしまい、英語練習の時間が減る傾向があります。" },
       { q: "無料体験の前にゲームを買う必要はありますか?", a: "はい。MinecraftまたはFortniteをインストール済みの状態でご参加ください。" },
