@@ -19,28 +19,27 @@ export function persistLang(lang: Lang) {
 }
 
 function detectBrowserLang(): Lang {
-  if (typeof navigator === "undefined") return "pt";
+  if (typeof navigator === "undefined") return "jp";
   const langs = [navigator.language, ...(navigator.languages ?? [])].filter(Boolean);
   for (const l of langs) {
     const low = l.toLowerCase();
     if (low.startsWith("ja")) return "jp";
     if (low.startsWith("pt")) return "pt";
   }
-  return "pt";
+  return "jp";
 }
 
-/** Map a pathname between /... and /jp/... equivalents. */
+/** Map a pathname between /... (JP default) and /ptbr/... (PT) equivalents. */
 export function pathForLang(pathname: string, target: Lang): string {
-  const isJp = pathname === "/jp" || pathname.startsWith("/jp/");
-  const bare = isJp ? (pathname === "/jp" ? "/" : pathname.slice(3)) : pathname;
-  if (target === "jp") return bare === "/" ? "/jp" : `/jp${bare}`;
+  const isPt = pathname === "/ptbr" || pathname.startsWith("/ptbr/");
+  const bare = isPt ? (pathname === "/ptbr" ? "/" : pathname.slice(5)) : pathname;
+  if (target === "pt") return bare === "/" ? "/ptbr" : `/ptbr${bare}`;
   return bare;
 }
 
 /**
  * Auto-detect the visitor's preferred language on first visit to a landing
- * page (/ or /jp) and redirect if it differs from the current URL. Runs once
- * per session and only when no explicit preference is stored.
+ * page (/ or /ptbr) and redirect if it differs. JP is now the default.
  */
 export function useLangAutoDetect() {
   const router = useRouter();
@@ -48,7 +47,7 @@ export function useLangAutoDetect() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const isLanding = pathname === "/" || pathname === "/jp";
+    const isLanding = pathname === "/" || pathname === "/ptbr";
     if (!isLanding) return;
 
     const stored = storedLang();
@@ -57,10 +56,10 @@ export function useLangAutoDetect() {
     const preferred = detectBrowserLang();
     persistLang(preferred);
 
-    const currentIsJp = pathname === "/jp";
-    if (preferred === "jp" && !currentIsJp) {
-      router.navigate({ to: "/jp", replace: true });
-    } else if (preferred === "pt" && currentIsJp) {
+    const currentIsPt = pathname === "/ptbr";
+    if (preferred === "pt" && !currentIsPt) {
+      router.navigate({ to: "/ptbr", replace: true });
+    } else if (preferred === "jp" && currentIsPt) {
       router.navigate({ to: "/", replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
