@@ -15,9 +15,11 @@ import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PtbrIndexRouteImport } from './routes/ptbr.index'
+import { Route as JpIndexRouteImport } from './routes/jp.index'
 import { Route as PtbrSignupRouteImport } from './routes/ptbr.signup'
 import { Route as PtbrLoginRouteImport } from './routes/ptbr.login'
 import { Route as PtbrContatoRouteImport } from './routes/ptbr.contato'
+import { Route as JpSplatRouteImport } from './routes/jp.$'
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCreditsRouteImport } from './routes/_authenticated/credits'
@@ -63,6 +65,11 @@ const PtbrIndexRoute = PtbrIndexRouteImport.update({
   path: '/ptbr/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JpIndexRoute = JpIndexRouteImport.update({
+  id: '/jp/',
+  path: '/jp/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PtbrSignupRoute = PtbrSignupRouteImport.update({
   id: '/ptbr/signup',
   path: '/ptbr/signup',
@@ -76,6 +83,11 @@ const PtbrLoginRoute = PtbrLoginRouteImport.update({
 const PtbrContatoRoute = PtbrContatoRouteImport.update({
   id: '/ptbr/contato',
   path: '/ptbr/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JpSplatRoute = JpSplatRouteImport.update({
+  id: '/jp/$',
+  path: '/jp/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
@@ -173,9 +185,11 @@ export interface FileRoutesByFullPath {
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/schedule': typeof AuthenticatedScheduleRoute
+  '/jp/$': typeof JpSplatRoute
   '/ptbr/contato': typeof PtbrContatoRoute
   '/ptbr/login': typeof PtbrLoginRoute
   '/ptbr/signup': typeof PtbrSignupRoute
+  '/jp/': typeof JpIndexRoute
   '/ptbr/': typeof PtbrIndexRoute
   '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
@@ -198,9 +212,11 @@ export interface FileRoutesByTo {
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/schedule': typeof AuthenticatedScheduleRoute
+  '/jp/$': typeof JpSplatRoute
   '/ptbr/contato': typeof PtbrContatoRoute
   '/ptbr/login': typeof PtbrLoginRoute
   '/ptbr/signup': typeof PtbrSignupRoute
+  '/jp': typeof JpIndexRoute
   '/ptbr': typeof PtbrIndexRoute
   '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
@@ -225,9 +241,11 @@ export interface FileRoutesById {
   '/_authenticated/credits': typeof AuthenticatedCreditsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
+  '/jp/$': typeof JpSplatRoute
   '/ptbr/contato': typeof PtbrContatoRoute
   '/ptbr/login': typeof PtbrLoginRoute
   '/ptbr/signup': typeof PtbrSignupRoute
+  '/jp/': typeof JpIndexRoute
   '/ptbr/': typeof PtbrIndexRoute
   '/_authenticated/checkout/return': typeof AuthenticatedCheckoutReturnRoute
   '/_authenticated/lessons/$id': typeof AuthenticatedLessonsIdRoute
@@ -252,9 +270,11 @@ export interface FileRouteTypes {
     | '/credits'
     | '/dashboard'
     | '/schedule'
+    | '/jp/$'
     | '/ptbr/contato'
     | '/ptbr/login'
     | '/ptbr/signup'
+    | '/jp/'
     | '/ptbr/'
     | '/checkout/return'
     | '/lessons/$id'
@@ -277,9 +297,11 @@ export interface FileRouteTypes {
     | '/credits'
     | '/dashboard'
     | '/schedule'
+    | '/jp/$'
     | '/ptbr/contato'
     | '/ptbr/login'
     | '/ptbr/signup'
+    | '/jp'
     | '/ptbr'
     | '/checkout/return'
     | '/lessons/$id'
@@ -303,9 +325,11 @@ export interface FileRouteTypes {
     | '/_authenticated/credits'
     | '/_authenticated/dashboard'
     | '/_authenticated/schedule'
+    | '/jp/$'
     | '/ptbr/contato'
     | '/ptbr/login'
     | '/ptbr/signup'
+    | '/jp/'
     | '/ptbr/'
     | '/_authenticated/checkout/return'
     | '/_authenticated/lessons/$id'
@@ -327,9 +351,11 @@ export interface RootRouteChildren {
   ContatoRoute: typeof ContatoRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
+  JpSplatRoute: typeof JpSplatRoute
   PtbrContatoRoute: typeof PtbrContatoRoute
   PtbrLoginRoute: typeof PtbrLoginRoute
   PtbrSignupRoute: typeof PtbrSignupRoute
+  JpIndexRoute: typeof JpIndexRoute
   PtbrIndexRoute: typeof PtbrIndexRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -378,6 +404,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PtbrIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jp/': {
+      id: '/jp/'
+      path: '/jp'
+      fullPath: '/jp/'
+      preLoaderRoute: typeof JpIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ptbr/signup': {
       id: '/ptbr/signup'
       path: '/ptbr/signup'
@@ -397,6 +430,13 @@ declare module '@tanstack/react-router' {
       path: '/ptbr/contato'
       fullPath: '/ptbr/contato'
       preLoaderRoute: typeof PtbrContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jp/$': {
+      id: '/jp/$'
+      path: '/jp/$'
+      fullPath: '/jp/$'
+      preLoaderRoute: typeof JpSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/schedule': {
@@ -550,9 +590,11 @@ const rootRouteChildren: RootRouteChildren = {
   ContatoRoute: ContatoRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
+  JpSplatRoute: JpSplatRoute,
   PtbrContatoRoute: PtbrContatoRoute,
   PtbrLoginRoute: PtbrLoginRoute,
   PtbrSignupRoute: PtbrSignupRoute,
+  JpIndexRoute: JpIndexRoute,
   PtbrIndexRoute: PtbrIndexRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
