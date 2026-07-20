@@ -23,8 +23,8 @@ function ReturnPage() {
               Seus créditos serão adicionados em instantes. Você pode agendar sua próxima aula agora.
             </p>
             <div className="mt-6 flex gap-3">
-              <Link to="/schedule" className="btn-primary">Agendar aula</Link>
-              <Link to="/dashboard" className="btn-outline">Dashboard</Link>
+              <Link to="/ptbr/schedule" className="btn-primary">Agendar aula</Link>
+              <Link to="/ptbr/dashboard" className="btn-outline">Dashboard</Link>
             </div>
           </>
         ) : (

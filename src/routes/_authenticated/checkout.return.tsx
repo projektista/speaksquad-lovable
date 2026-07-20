@@ -23,8 +23,8 @@ function ReturnPage() {
               クレジットはまもなく追加されます。今すぐ次のレッスンを予約できます。
             </p>
             <div className="mt-6 flex gap-3">
-              <Link to="/jp/schedule" className="btn-primary">予約する</Link>
-              <Link to="/jp/dashboard" className="btn-outline">ダッシュボード</Link>
+              <Link to="/schedule" className="btn-primary">予約する</Link>
+              <Link to="/dashboard" className="btn-outline">ダッシュボード</Link>
             </div>
           </>
         ) : (

@@ -19,8 +19,8 @@ export const Route = createFileRoute("/")({
       },
     ],
     links: [
-      { rel: "alternate", hrefLang: "pt-BR", href: "/" },
-      { rel: "alternate", hrefLang: "ja", href: "/jp" },
+      { rel: "alternate", hrefLang: "ja", href: "/" },
+      { rel: "alternate", hrefLang: "pt-BR", href: "/ptbr" },
       { rel: "alternate", hrefLang: "x-default", href: "/" },
     ],
   }),
