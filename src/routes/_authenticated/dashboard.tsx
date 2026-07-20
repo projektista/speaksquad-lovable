@@ -5,9 +5,9 @@ import { dashboardContent } from "@/lib/i18n";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: dashboardContent.pt.metaTitle },
+      { title: dashboardContent.jp.metaTitle },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <DashboardPage content={dashboardContent.pt} lang="pt" />,
+  component: () => <DashboardPage content={dashboardContent.jp} lang="jp" />,
 });

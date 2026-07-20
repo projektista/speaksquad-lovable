@@ -8,18 +8,18 @@ type Lang = "pt" | "jp";
 
 const studentItemsByLang: Record<Lang, Array<{ to: string; label: string }>> = {
   pt: [
-    { to: "/dashboard", label: "Dashboard" },
-    { to: "/schedule", label: "Agendar" },
-    { to: "/lessons", label: "Aulas" },
-    { to: "/credits", label: "Créditos" },
-    { to: "/profile", label: "Perfil" },
+    { to: "/ptbr/dashboard", label: "Dashboard" },
+    { to: "/ptbr/schedule", label: "Agendar" },
+    { to: "/ptbr/lessons", label: "Aulas" },
+    { to: "/ptbr/credits", label: "Créditos" },
+    { to: "/ptbr/profile", label: "Perfil" },
   ],
   jp: [
-    { to: "/jp/dashboard", label: "ダッシュボード" },
-    { to: "/jp/schedule", label: "予約" },
-    { to: "/jp/lessons", label: "レッスン" },
-    { to: "/jp/credits", label: "クレジット" },
-    { to: "/jp/profile", label: "プロフィール" },
+    { to: "/dashboard", label: "ダッシュボード" },
+    { to: "/schedule", label: "予約" },
+    { to: "/lessons", label: "レッスン" },
+    { to: "/credits", label: "クレジット" },
+    { to: "/profile", label: "プロフィール" },
   ],
 };
 
@@ -49,13 +49,13 @@ export function AppShell({
   const accent = isTeacher ? "magenta" : "cyan";
   const creditsLabel = lang === "jp" ? "残りクレジット" : "créditos_disponíveis";
   const buyLabel = lang === "jp" ? "購入" : "Comprar";
-  const creditsHref = lang === "jp" ? "/jp/credits" : "/credits";
+  const creditsHref = lang === "jp" ? "/credits" : "/ptbr/credits";
   const navigate = useNavigate();
   const signOutLabel = lang === "jp" ? "ログアウト" : "Sair";
 
   async function onSignOut() {
     await supabase.auth.signOut();
-    navigate({ to: lang === "jp" ? "/jp" : "/" });
+    navigate({ to: lang === "jp" ? "/" : "/ptbr" });
   }
 
   return (
@@ -63,7 +63,7 @@ export function AppShell({
       <div className="mx-auto flex max-w-6xl gap-6 px-4 py-6 md:py-10">
         <aside className="hidden w-56 shrink-0 md:block">
           <div className="mb-6">
-            <BrandMark to={lang === "jp" ? "/jp" : "/"} size="sm" />
+            <BrandMark to={lang === "jp" ? "/" : "/ptbr"} size="sm" />
           </div>
           {isTeacher && (
             <div className="mb-2 px-2 font-mono-alt text-[10px] uppercase tracking-widest text-magenta">

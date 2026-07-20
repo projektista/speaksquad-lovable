@@ -5,9 +5,9 @@ import { scheduleContent } from "@/lib/i18n";
 export const Route = createFileRoute("/_authenticated/schedule")({
   head: () => ({
     meta: [
-      { title: scheduleContent.pt.metaTitle },
+      { title: scheduleContent.jp.metaTitle },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <SchedulePage content={scheduleContent.pt} lang="pt" />,
+  component: () => <SchedulePage content={scheduleContent.jp} lang="jp" />,
 });

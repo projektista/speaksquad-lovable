@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LessonDetailPage } from "@/components/pages/lesson-detail-page";
 
-export const Route = createFileRoute("/_authenticated/jp/lessons/$id")({
+export const Route = createFileRoute("/_authenticated/ptbr/lessons/$id")({
   head: () => ({
     meta: [
-      { title: "レッスン · SpeakSquad" },
+      { title: "Aula · SpeakSquad" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -13,5 +13,5 @@ export const Route = createFileRoute("/_authenticated/jp/lessons/$id")({
 
 function LessonRoute() {
   const { id } = Route.useParams();
-  return <LessonDetailPage id={id} lang="jp" />;
+  return <LessonDetailPage id={id} lang="pt" />;
 }

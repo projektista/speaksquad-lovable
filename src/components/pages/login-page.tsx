@@ -12,8 +12,8 @@ export function LoginPage({ content, lang }: { content: LoginContent; lang: Lang
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const signupTo = lang === "jp" ? "/jp/signup" : "/signup";
-  const dashTo = lang === "jp" ? "/jp/dashboard" : "/dashboard";
+  const signupTo = lang === "jp" ? "/signup" : "/ptbr/signup";
+  const dashTo = lang === "jp" ? "/dashboard" : "/ptbr/dashboard";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();

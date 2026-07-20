@@ -25,7 +25,7 @@ export function AuthFrame({
       <div className="relative mx-auto flex min-h-screen max-w-6xl items-center justify-center px-5 py-12">
         <div className="w-full max-w-md">
           <div className="mb-8">
-            <BrandMark to={lang === "jp" ? "/jp" : "/"} size="sm" />
+            <BrandMark to={lang === "jp" ? "/" : "/ptbr"} size="sm" />
           </div>
           <BracketFrame className="p-7">
             <SectionLabel n={code}>{title}</SectionLabel>

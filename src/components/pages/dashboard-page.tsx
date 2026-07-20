@@ -23,7 +23,7 @@ function formatDateTime(iso: string, lang: Lang) {
 }
 
 export function DashboardPage({ content, lang }: { content: DashboardContent; lang: Lang }) {
-  const p = (path: string) => (lang === "jp" ? `/jp${path}` : path);
+  const p = (path: string) => (lang === "jp" ? path : `/ptbr${path}`);
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard-overview"],
     queryFn: () => getMyOverview(),

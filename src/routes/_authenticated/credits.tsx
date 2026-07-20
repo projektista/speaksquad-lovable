@@ -4,9 +4,9 @@ import { CreditsPage } from "@/components/pages/credits-page";
 export const Route = createFileRoute("/_authenticated/credits")({
   head: () => ({
     meta: [
-      { title: "Créditos · SpeakSquad" },
+      { title: "クレジット · SpeakSquad" },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <CreditsPage lang="pt" />,
+  component: () => <CreditsPage lang="jp" />,
 });

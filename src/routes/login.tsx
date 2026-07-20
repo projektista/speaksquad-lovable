@@ -5,10 +5,10 @@ import { loginContent } from "@/lib/i18n";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: loginContent.pt.metaTitle },
-      { name: "description", content: loginContent.pt.metaDescription },
+      { title: loginContent.jp.metaTitle },
+      { name: "description", content: loginContent.jp.metaDescription },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <LoginPage content={loginContent.pt} lang="pt" />,
+  component: () => <LoginPage content={loginContent.jp} lang="jp" />,
 });

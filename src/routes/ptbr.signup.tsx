@@ -2,13 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SignupPage } from "@/components/pages/signup-page";
 import { signupContent } from "@/lib/i18n";
 
-export const Route = createFileRoute("/jp/signup")({
+export const Route = createFileRoute("/ptbr/signup")({
   head: () => ({
     meta: [
-      { title: signupContent.jp.metaTitle },
-      { name: "description", content: signupContent.jp.metaDescription },
+      { title: signupContent.pt.metaTitle },
+      { name: "description", content: signupContent.pt.metaDescription },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => <SignupPage content={signupContent.jp} lang="jp" />,
+  component: () => <SignupPage content={signupContent.pt} lang="pt" />,
 });

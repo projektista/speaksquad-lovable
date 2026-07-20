@@ -27,14 +27,14 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
           { href: "#flow", label: "レッスンの流れ" },
           { href: "#pricing", label: "料金" },
           { href: "#faq", label: "FAQ" },
-          { href: "/jp/contato", label: "お問い合わせ", isRoute: true },
+          { href: "/contato", label: "お問い合わせ", isRoute: true },
         ]
       : [
           { href: "#method", label: "Método" },
           { href: "#flow", label: "Fluxo da aula" },
           { href: "#pricing", label: "Preço" },
           { href: "#faq", label: "FAQ" },
-          { href: "/contato", label: "CONTATO", isRoute: true },
+          { href: "/ptbr/contato", label: "CONTATO", isRoute: true },
         ];
 
   return (
@@ -45,7 +45,7 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
         <Link
-          to={lang === "jp" ? "/jp" : "/"}
+          to={lang === "jp" ? "/" : "/ptbr"}
           className="group brand-link glitch flex items-center gap-2 font-display text-lg"
         >
           <span
@@ -73,10 +73,10 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
           ))}
           <span className="mx-2 h-4 w-px bg-[color:var(--border2)]" />
           <LangSwitcher lang={lang} />
-          <Link to={lang === "jp" ? "/jp/login" : "/login"} className="btn-ghost link-underline ml-1">
+          <Link to={lang === "jp" ? "/login" : "/ptbr/login"} className="btn-ghost link-underline ml-1">
             {lang === "jp" ? "ログイン" : "Entrar"}
           </Link>
-          <Link to={lang === "jp" ? "/jp/signup" : "/signup"} className="btn-primary btn-shine ml-2 !py-2 !px-3 text-xs">
+          <Link to={lang === "jp" ? "/signup" : "/ptbr/signup"} className="btn-primary btn-shine ml-2 !py-2 !px-3 text-xs">
             {lang === "jp" ? "無料体験" : "Aula grátis"}
           </Link>
         </nav>
@@ -109,10 +109,10 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
             <div className="px-1">
               <LangSwitcher lang={lang} variant="mobile" />
             </div>
-            <Link to={lang === "jp" ? "/jp/login" : "/login"} className="btn-outline mt-2 justify-center">
+            <Link to={lang === "jp" ? "/login" : "/ptbr/login"} className="btn-outline mt-2 justify-center">
               {lang === "jp" ? "ログイン" : "Entrar"}
             </Link>
-            <Link to={lang === "jp" ? "/jp/signup" : "/signup"} className="btn-primary mt-1 justify-center">
+            <Link to={lang === "jp" ? "/signup" : "/ptbr/signup"} className="btn-primary mt-1 justify-center">
               {lang === "jp" ? "無料体験" : "Aula grátis"}
             </Link>
           </div>

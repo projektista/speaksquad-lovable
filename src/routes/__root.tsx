@@ -80,11 +80,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "SpeakSquad — Level Up Your English" },
+      { title: "SpeakSquad — ゲームで英語を身につける" },
       {
         name: "description",
         content:
-          "Aprenda inglês jogando Minecraft e Fortnite. Aulas 1-on-1 via Zoom com o mesmo professor. Tokyo.",
+          "MinecraftとFortniteで学ぶ、日本語がわかる先生とのマンツーマン英会話。同じ先生が最後まで担当。東京。",
       },
       { name: "author", content: "SpeakSquad" },
       { name: "theme-color", content: "#00d9ff" },
@@ -92,7 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Aprenda inglês jogando Minecraft e Fortnite. Aulas 1-on-1 via Zoom.",
+          "ゲームで学ぶマンツーマン英会話。初回無料。",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -123,7 +123,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <head>
         <HeadContent />
       </head>
