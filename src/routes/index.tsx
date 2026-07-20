@@ -1,21 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LandingPage } from "@/components/landing/landing-page";
-import { ptContent } from "@/components/landing/landing-content";
+import { jpContent } from "@/components/landing/landing-content";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/jp/")({
   head: () => ({
     meta: [
-      { title: "SpeakSquad — Aprenda inglês jogando Minecraft e Fortnite" },
+      { title: "SpeakSquad — ゲームで英語を身につける" },
       {
         name: "description",
         content:
-          "Aulas 1-on-1 de inglês através de Minecraft e Fortnite. Mesmo professor sempre, 50 min via Zoom. Primeira aula grátis. Tokyo.",
+          "MinecraftとFortniteで学ぶ、日本語がわかる先生とのマンツーマン英会話。初回50分無料。東京。",
       },
       { property: "og:title", content: "SpeakSquad — Level Up Your English" },
       {
         property: "og:description",
         content:
-          "Aulas 1-on-1 de inglês através de games. Mesmo professor sempre. Primeira aula grátis.",
+          "ゲームで学ぶマンツーマン英会話。同じ先生が最後まで担当。初回無料。",
       },
     ],
     links: [
@@ -24,9 +24,9 @@ export const Route = createFileRoute("/")({
       { rel: "alternate", hrefLang: "x-default", href: "/" },
     ],
   }),
-  component: LandingPT,
+  component: LandingJP,
 });
 
-function LandingPT() {
-  return <LandingPage content={ptContent} lang="pt" />;
+function LandingJP() {
+  return <LandingPage content={jpContent} lang="jp" />;
 }
