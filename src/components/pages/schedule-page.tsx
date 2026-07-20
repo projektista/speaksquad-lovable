@@ -60,7 +60,7 @@ export function SchedulePage({ content, lang }: { content: ScheduleContent; lang
     setErr(null);
     try {
       const res = await bookLesson({ data: { starts_at: pickedSlot.starts_at, mode } });
-      const path = lang === "jp" ? `/jp/lessons/${res.lessonId}` : `/lessons/${res.lessonId}`;
+      const path = lang === "jp" ? `/lessons/${res.lessonId}` : `/ptbr/lessons/${res.lessonId}`;
       navigate({ to: path });
     } catch (e: any) {
       setErr(e.message ?? String(e));
