@@ -342,6 +342,16 @@ export type DashboardContent = {
   nextStepTitle: string;
   nextStepLead: string;
   scheduleCta: string;
+  noNextLesson: string;
+  quickActionsCode: string;
+  quickActionsTitle: string;
+  quickScheduleTitle: string;
+  quickScheduleDesc: string;
+  quickCreditsTitle: string;
+  quickCreditsDesc: string;
+  quickProfileTitle: string;
+  quickProfileDesc: string;
+  open: string;
 };
 
 export const dashboardContent: Record<Lang, DashboardContent> = {
@@ -361,6 +371,16 @@ export const dashboardContent: Record<Lang, DashboardContent> = {
     nextStepTitle: "Pronto para agendar sua próxima aula?",
     nextStepLead: "Escolha um horário aberto pelo Hugo esta semana.",
     scheduleCta: "Agendar aula",
+    noNextLesson: "Nenhuma aula agendada",
+    quickActionsCode: "// ações_rápidas",
+    quickActionsTitle: "O que você quer fazer agora?",
+    quickScheduleTitle: "Agendar aula",
+    quickScheduleDesc: "Escolha um horário aberto do Hugo.",
+    quickCreditsTitle: "Comprar créditos",
+    quickCreditsDesc: "Pacotes de 1, 5 ou 10 aulas.",
+    quickProfileTitle: "Editar perfil",
+    quickProfileDesc: "Atualize seus dados e nicknames dos jogos.",
+    open: "Abrir",
   },
   jp: {
     metaTitle: "ダッシュボード — SpeakSquad",
@@ -378,6 +398,16 @@ export const dashboardContent: Record<Lang, DashboardContent> = {
     nextStepTitle: "次のレッスンを予約しますか?",
     nextStepLead: "今週の空き時間からお選びください。",
     scheduleCta: "レッスンを予約",
+    noNextLesson: "予約されたレッスンはありません",
+    quickActionsCode: "// クイックアクション",
+    quickActionsTitle: "何をしますか?",
+    quickScheduleTitle: "レッスンを予約",
+    quickScheduleDesc: "空き時間からお選びください。",
+    quickCreditsTitle: "クレジット購入",
+    quickCreditsDesc: "1・5・10レッスンパック。",
+    quickProfileTitle: "プロフィール編集",
+    quickProfileDesc: "情報とゲームIDを更新。",
+    open: "開く",
   },
 };
 export type ScheduleContent = {
