@@ -13,9 +13,9 @@ export const getLessonDetail = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { id: string }) => data)
   .handler(async ({ data, context }) => {
-    const { data: lesson, error } = await context.supabase
+    const { data: lesson, error } = await (context.supabase as any)
       .from("lessons")
-      .select("id, scheduled_at, mode, status, meet_url, student_id, feedback, vocabulary_notes, duration_min")
+      .select("id, scheduled_at, mode, status, meet_url, student_id, teacher_id, feedback, vocabulary_notes, duration_min")
       .eq("id", data.id)
       .maybeSingle();
     if (error) throw error;
@@ -33,9 +33,18 @@ export const getLessonDetail = createServerFn({ method: "POST" })
       .eq("id", lesson.student_id)
       .maybeSingle();
 
+    const { data: teacher } = lesson.teacher_id
+      ? await context.supabase
+          .from("profiles")
+          .select("id, name, bio")
+          .eq("id", lesson.teacher_id)
+          .maybeSingle()
+      : { data: null };
+
     return {
       lesson,
       student,
+      teacher,
       viewerIsTeacher: isTeacher,
     };
   });
