@@ -13,7 +13,7 @@ export const getLessonDetail = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { id: string }) => data)
   .handler(async ({ data, context }) => {
-    const { data: lesson, error } = await context.supabase
+    const { data: lesson, error } = await (context.supabase as any)
       .from("lessons")
       .select("id, scheduled_at, mode, status, meet_url, student_id, teacher_id, feedback, vocabulary_notes, duration_min")
       .eq("id", data.id)
