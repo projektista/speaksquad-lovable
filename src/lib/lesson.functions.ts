@@ -33,9 +33,18 @@ export const getLessonDetail = createServerFn({ method: "POST" })
       .eq("id", lesson.student_id)
       .maybeSingle();
 
+    const { data: teacher } = lesson.teacher_id
+      ? await context.supabase
+          .from("profiles")
+          .select("id, name, bio")
+          .eq("id", lesson.teacher_id)
+          .maybeSingle()
+      : { data: null };
+
     return {
       lesson,
       student,
+      teacher,
       viewerIsTeacher: isTeacher,
     };
   });
