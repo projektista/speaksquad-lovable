@@ -21,6 +21,7 @@ import { Route as PtbrLoginRouteImport } from './routes/ptbr.login'
 import { Route as PtbrContatoRouteImport } from './routes/ptbr.contato'
 import { Route as JpSplatRouteImport } from './routes/jp.$'
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCreditsRouteImport } from './routes/_authenticated/credits'
 import { Route as AuthenticatedLessonsIndexRouteImport } from './routes/_authenticated/lessons.index'
@@ -95,6 +96,11 @@ const JpSplatRoute = JpSplatRouteImport.update({
 const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
   id: '/schedule',
   path: '/schedule',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -198,6 +204,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/schedule': typeof AuthenticatedScheduleRoute
   '/jp/$': typeof JpSplatRoute
   '/ptbr/contato': typeof PtbrContatoRoute
@@ -227,6 +234,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/schedule': typeof AuthenticatedScheduleRoute
   '/jp/$': typeof JpSplatRoute
   '/ptbr/contato': typeof PtbrContatoRoute
@@ -258,6 +266,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/credits': typeof AuthenticatedCreditsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/jp/$': typeof JpSplatRoute
   '/ptbr/contato': typeof PtbrContatoRoute
@@ -289,6 +298,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/credits'
     | '/dashboard'
+    | '/profile'
     | '/schedule'
     | '/jp/$'
     | '/ptbr/contato'
@@ -318,6 +328,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/credits'
     | '/dashboard'
+    | '/profile'
     | '/schedule'
     | '/jp/$'
     | '/ptbr/contato'
@@ -348,6 +359,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/credits'
     | '/_authenticated/dashboard'
+    | '/_authenticated/profile'
     | '/_authenticated/schedule'
     | '/jp/$'
     | '/ptbr/contato'
@@ -472,6 +484,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedScheduleRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -590,6 +609,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCreditsRoute: typeof AuthenticatedCreditsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedCheckoutReturnRoute: typeof AuthenticatedCheckoutReturnRoute
   AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
@@ -609,6 +629,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCreditsRoute: AuthenticatedCreditsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedCheckoutReturnRoute: AuthenticatedCheckoutReturnRoute,
   AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
