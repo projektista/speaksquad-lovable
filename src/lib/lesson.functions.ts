@@ -15,7 +15,7 @@ export const getLessonDetail = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { data: lesson, error } = await context.supabase
       .from("lessons")
-      .select("id, scheduled_at, mode, status, meet_url, student_id, feedback, vocabulary_notes, duration_min")
+      .select("id, scheduled_at, mode, status, meet_url, student_id, teacher_id, feedback, vocabulary_notes, duration_min")
       .eq("id", data.id)
       .maybeSingle();
     if (error) throw error;
