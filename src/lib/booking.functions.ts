@@ -83,7 +83,7 @@ export const updateMyProfile = createServerFn({ method: "POST" })
     for (const [k, v] of Object.entries(data)) {
       if (v !== undefined) patch[k] = v || null;
     }
-    const { error } = await context.supabase
+    const { error } = await (context.supabase as any)
       .from("profiles")
       .update(patch)
       .eq("id", context.userId);
