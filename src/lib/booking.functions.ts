@@ -41,6 +41,57 @@ export const getMyOverview = createServerFn({ method: "GET" })
   });
 
 /**
+ * Returns the current student's lessons list (all statuses).
+ */
+export const getMyLessons = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data } = await context.supabase
+      .from("lessons")
+      .select("id, scheduled_at, mode, status, meet_url")
+      .eq("student_id", context.userId)
+      .order("scheduled_at", { ascending: false })
+      .limit(200);
+    return data ?? [];
+  });
+
+/**
+ * Returns the current user's profile (student self-view).
+ */
+export const getMyProfile = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data } = await context.supabase
+      .from("profiles")
+      .select("id, name, bio, english_level, minecraft_gamertag, fortnite_nickname")
+      .eq("id", context.userId)
+      .maybeSingle();
+    return data;
+  });
+
+export const updateMyProfile = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: {
+    name?: string;
+    bio?: string;
+    english_level?: string;
+    minecraft_gamertag?: string;
+    fortnite_nickname?: string;
+  }) => data)
+  .handler(async ({ data, context }) => {
+    const patch: Record<string, string | null> = {};
+    for (const [k, v] of Object.entries(data)) {
+      if (v !== undefined) patch[k] = v || null;
+    }
+    const { error } = await context.supabase
+      .from("profiles")
+      .update(patch)
+      .eq("id", context.userId);
+    if (error) throw error;
+    return { ok: true };
+  });
+
+/**
  * Public availability for booking: returns available slots (not yet booked)
  * across all teachers within [from, to). No auth required — RLS restricts to
  * status='available' AND starts_at>now().
