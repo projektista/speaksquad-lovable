@@ -33,6 +33,7 @@ import { Route as AuthenticatedPtbrDashboardRouteImport } from './routes/_authen
 import { Route as AuthenticatedPtbrCreditsRouteImport } from './routes/_authenticated/ptbr.credits'
 import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authenticated/lessons.$id'
 import { Route as AuthenticatedCheckoutReturnRouteImport } from './routes/_authenticated/checkout.return'
+import { Route as AuthenticatedPtbrLessonsIndexRouteImport } from './routes/_authenticated/ptbr.lessons.index'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as AuthenticatedPtbrLessonsIdRouteImport } from './routes/_authenticated/ptbr.lessons.$id'
 import { Route as AuthenticatedPtbrCheckoutReturnRouteImport } from './routes/_authenticated/ptbr.checkout.return'
@@ -165,6 +166,12 @@ const AuthenticatedCheckoutReturnRoute =
     path: '/checkout/return',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPtbrLessonsIndexRoute =
+  AuthenticatedPtbrLessonsIndexRouteImport.update({
+    id: '/ptbr/lessons/',
+    path: '/ptbr/lessons/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -211,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/ptbr/lessons/': typeof AuthenticatedPtbrLessonsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -239,6 +247,7 @@ export interface FileRoutesByTo {
   '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/ptbr/lessons': typeof AuthenticatedPtbrLessonsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -269,6 +278,7 @@ export interface FileRoutesById {
   '/_authenticated/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/_authenticated/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/_authenticated/ptbr/lessons/': typeof AuthenticatedPtbrLessonsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -299,6 +309,7 @@ export interface FileRouteTypes {
     | '/ptbr/checkout/return'
     | '/ptbr/lessons/$id'
     | '/api/public/payments/webhook'
+    | '/ptbr/lessons/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -327,6 +338,7 @@ export interface FileRouteTypes {
     | '/ptbr/checkout/return'
     | '/ptbr/lessons/$id'
     | '/api/public/payments/webhook'
+    | '/ptbr/lessons'
   id:
     | '__root__'
     | '/'
@@ -356,6 +368,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ptbr/checkout/return'
     | '/_authenticated/ptbr/lessons/$id'
     | '/api/public/payments/webhook'
+    | '/_authenticated/ptbr/lessons/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -543,6 +556,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCheckoutReturnRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ptbr/lessons/': {
+      id: '/_authenticated/ptbr/lessons/'
+      path: '/ptbr/lessons'
+      fullPath: '/ptbr/lessons/'
+      preLoaderRoute: typeof AuthenticatedPtbrLessonsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -583,6 +603,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedLessonsIndexRoute: typeof AuthenticatedLessonsIndexRoute
   AuthenticatedPtbrCheckoutReturnRoute: typeof AuthenticatedPtbrCheckoutReturnRoute
   AuthenticatedPtbrLessonsIdRoute: typeof AuthenticatedPtbrLessonsIdRoute
+  AuthenticatedPtbrLessonsIndexRoute: typeof AuthenticatedPtbrLessonsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -601,6 +622,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLessonsIndexRoute: AuthenticatedLessonsIndexRoute,
   AuthenticatedPtbrCheckoutReturnRoute: AuthenticatedPtbrCheckoutReturnRoute,
   AuthenticatedPtbrLessonsIdRoute: AuthenticatedPtbrLessonsIdRoute,
+  AuthenticatedPtbrLessonsIndexRoute: AuthenticatedPtbrLessonsIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
