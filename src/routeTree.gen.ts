@@ -23,6 +23,7 @@ import { Route as JpSplatRouteImport } from './routes/jp.$'
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated/schedule'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCreditsRouteImport } from './routes/_authenticated/credits'
+import { Route as AuthenticatedLessonsIndexRouteImport } from './routes/_authenticated/lessons.index'
 import { Route as AuthenticatedTeacherPerfilRouteImport } from './routes/_authenticated/teacher.perfil'
 import { Route as AuthenticatedTeacherDashboardRouteImport } from './routes/_authenticated/teacher.dashboard'
 import { Route as AuthenticatedTeacherAulasRouteImport } from './routes/_authenticated/teacher.aulas'
@@ -105,6 +106,12 @@ const AuthenticatedCreditsRoute = AuthenticatedCreditsRouteImport.update({
   path: '/credits',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedLessonsIndexRoute =
+  AuthenticatedLessonsIndexRouteImport.update({
+    id: '/lessons/',
+    path: '/lessons/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTeacherPerfilRoute =
   AuthenticatedTeacherPerfilRouteImport.update({
     id: '/teacher/perfil',
@@ -200,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
+  '/lessons/': typeof AuthenticatedLessonsIndexRoute
   '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -227,6 +235,7 @@ export interface FileRoutesByTo {
   '/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
+  '/lessons': typeof AuthenticatedLessonsIndexRoute
   '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -256,6 +265,7 @@ export interface FileRoutesById {
   '/_authenticated/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/_authenticated/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/_authenticated/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
+  '/_authenticated/lessons/': typeof AuthenticatedLessonsIndexRoute
   '/_authenticated/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/_authenticated/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -285,6 +295,7 @@ export interface FileRouteTypes {
     | '/teacher/aulas'
     | '/teacher/dashboard'
     | '/teacher/perfil'
+    | '/lessons/'
     | '/ptbr/checkout/return'
     | '/ptbr/lessons/$id'
     | '/api/public/payments/webhook'
@@ -312,6 +323,7 @@ export interface FileRouteTypes {
     | '/teacher/aulas'
     | '/teacher/dashboard'
     | '/teacher/perfil'
+    | '/lessons'
     | '/ptbr/checkout/return'
     | '/ptbr/lessons/$id'
     | '/api/public/payments/webhook'
@@ -340,6 +352,7 @@ export interface FileRouteTypes {
     | '/_authenticated/teacher/aulas'
     | '/_authenticated/teacher/dashboard'
     | '/_authenticated/teacher/perfil'
+    | '/_authenticated/lessons/'
     | '/_authenticated/ptbr/checkout/return'
     | '/_authenticated/ptbr/lessons/$id'
     | '/api/public/payments/webhook'
@@ -460,6 +473,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCreditsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/lessons/': {
+      id: '/_authenticated/lessons/'
+      path: '/lessons'
+      fullPath: '/lessons/'
+      preLoaderRoute: typeof AuthenticatedLessonsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/teacher/perfil': {
       id: '/_authenticated/teacher/perfil'
       path: '/teacher/perfil'
@@ -560,6 +580,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTeacherAulasRoute: typeof AuthenticatedTeacherAulasRoute
   AuthenticatedTeacherDashboardRoute: typeof AuthenticatedTeacherDashboardRoute
   AuthenticatedTeacherPerfilRoute: typeof AuthenticatedTeacherPerfilRoute
+  AuthenticatedLessonsIndexRoute: typeof AuthenticatedLessonsIndexRoute
   AuthenticatedPtbrCheckoutReturnRoute: typeof AuthenticatedPtbrCheckoutReturnRoute
   AuthenticatedPtbrLessonsIdRoute: typeof AuthenticatedPtbrLessonsIdRoute
 }
@@ -577,6 +598,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTeacherAulasRoute: AuthenticatedTeacherAulasRoute,
   AuthenticatedTeacherDashboardRoute: AuthenticatedTeacherDashboardRoute,
   AuthenticatedTeacherPerfilRoute: AuthenticatedTeacherPerfilRoute,
+  AuthenticatedLessonsIndexRoute: AuthenticatedLessonsIndexRoute,
   AuthenticatedPtbrCheckoutReturnRoute: AuthenticatedPtbrCheckoutReturnRoute,
   AuthenticatedPtbrLessonsIdRoute: AuthenticatedPtbrLessonsIdRoute,
 }
