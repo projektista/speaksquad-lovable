@@ -7,7 +7,7 @@ Plataforma de ensino de idiomas — aulas ao vivo, prática guiada e comunidade 
 - **Framework:** TanStack Start (React 19 + Vite 7)
 - **Estilo:** Tailwind CSS v4
 - **Componentes:** shadcn/ui
-- **Backend:** Lovable Cloud (Supabase gerenciado) — quando habilitado
+- **Backend:** Supabase próprio (self-managed) + Stripe próprio via SDK oficial
 - **Deploy alvo:** Vercel (via GitHub)
 
 ## Desenvolvimento local
