@@ -52,48 +52,6 @@ export const getTeacherOverview = createServerFn({ method: "GET" })
     };
   });
 
-export const getTeacherAvailability = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    await assertTeacher(context);
-    const { data } = await context.supabase
-      .from("teacher_availability")
-      .select("id, weekday, start_time, end_time, active")
-      .order("weekday", { ascending: true })
-      .order("start_time", { ascending: true });
-    return data ?? [];
-  });
-
-export const setWeeklySlot = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: { weekday: number; hour: number; state: "available" | "blocked" | "off" }) => {
-    if (data.weekday < 0 || data.weekday > 6) throw new Error("Invalid weekday");
-    if (data.hour < 0 || data.hour > 23) throw new Error("Invalid hour");
-    return data;
-  })
-  .handler(async ({ data, context }) => {
-    await assertTeacher(context);
-    const start = `${String(data.hour).padStart(2, "0")}:00:00`;
-    const end = `${String((data.hour + 1) % 24).padStart(2, "0")}:00:00`;
-
-    // Delete any slot matching that hour on that weekday
-    await context.supabase
-      .from("teacher_availability")
-      .delete()
-      .eq("weekday", data.weekday)
-      .eq("start_time", start);
-
-    if (data.state === "off") return { ok: true };
-
-    await context.supabase.from("teacher_availability").insert({
-      weekday: data.weekday,
-      start_time: start,
-      end_time: end,
-      active: data.state === "available",
-    });
-    return { ok: true };
-  });
-
 export const getTeacherAllLessons = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
