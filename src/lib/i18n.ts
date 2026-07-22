@@ -22,9 +22,7 @@ function detectBrowserLang(): Lang {
   if (typeof navigator === "undefined") return "jp";
   const langs = [navigator.language, ...(navigator.languages ?? [])].filter(Boolean);
   for (const l of langs) {
-    const low = l.toLowerCase();
-    if (low.startsWith("ja")) return "jp";
-    if (low.startsWith("pt")) return "pt";
+    if (l.toLowerCase().startsWith("pt")) return "pt";
   }
   return "jp";
 }
@@ -38,8 +36,10 @@ export function pathForLang(pathname: string, target: Lang): string {
 }
 
 /**
- * Auto-detect the visitor's preferred language on first visit to a landing
- * page (/ or /ptbr) and redirect if it differs. JP is now the default.
+ * On first visit to the domain root (/), detect the browser language and
+ * redirect PT speakers to /ptbr. Any other language stays on / (JP default).
+ * Runs only when the visitor lands on "/" without a stored preference, so
+ * deep links and manual switch choices are always respected.
  */
 export function useLangAutoDetect() {
   const router = useRouter();
@@ -47,20 +47,14 @@ export function useLangAutoDetect() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const isLanding = pathname === "/" || pathname === "/ptbr";
-    if (!isLanding) return;
+    if (pathname !== "/") return; // only auto-detect at domain root
 
-    const stored = storedLang();
-    if (stored) return; // user already made an explicit choice
+    if (storedLang()) return; // user already has an explicit preference
 
     const preferred = detectBrowserLang();
     persistLang(preferred);
-
-    const currentIsPt = pathname === "/ptbr";
-    if (preferred === "pt" && !currentIsPt) {
+    if (preferred === "pt") {
       router.navigate({ to: "/ptbr", replace: true });
-    } else if (preferred === "jp" && currentIsPt) {
-      router.navigate({ to: "/", replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
