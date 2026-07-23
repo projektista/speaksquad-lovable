@@ -741,3 +741,35 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
     vocabPlaceholder: "学んだ語彙(任意)",
   },
 };
+
+/* ------------------------------------------------------------------ */
+/* Complete profile (Google / social signups)                          */
+/* ------------------------------------------------------------------ */
+
+export type CompleteProfileContent = {
+  metaTitle: string;
+  title: string;
+  subtitle: string;
+  lead: string;
+  submit: string;
+  saving: string;
+};
+
+export const completeProfileContent: Record<Lang, CompleteProfileContent> = {
+  pt: {
+    metaTitle: "Completar perfil — SpeakSquad",
+    title: "Completar perfil",
+    subtitle: "Faltam poucos dados para você começar.",
+    lead: "Precisamos dessas informações para preparar aulas adequadas à idade e interesses do aluno.",
+    submit: "Salvar e continuar",
+    saving: "Salvando...",
+  },
+  jp: {
+    metaTitle: "プロフィール完了 — SpeakSquad",
+    title: "プロフィール完了",
+    subtitle: "レッスンを始める前にご入力ください。",
+    lead: "年齢と興味に合ったレッスンをご用意するために必要です。",
+    submit: "保存して続ける",
+    saving: "保存中...",
+  },
+};
