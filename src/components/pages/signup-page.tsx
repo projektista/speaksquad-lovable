@@ -299,6 +299,28 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
               </div>
             )}
           </Field>
+          <Field label={content.interests} hint={`${interests.length}/200`}>
+            <input
+              type="text"
+              maxLength={200}
+              placeholder={content.interestsPlaceholder}
+              className={inputCls}
+              value={interests}
+              onChange={(e) => setInterests(e.target.value)}
+            />
+          </Field>
+          <Field label={content.goal}>
+            <select
+              className={inputCls}
+              value={goal}
+              onChange={(e) => setGoal(e.target.value)}
+            >
+              <option value="">{content.goalPlaceholder}</option>
+              {content.goalOptions.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </Field>
         </section>
 
         {error && (
