@@ -1,10 +1,8 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { BrandMark } from "@/components/fx/brand-mark";
 import { supabase } from "@/integrations/supabase/client";
 import { useRoles } from "@/hooks/use-role";
-import { getMyOverview } from "@/lib/booking.functions";
 
 type Lang = "pt" | "jp";
 
