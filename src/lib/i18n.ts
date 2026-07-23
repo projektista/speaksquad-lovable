@@ -215,6 +215,8 @@ export type SignupContent = {
   sectionProfile: string;
   name: string;
   namePlaceholder: string;
+  birthDate: string;
+  birthDateHint: string;
   email: string;
   emailPlaceholder: string;
   password: string;
@@ -239,6 +241,12 @@ export type SignupContent = {
   fortniteNickname: string;
   gameRequired: string;
   gamertagRequired: string;
+  interests: string;
+  interestsPlaceholder: string;
+  goal: string;
+  goalPlaceholder: string;
+  goalOptions: { value: string; label: string }[];
+  birthDateRequired: string;
 };
 
 export const signupContent: Record<Lang, SignupContent> = {
@@ -251,6 +259,8 @@ export const signupContent: Record<Lang, SignupContent> = {
     sectionProfile: "// perfil_de_aprendizado",
     name: "Nome",
     namePlaceholder: "Seu nome",
+    birthDate: "Data de nascimento (do aluno)",
+    birthDateHint: "Sempre a data do aluno que terá aula.",
     email: "Email",
     emailPlaceholder: "seu@email.com",
     password: "Senha",
@@ -279,6 +289,18 @@ export const signupContent: Record<Lang, SignupContent> = {
     fortniteNickname: "Nickname no FORTNITE",
     gameRequired: "Escolha pelo menos um jogo",
     gamertagRequired: "Preencha o nome de usuário do jogo escolhido",
+    interests: "Interesses (opcional)",
+    interestsPlaceholder: "Ex.: animes, desenhos, futebol, música...",
+    goal: "Objetivo com o inglês",
+    goalPlaceholder: "Selecione",
+    goalOptions: [
+      { value: "friends", label: "Jogar com amigos de outros países" },
+      { value: "travel", label: "Viajar" },
+      { value: "study_abroad", label: "Estudar fora" },
+      { value: "career", label: "Carreira / futuro profissional" },
+      { value: "other", label: "Outro" },
+    ],
+    birthDateRequired: "Informe a data de nascimento do aluno",
   },
   jp: {
     metaTitle: "新規登録 — SpeakSquad",
@@ -289,6 +311,8 @@ export const signupContent: Record<Lang, SignupContent> = {
     sectionProfile: "// learning_profile",
     name: "お名前",
     namePlaceholder: "お名前",
+    birthDate: "生年月日(生徒)",
+    birthDateHint: "レッスンを受ける生徒本人の生年月日を入力してください。",
     email: "メール",
     emailPlaceholder: "your@email.com",
     password: "パスワード",
@@ -317,6 +341,18 @@ export const signupContent: Record<Lang, SignupContent> = {
     fortniteNickname: "FORTNITE ニックネーム",
     gameRequired: "少なくとも1つのゲームを選択してください",
     gamertagRequired: "選択したゲームのユーザー名を入力してください",
+    interests: "趣味・興味(任意)",
+    interestsPlaceholder: "例:アニメ、漫画、サッカー、音楽...",
+    goal: "英語を学ぶ目的",
+    goalPlaceholder: "選択してください",
+    goalOptions: [
+      { value: "friends", label: "海外の友達とゲームがしたい" },
+      { value: "travel", label: "旅行" },
+      { value: "study_abroad", label: "留学" },
+      { value: "career", label: "将来の仕事のため" },
+      { value: "other", label: "その他" },
+    ],
+    birthDateRequired: "生徒の生年月日を入力してください",
   },
 };
 
@@ -526,6 +562,15 @@ export type ProfileContent = {
   save: string;
   saved: string;
   levelOptions: { value: string; label: string }[];
+  birthDateLabel: string;
+  interestsLabel: string;
+  interestsPlaceholder: string;
+  goalLabel: string;
+  goalPlaceholder: string;
+  goalOptions: { value: string; label: string }[];
+  sectionIdentity: string;
+  sectionLearning: string;
+  sectionGames: string;
 };
 
 export const profileContent: Record<Lang, ProfileContent> = {
