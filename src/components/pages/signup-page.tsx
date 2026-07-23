@@ -7,6 +7,7 @@ import { lovable } from "@/integrations/lovable/index";
 
 export function SignupPage({ content, lang }: { content: SignupContent; lang: Lang }) {
   const [name, setName] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
@@ -15,6 +16,8 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
   const [games, setGames] = useState<Array<"minecraft" | "fortnite">>([]);
   const [minecraftTag, setMinecraftTag] = useState("");
   const [fortniteTag, setFortniteTag] = useState("");
+  const [interests, setInterests] = useState("");
+  const [goal, setGoal] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sentMsg, setSentMsg] = useState<string | null>(null);
@@ -38,6 +41,10 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       setError(content.passwordMismatch);
       return;
     }
+    if (!birthDate) {
+      setError(content.birthDateRequired);
+      return;
+    }
     if (games.length === 0) {
       setError(content.gameRequired);
       return;
@@ -51,12 +58,27 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       return;
     }
     setLoading(true);
+    // Pass EVERY signup field via options.data so the DB trigger
+    // handle_new_user() writes them on the initial profile insert. Previously
+    // we only ran a client-side UPDATE inside `if (data.session)`, which is
+    // skipped when email confirmation is on → data was silently lost.
     const { data, error } = await supabase.auth.signUp({
       email,
       password: pw,
       options: {
         emailRedirectTo: `${window.location.origin}${dashTo}`,
-        data: { name },
+        data: {
+          name,
+          birth_date: birthDate,
+          english_level: level || null,
+          bio: bio || null,
+          preferred_game: games[0] ?? null,
+          games,
+          minecraft_gamertag: minecraftTag.trim() || null,
+          fortnite_nickname: fortniteTag.trim() || null,
+          interests: interests.trim() || null,
+          learning_goal: goal || null,
+        },
       },
     });
     if (error) {
@@ -65,24 +87,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       return;
     }
     if (data.session) {
-      if (data.user) {
-        await supabase
-          .from("profiles")
-          .update({
-            name,
-            english_level: (level || null) as
-              | "beginner"
-              | "intermediate"
-              | "advanced"
-              | null,
-            bio: bio || null,
-            preferred_game: games[0],
-            games,
-            minecraft_gamertag: minecraftTag.trim() || null,
-            fortnite_nickname: fortniteTag.trim() || null,
-          })
-          .eq("id", data.user.id);
-      }
       setLoading(false);
       navigate({ to: dashTo });
       return;
@@ -105,6 +109,8 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       return;
     }
     if (result.redirected) return;
+    // Auth gate will forward Google signups without birth_date to
+    // /complete-profile automatically.
     navigate({ to: dashTo });
   }
 
