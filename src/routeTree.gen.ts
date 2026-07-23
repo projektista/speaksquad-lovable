@@ -24,6 +24,7 @@ import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCreditsRouteImport } from './routes/_authenticated/credits'
+import { Route as AuthenticatedCompleteProfileRouteImport } from './routes/_authenticated/complete-profile'
 import { Route as AuthenticatedLessonsIndexRouteImport } from './routes/_authenticated/lessons.index'
 import { Route as AuthenticatedTeacherPerfilRouteImport } from './routes/_authenticated/teacher.perfil'
 import { Route as AuthenticatedTeacherDashboardRouteImport } from './routes/_authenticated/teacher.dashboard'
@@ -33,6 +34,7 @@ import { Route as AuthenticatedPtbrScheduleRouteImport } from './routes/_authent
 import { Route as AuthenticatedPtbrProfileRouteImport } from './routes/_authenticated/ptbr.profile'
 import { Route as AuthenticatedPtbrDashboardRouteImport } from './routes/_authenticated/ptbr.dashboard'
 import { Route as AuthenticatedPtbrCreditsRouteImport } from './routes/_authenticated/ptbr.credits'
+import { Route as AuthenticatedPtbrCompleteProfileRouteImport } from './routes/_authenticated/ptbr.complete-profile'
 import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authenticated/lessons.$id'
 import { Route as AuthenticatedCheckoutReturnRouteImport } from './routes/_authenticated/checkout.return'
 import { Route as AuthenticatedPtbrLessonsIndexRouteImport } from './routes/_authenticated/ptbr.lessons.index'
@@ -114,6 +116,12 @@ const AuthenticatedCreditsRoute = AuthenticatedCreditsRouteImport.update({
   path: '/credits',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCompleteProfileRoute =
+  AuthenticatedCompleteProfileRouteImport.update({
+    id: '/complete-profile',
+    path: '/complete-profile',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLessonsIndexRoute =
   AuthenticatedLessonsIndexRouteImport.update({
     id: '/lessons/',
@@ -168,6 +176,12 @@ const AuthenticatedPtbrCreditsRoute =
     path: '/ptbr/credits',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPtbrCompleteProfileRoute =
+  AuthenticatedPtbrCompleteProfileRouteImport.update({
+    id: '/ptbr/complete-profile',
+    path: '/ptbr/complete-profile',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLessonsIdRoute = AuthenticatedLessonsIdRouteImport.update({
   id: '/lessons/$id',
   path: '/lessons/$id',
@@ -209,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -221,6 +236,7 @@ export interface FileRoutesByFullPath {
   '/ptbr/': typeof PtbrIndexRoute
   '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
+  '/ptbr/complete-profile': typeof AuthenticatedPtbrCompleteProfileRoute
   '/ptbr/credits': typeof AuthenticatedPtbrCreditsRoute
   '/ptbr/dashboard': typeof AuthenticatedPtbrDashboardRoute
   '/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
@@ -240,6 +256,7 @@ export interface FileRoutesByTo {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -252,6 +269,7 @@ export interface FileRoutesByTo {
   '/ptbr': typeof PtbrIndexRoute
   '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
   '/lessons/$id': typeof AuthenticatedLessonsIdRoute
+  '/ptbr/complete-profile': typeof AuthenticatedPtbrCompleteProfileRoute
   '/ptbr/credits': typeof AuthenticatedPtbrCreditsRoute
   '/ptbr/dashboard': typeof AuthenticatedPtbrDashboardRoute
   '/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
@@ -273,6 +291,7 @@ export interface FileRoutesById {
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/_authenticated/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/_authenticated/credits': typeof AuthenticatedCreditsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -285,6 +304,7 @@ export interface FileRoutesById {
   '/ptbr/': typeof PtbrIndexRoute
   '/_authenticated/checkout/return': typeof AuthenticatedCheckoutReturnRoute
   '/_authenticated/lessons/$id': typeof AuthenticatedLessonsIdRoute
+  '/_authenticated/ptbr/complete-profile': typeof AuthenticatedPtbrCompleteProfileRoute
   '/_authenticated/ptbr/credits': typeof AuthenticatedPtbrCreditsRoute
   '/_authenticated/ptbr/dashboard': typeof AuthenticatedPtbrDashboardRoute
   '/_authenticated/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
@@ -306,6 +326,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/signup'
+    | '/complete-profile'
     | '/credits'
     | '/dashboard'
     | '/profile'
@@ -318,6 +339,7 @@ export interface FileRouteTypes {
     | '/ptbr/'
     | '/checkout/return'
     | '/lessons/$id'
+    | '/ptbr/complete-profile'
     | '/ptbr/credits'
     | '/ptbr/dashboard'
     | '/ptbr/profile'
@@ -337,6 +359,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/signup'
+    | '/complete-profile'
     | '/credits'
     | '/dashboard'
     | '/profile'
@@ -349,6 +372,7 @@ export interface FileRouteTypes {
     | '/ptbr'
     | '/checkout/return'
     | '/lessons/$id'
+    | '/ptbr/complete-profile'
     | '/ptbr/credits'
     | '/ptbr/dashboard'
     | '/ptbr/profile'
@@ -369,6 +393,7 @@ export interface FileRouteTypes {
     | '/contato'
     | '/login'
     | '/signup'
+    | '/_authenticated/complete-profile'
     | '/_authenticated/credits'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
@@ -381,6 +406,7 @@ export interface FileRouteTypes {
     | '/ptbr/'
     | '/_authenticated/checkout/return'
     | '/_authenticated/lessons/$id'
+    | '/_authenticated/ptbr/complete-profile'
     | '/_authenticated/ptbr/credits'
     | '/_authenticated/ptbr/dashboard'
     | '/_authenticated/ptbr/profile'
@@ -518,6 +544,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCreditsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/complete-profile': {
+      id: '/_authenticated/complete-profile'
+      path: '/complete-profile'
+      fullPath: '/complete-profile'
+      preLoaderRoute: typeof AuthenticatedCompleteProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/lessons/': {
       id: '/_authenticated/lessons/'
       path: '/lessons'
@@ -581,6 +614,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPtbrCreditsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ptbr/complete-profile': {
+      id: '/_authenticated/ptbr/complete-profile'
+      path: '/ptbr/complete-profile'
+      fullPath: '/ptbr/complete-profile'
+      preLoaderRoute: typeof AuthenticatedPtbrCompleteProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/lessons/$id': {
       id: '/_authenticated/lessons/$id'
       path: '/lessons/$id'
@@ -627,12 +667,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCompleteProfileRoute: typeof AuthenticatedCompleteProfileRoute
   AuthenticatedCreditsRoute: typeof AuthenticatedCreditsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedCheckoutReturnRoute: typeof AuthenticatedCheckoutReturnRoute
   AuthenticatedLessonsIdRoute: typeof AuthenticatedLessonsIdRoute
+  AuthenticatedPtbrCompleteProfileRoute: typeof AuthenticatedPtbrCompleteProfileRoute
   AuthenticatedPtbrCreditsRoute: typeof AuthenticatedPtbrCreditsRoute
   AuthenticatedPtbrDashboardRoute: typeof AuthenticatedPtbrDashboardRoute
   AuthenticatedPtbrProfileRoute: typeof AuthenticatedPtbrProfileRoute
@@ -648,12 +690,14 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCompleteProfileRoute: AuthenticatedCompleteProfileRoute,
   AuthenticatedCreditsRoute: AuthenticatedCreditsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedCheckoutReturnRoute: AuthenticatedCheckoutReturnRoute,
   AuthenticatedLessonsIdRoute: AuthenticatedLessonsIdRoute,
+  AuthenticatedPtbrCompleteProfileRoute: AuthenticatedPtbrCompleteProfileRoute,
   AuthenticatedPtbrCreditsRoute: AuthenticatedPtbrCreditsRoute,
   AuthenticatedPtbrDashboardRoute: AuthenticatedPtbrDashboardRoute,
   AuthenticatedPtbrProfileRoute: AuthenticatedPtbrProfileRoute,
