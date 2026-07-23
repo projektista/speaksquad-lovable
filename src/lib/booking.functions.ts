@@ -61,9 +61,11 @@ export const getMyLessons = createServerFn({ method: "GET" })
 export const getMyProfile = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data } = await context.supabase
+    const { data } = await (context.supabase as any)
       .from("profiles")
-      .select("id, name, bio, english_level, minecraft_gamertag, fortnite_nickname")
+      .select(
+        "id, name, bio, english_level, minecraft_gamertag, fortnite_nickname, birth_date, interests, learning_goal",
+      )
       .eq("id", context.userId)
       .maybeSingle();
     return data;
@@ -77,6 +79,9 @@ export const updateMyProfile = createServerFn({ method: "POST" })
     english_level?: string;
     minecraft_gamertag?: string;
     fortnite_nickname?: string;
+    birth_date?: string;
+    interests?: string;
+    learning_goal?: string;
   }) => data)
   .handler(async ({ data, context }) => {
     const patch: Record<string, string | null> = {};
@@ -89,6 +94,29 @@ export const updateMyProfile = createServerFn({ method: "POST" })
       .eq("id", context.userId);
     if (error) throw error;
     return { ok: true };
+  });
+
+/**
+ * Returns whether the current user's profile has the essentials filled in
+ * (birth_date is the required signal). Used by the auth gate to redirect
+ * incomplete profiles (e.g. Google signups) to /complete-profile.
+ * Teachers/admins are always considered complete — they don't take lessons.
+ */
+export const getProfileCompletion = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const [rolesRes, profRes] = await Promise.all([
+      context.supabase.from("user_roles").select("role").eq("user_id", context.userId),
+      (context.supabase as any)
+        .from("profiles")
+        .select("birth_date")
+        .eq("id", context.userId)
+        .maybeSingle(),
+    ]);
+    const roles = (rolesRes.data ?? []).map((r: any) => r.role);
+    const isStaff = roles.includes("teacher") || roles.includes("admin");
+    const complete = isStaff || Boolean(profRes.data?.birth_date);
+    return { complete, isStaff };
   });
 
 /**

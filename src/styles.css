@@ -177,6 +177,31 @@
 @utility bg-bg2 { background-color: var(--bg2); }
 @utility bg-bg3 { background-color: var(--bg3); }
 
+/* Internal app surface (post-login). Lifts the palette to a softer,
+ * higher-contrast dark neutral so day-to-day pages feel less "heavy"
+ * than the marketing landing. Scoped so overrides only apply to
+ * app-shell content — the landing stays on the original tokens. */
+@utility app-surface {
+  --bg: #1a2233;
+  --bg2: #232d42;
+  --bg3: #2b3654;
+  --border: #3a465d;
+  --border2: #4d5975;
+  --text: #f8fafc;
+  --foreground: #f8fafc;
+  --card: #232d42;
+  --input: #2b3654;
+  color-scheme: dark;
+  background: #1a2233;
+  color: #f8fafc;
+}
+.app-surface .text-muted { color: #cbd5e1; }
+.app-surface .section-label {
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  color: #d8b4fe;
+}
+
 @utility border-hair { border: 1px solid var(--border); }
 @utility border-hair2 { border: 1px solid var(--border2); }
 
