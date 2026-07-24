@@ -29,6 +29,7 @@ import { Route as AuthenticatedLessonsIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedTeacherPerfilRouteImport } from './routes/_authenticated/teacher.perfil'
 import { Route as AuthenticatedTeacherDashboardRouteImport } from './routes/_authenticated/teacher.dashboard'
 import { Route as AuthenticatedTeacherAulasRouteImport } from './routes/_authenticated/teacher.aulas'
+import { Route as AuthenticatedTeacherAlunosRouteImport } from './routes/_authenticated/teacher.alunos'
 import { Route as AuthenticatedTeacherAgendamentoRouteImport } from './routes/_authenticated/teacher.agendamento'
 import { Route as AuthenticatedPtbrScheduleRouteImport } from './routes/_authenticated/ptbr.schedule'
 import { Route as AuthenticatedPtbrProfileRouteImport } from './routes/_authenticated/ptbr.profile'
@@ -146,6 +147,12 @@ const AuthenticatedTeacherAulasRoute =
     path: '/teacher/aulas',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedTeacherAlunosRoute =
+  AuthenticatedTeacherAlunosRouteImport.update({
+    id: '/teacher/alunos',
+    path: '/teacher/alunos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTeacherAgendamentoRoute =
   AuthenticatedTeacherAgendamentoRouteImport.update({
     id: '/teacher/agendamento',
@@ -242,6 +249,7 @@ export interface FileRoutesByFullPath {
   '/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
   '/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
   '/teacher/agendamento': typeof AuthenticatedTeacherAgendamentoRoute
+  '/teacher/alunos': typeof AuthenticatedTeacherAlunosRoute
   '/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
@@ -275,6 +283,7 @@ export interface FileRoutesByTo {
   '/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
   '/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
   '/teacher/agendamento': typeof AuthenticatedTeacherAgendamentoRoute
+  '/teacher/alunos': typeof AuthenticatedTeacherAlunosRoute
   '/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
@@ -310,6 +319,7 @@ export interface FileRoutesById {
   '/_authenticated/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
   '/_authenticated/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
   '/_authenticated/teacher/agendamento': typeof AuthenticatedTeacherAgendamentoRoute
+  '/_authenticated/teacher/alunos': typeof AuthenticatedTeacherAlunosRoute
   '/_authenticated/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/_authenticated/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/_authenticated/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
@@ -345,6 +355,7 @@ export interface FileRouteTypes {
     | '/ptbr/profile'
     | '/ptbr/schedule'
     | '/teacher/agendamento'
+    | '/teacher/alunos'
     | '/teacher/aulas'
     | '/teacher/dashboard'
     | '/teacher/perfil'
@@ -378,6 +389,7 @@ export interface FileRouteTypes {
     | '/ptbr/profile'
     | '/ptbr/schedule'
     | '/teacher/agendamento'
+    | '/teacher/alunos'
     | '/teacher/aulas'
     | '/teacher/dashboard'
     | '/teacher/perfil'
@@ -412,6 +424,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ptbr/profile'
     | '/_authenticated/ptbr/schedule'
     | '/_authenticated/teacher/agendamento'
+    | '/_authenticated/teacher/alunos'
     | '/_authenticated/teacher/aulas'
     | '/_authenticated/teacher/dashboard'
     | '/_authenticated/teacher/perfil'
@@ -579,6 +592,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeacherAulasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/teacher/alunos': {
+      id: '/_authenticated/teacher/alunos'
+      path: '/teacher/alunos'
+      fullPath: '/teacher/alunos'
+      preLoaderRoute: typeof AuthenticatedTeacherAlunosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/teacher/agendamento': {
       id: '/_authenticated/teacher/agendamento'
       path: '/teacher/agendamento'
@@ -680,6 +700,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPtbrProfileRoute: typeof AuthenticatedPtbrProfileRoute
   AuthenticatedPtbrScheduleRoute: typeof AuthenticatedPtbrScheduleRoute
   AuthenticatedTeacherAgendamentoRoute: typeof AuthenticatedTeacherAgendamentoRoute
+  AuthenticatedTeacherAlunosRoute: typeof AuthenticatedTeacherAlunosRoute
   AuthenticatedTeacherAulasRoute: typeof AuthenticatedTeacherAulasRoute
   AuthenticatedTeacherDashboardRoute: typeof AuthenticatedTeacherDashboardRoute
   AuthenticatedTeacherPerfilRoute: typeof AuthenticatedTeacherPerfilRoute
@@ -703,6 +724,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPtbrProfileRoute: AuthenticatedPtbrProfileRoute,
   AuthenticatedPtbrScheduleRoute: AuthenticatedPtbrScheduleRoute,
   AuthenticatedTeacherAgendamentoRoute: AuthenticatedTeacherAgendamentoRoute,
+  AuthenticatedTeacherAlunosRoute: AuthenticatedTeacherAlunosRoute,
   AuthenticatedTeacherAulasRoute: AuthenticatedTeacherAulasRoute,
   AuthenticatedTeacherDashboardRoute: AuthenticatedTeacherDashboardRoute,
   AuthenticatedTeacherPerfilRoute: AuthenticatedTeacherPerfilRoute,
