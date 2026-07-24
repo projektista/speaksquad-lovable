@@ -29,6 +29,7 @@ import { Route as AuthenticatedLessonsIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedTeacherPerfilRouteImport } from './routes/_authenticated/teacher.perfil'
 import { Route as AuthenticatedTeacherDashboardRouteImport } from './routes/_authenticated/teacher.dashboard'
 import { Route as AuthenticatedTeacherAulasRouteImport } from './routes/_authenticated/teacher.aulas'
+import { Route as AuthenticatedTeacherAlunosRouteImport } from './routes/_authenticated/teacher.alunos'
 import { Route as AuthenticatedTeacherAgendamentoRouteImport } from './routes/_authenticated/teacher.agendamento'
 import { Route as AuthenticatedPtbrScheduleRouteImport } from './routes/_authenticated/ptbr.schedule'
 import { Route as AuthenticatedPtbrProfileRouteImport } from './routes/_authenticated/ptbr.profile'
@@ -39,6 +40,7 @@ import { Route as AuthenticatedLessonsIdRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCheckoutReturnRouteImport } from './routes/_authenticated/checkout.return'
 import { Route as AuthenticatedPtbrLessonsIndexRouteImport } from './routes/_authenticated/ptbr.lessons.index'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as AuthenticatedTeacherAlunosIdRouteImport } from './routes/_authenticated/teacher.alunos.$id'
 import { Route as AuthenticatedPtbrLessonsIdRouteImport } from './routes/_authenticated/ptbr.lessons.$id'
 import { Route as AuthenticatedPtbrCheckoutReturnRouteImport } from './routes/_authenticated/ptbr.checkout.return'
 
@@ -146,6 +148,12 @@ const AuthenticatedTeacherAulasRoute =
     path: '/teacher/aulas',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedTeacherAlunosRoute =
+  AuthenticatedTeacherAlunosRouteImport.update({
+    id: '/teacher/alunos',
+    path: '/teacher/alunos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTeacherAgendamentoRoute =
   AuthenticatedTeacherAgendamentoRouteImport.update({
     id: '/teacher/agendamento',
@@ -205,6 +213,12 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedTeacherAlunosIdRoute =
+  AuthenticatedTeacherAlunosIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedTeacherAlunosRoute,
+  } as any)
 const AuthenticatedPtbrLessonsIdRoute =
   AuthenticatedPtbrLessonsIdRouteImport.update({
     id: '/ptbr/lessons/$id',
@@ -242,12 +256,14 @@ export interface FileRoutesByFullPath {
   '/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
   '/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
   '/teacher/agendamento': typeof AuthenticatedTeacherAgendamentoRoute
+  '/teacher/alunos': typeof AuthenticatedTeacherAlunosRouteWithChildren
   '/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
   '/lessons/': typeof AuthenticatedLessonsIndexRoute
   '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
+  '/teacher/alunos/$id': typeof AuthenticatedTeacherAlunosIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/ptbr/lessons/': typeof AuthenticatedPtbrLessonsIndexRoute
 }
@@ -275,12 +291,14 @@ export interface FileRoutesByTo {
   '/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
   '/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
   '/teacher/agendamento': typeof AuthenticatedTeacherAgendamentoRoute
+  '/teacher/alunos': typeof AuthenticatedTeacherAlunosRouteWithChildren
   '/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
   '/lessons': typeof AuthenticatedLessonsIndexRoute
   '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
+  '/teacher/alunos/$id': typeof AuthenticatedTeacherAlunosIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/ptbr/lessons': typeof AuthenticatedPtbrLessonsIndexRoute
 }
@@ -310,12 +328,14 @@ export interface FileRoutesById {
   '/_authenticated/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
   '/_authenticated/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
   '/_authenticated/teacher/agendamento': typeof AuthenticatedTeacherAgendamentoRoute
+  '/_authenticated/teacher/alunos': typeof AuthenticatedTeacherAlunosRouteWithChildren
   '/_authenticated/teacher/aulas': typeof AuthenticatedTeacherAulasRoute
   '/_authenticated/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/_authenticated/teacher/perfil': typeof AuthenticatedTeacherPerfilRoute
   '/_authenticated/lessons/': typeof AuthenticatedLessonsIndexRoute
   '/_authenticated/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/_authenticated/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
+  '/_authenticated/teacher/alunos/$id': typeof AuthenticatedTeacherAlunosIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/_authenticated/ptbr/lessons/': typeof AuthenticatedPtbrLessonsIndexRoute
 }
@@ -345,12 +365,14 @@ export interface FileRouteTypes {
     | '/ptbr/profile'
     | '/ptbr/schedule'
     | '/teacher/agendamento'
+    | '/teacher/alunos'
     | '/teacher/aulas'
     | '/teacher/dashboard'
     | '/teacher/perfil'
     | '/lessons/'
     | '/ptbr/checkout/return'
     | '/ptbr/lessons/$id'
+    | '/teacher/alunos/$id'
     | '/api/public/payments/webhook'
     | '/ptbr/lessons/'
   fileRoutesByTo: FileRoutesByTo
@@ -378,12 +400,14 @@ export interface FileRouteTypes {
     | '/ptbr/profile'
     | '/ptbr/schedule'
     | '/teacher/agendamento'
+    | '/teacher/alunos'
     | '/teacher/aulas'
     | '/teacher/dashboard'
     | '/teacher/perfil'
     | '/lessons'
     | '/ptbr/checkout/return'
     | '/ptbr/lessons/$id'
+    | '/teacher/alunos/$id'
     | '/api/public/payments/webhook'
     | '/ptbr/lessons'
   id:
@@ -412,12 +436,14 @@ export interface FileRouteTypes {
     | '/_authenticated/ptbr/profile'
     | '/_authenticated/ptbr/schedule'
     | '/_authenticated/teacher/agendamento'
+    | '/_authenticated/teacher/alunos'
     | '/_authenticated/teacher/aulas'
     | '/_authenticated/teacher/dashboard'
     | '/_authenticated/teacher/perfil'
     | '/_authenticated/lessons/'
     | '/_authenticated/ptbr/checkout/return'
     | '/_authenticated/ptbr/lessons/$id'
+    | '/_authenticated/teacher/alunos/$id'
     | '/api/public/payments/webhook'
     | '/_authenticated/ptbr/lessons/'
   fileRoutesById: FileRoutesById
@@ -579,6 +605,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeacherAulasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/teacher/alunos': {
+      id: '/_authenticated/teacher/alunos'
+      path: '/teacher/alunos'
+      fullPath: '/teacher/alunos'
+      preLoaderRoute: typeof AuthenticatedTeacherAlunosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/teacher/agendamento': {
       id: '/_authenticated/teacher/agendamento'
       path: '/teacher/agendamento'
@@ -649,6 +682,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/teacher/alunos/$id': {
+      id: '/_authenticated/teacher/alunos/$id'
+      path: '/$id'
+      fullPath: '/teacher/alunos/$id'
+      preLoaderRoute: typeof AuthenticatedTeacherAlunosIdRouteImport
+      parentRoute: typeof AuthenticatedTeacherAlunosRoute
+    }
     '/_authenticated/ptbr/lessons/$id': {
       id: '/_authenticated/ptbr/lessons/$id'
       path: '/ptbr/lessons/$id'
@@ -666,6 +706,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedTeacherAlunosRouteChildren {
+  AuthenticatedTeacherAlunosIdRoute: typeof AuthenticatedTeacherAlunosIdRoute
+}
+
+const AuthenticatedTeacherAlunosRouteChildren: AuthenticatedTeacherAlunosRouteChildren =
+  {
+    AuthenticatedTeacherAlunosIdRoute: AuthenticatedTeacherAlunosIdRoute,
+  }
+
+const AuthenticatedTeacherAlunosRouteWithChildren =
+  AuthenticatedTeacherAlunosRoute._addFileChildren(
+    AuthenticatedTeacherAlunosRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCompleteProfileRoute: typeof AuthenticatedCompleteProfileRoute
   AuthenticatedCreditsRoute: typeof AuthenticatedCreditsRoute
@@ -680,6 +734,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPtbrProfileRoute: typeof AuthenticatedPtbrProfileRoute
   AuthenticatedPtbrScheduleRoute: typeof AuthenticatedPtbrScheduleRoute
   AuthenticatedTeacherAgendamentoRoute: typeof AuthenticatedTeacherAgendamentoRoute
+  AuthenticatedTeacherAlunosRoute: typeof AuthenticatedTeacherAlunosRouteWithChildren
   AuthenticatedTeacherAulasRoute: typeof AuthenticatedTeacherAulasRoute
   AuthenticatedTeacherDashboardRoute: typeof AuthenticatedTeacherDashboardRoute
   AuthenticatedTeacherPerfilRoute: typeof AuthenticatedTeacherPerfilRoute
@@ -703,6 +758,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPtbrProfileRoute: AuthenticatedPtbrProfileRoute,
   AuthenticatedPtbrScheduleRoute: AuthenticatedPtbrScheduleRoute,
   AuthenticatedTeacherAgendamentoRoute: AuthenticatedTeacherAgendamentoRoute,
+  AuthenticatedTeacherAlunosRoute: AuthenticatedTeacherAlunosRouteWithChildren,
   AuthenticatedTeacherAulasRoute: AuthenticatedTeacherAulasRoute,
   AuthenticatedTeacherDashboardRoute: AuthenticatedTeacherDashboardRoute,
   AuthenticatedTeacherPerfilRoute: AuthenticatedTeacherPerfilRoute,

@@ -157,3 +157,160 @@ export const setSlot = createServerFn({ method: "POST" })
       );
     return { ok: true };
   });
+
+/* ------------------------------------------------------------------ */
+/* Student management (teacher/admin only)                            */
+/* ------------------------------------------------------------------ */
+
+export const listStudents = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertTeacher(context);
+    const supabase = context.supabase as any;
+
+    const { data: roleRows, error: rolesErr } = await supabase
+      .from("user_roles")
+      .select("user_id")
+      .eq("role", "student");
+    if (rolesErr) throw rolesErr;
+    const ids: string[] = (roleRows ?? []).map((r: any) => r.user_id);
+    if (ids.length === 0) return [];
+
+    const [profilesRes, summariesRes, lessonsRes] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select("id, name, birth_date")
+        .in("id", ids),
+      supabase
+        .from("v_user_credit_summary")
+        .select("user_id, available, reserved, next_expiration")
+        .in("user_id", ids),
+      supabase
+        .from("lessons")
+        .select("student_id, scheduled_at, status")
+        .in("student_id", ids)
+        .eq("status", "completed")
+        .order("scheduled_at", { ascending: false }),
+    ]);
+
+    // Fetch emails via admin API (privileged operation, teacher/admin only).
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const emails: Record<string, string> = {};
+    // getUserById one at a time is fine for small lists; keep parallel.
+    await Promise.all(
+      ids.map(async (id) => {
+        const { data } = await supabaseAdmin.auth.admin.getUserById(id);
+        if (data?.user?.email) emails[id] = data.user.email;
+      }),
+    );
+
+    const profileById = new Map<string, any>();
+    for (const p of profilesRes.data ?? []) profileById.set(p.id, p);
+    const summaryById = new Map<string, any>();
+    for (const s of summariesRes.data ?? []) summaryById.set(s.user_id, s);
+    const lastLessonById = new Map<string, string>();
+    for (const l of lessonsRes.data ?? []) {
+      if (!lastLessonById.has(l.student_id)) {
+        lastLessonById.set(l.student_id, l.scheduled_at);
+      }
+    }
+
+    return ids.map((id) => {
+      const p = profileById.get(id);
+      const s = summaryById.get(id);
+      return {
+        id,
+        name: (p?.name as string) ?? "",
+        email: emails[id] ?? "",
+        available: (s?.available as number) ?? 0,
+        reserved: (s?.reserved as number) ?? 0,
+        lastCompletedAt: lastLessonById.get(id) ?? null,
+        profileComplete: Boolean(p?.birth_date),
+      };
+    });
+  });
+
+export const getStudentDetail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { studentId: string }) => data)
+  .handler(async ({ data, context }) => {
+    await assertTeacher(context);
+    const supabase = context.supabase as any;
+    const studentId = data.studentId;
+
+    const [profileRes, summaryRes, lotsRes, lessonsRes] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select(
+          "id, name, bio, english_level, minecraft_gamertag, fortnite_nickname, birth_date, interests, learning_goal",
+        )
+        .eq("id", studentId)
+        .maybeSingle(),
+      supabase
+        .from("v_user_credit_summary")
+        .select("available, reserved, next_expiration")
+        .eq("user_id", studentId)
+        .maybeSingle(),
+      supabase
+        .from("credit_lots")
+        .select("id, status, source, note, created_at, expires_at, consumed_at, reserved_for_lesson_id")
+        .eq("user_id", studentId)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("lessons")
+        .select("id, scheduled_at, status, mode")
+        .eq("student_id", studentId)
+        .order("scheduled_at", { ascending: false })
+        .limit(20),
+    ]);
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: userData } = await supabaseAdmin.auth.admin.getUserById(studentId);
+
+    return {
+      profile: profileRes.data ?? null,
+      email: userData?.user?.email ?? "",
+      summary: summaryRes.data ?? { available: 0, reserved: 0, next_expiration: null },
+      lots: lotsRes.data ?? [],
+      lessons: lessonsRes.data ?? [],
+    };
+  });
+
+export const grantStudentCredits = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(
+    (data: { studentId: string; quantity: number; expiresAt: string; note: string }) => data,
+  )
+  .handler(async ({ data, context }) => {
+    await assertTeacher(context);
+    const quantity = Math.floor(Number(data.quantity));
+    if (!Number.isFinite(quantity) || quantity < 1 || quantity > 100) {
+      throw new Error("Quantidade inválida (1-100).");
+    }
+    const note = data.note?.trim();
+    if (!note) throw new Error("Motivo é obrigatório.");
+    const expiresAt = new Date(data.expiresAt);
+    if (Number.isNaN(expiresAt.getTime())) throw new Error("Data de expiração inválida.");
+
+    // Ensure the target is actually a student we know about (RLS + sanity).
+    const { data: exists } = await context.supabase
+      .from("user_roles")
+      .select("user_id")
+      .eq("user_id", data.studentId)
+      .eq("role", "student")
+      .maybeSingle();
+    if (!exists) throw new Error("Aluno não encontrado.");
+
+    const rows = Array.from({ length: quantity }).map(() => ({
+      user_id: data.studentId,
+      expires_at: expiresAt.toISOString(),
+      source: "manual_grant",
+      status: "available" as const,
+      note,
+    }));
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("credit_lots").insert(rows);
+    if (error) throw error;
+    return { ok: true, granted: quantity };
+  });
