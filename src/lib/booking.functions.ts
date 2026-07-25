@@ -61,7 +61,7 @@ export const getMyLessons = createServerFn({ method: "GET" })
 export const getMyProfile = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data } = await (context.supabase as any)
+    const { data } = await context.supabase
       .from("profiles")
       .select(
         "id, name, bio, english_level, minecraft_gamertag, fortnite_nickname, birth_date, interests, learning_goal",
@@ -88,7 +88,7 @@ export const updateMyProfile = createServerFn({ method: "POST" })
     for (const [k, v] of Object.entries(data)) {
       if (v !== undefined) patch[k] = v || null;
     }
-    const { error } = await (context.supabase as any)
+    const { error } = await context.supabase
       .from("profiles")
       .update(patch)
       .eq("id", context.userId);
@@ -107,7 +107,7 @@ export const getProfileCompletion = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const [rolesRes, profRes] = await Promise.all([
       context.supabase.from("user_roles").select("role").eq("user_id", context.userId),
-      (context.supabase as any)
+      context.supabase
         .from("profiles")
         .select("birth_date")
         .eq("id", context.userId)
@@ -129,7 +129,7 @@ export const getAvailableSlotsRange = createServerFn({ method: "POST" })
   .inputValidator((data: { from: string; to: string }) => data)
   .handler(async ({ data, context }) => {
     const [slotsRes, lessonsRes] = await Promise.all([
-      (context.supabase as any)
+      context.supabase
         .from("teacher_availability_slots")
         .select("id, starts_at, teacher_id, status")
         .eq("status", "available")
@@ -143,8 +143,8 @@ export const getAvailableSlotsRange = createServerFn({ method: "POST" })
         .gte("scheduled_at", data.from)
         .lt("scheduled_at", data.to),
     ]);
-    const taken = new Set((lessonsRes.data ?? []).map((l: any) => l.scheduled_at));
-    const slots = (slotsRes.data ?? []).filter((s: any) => !taken.has(s.starts_at));
+    const taken = new Set((lessonsRes.data ?? []).map((l) => l.scheduled_at));
+    const slots = (slotsRes.data ?? []).filter((s) => !taken.has(s.starts_at));
     return slots as Array<{ id: string; starts_at: string; teacher_id: string; status: string }>;
   });
 
@@ -159,7 +159,7 @@ export const bookLesson = createServerFn({ method: "POST" })
 
     // Ensure slot is still available & not double-booked
     const [{ data: slot }, { data: existing }] = await Promise.all([
-      (supabase as any)
+      supabase
         .from("teacher_availability_slots")
         .select("id, teacher_id, status")
         .eq("starts_at", data.starts_at)
@@ -184,7 +184,7 @@ export const bookLesson = createServerFn({ method: "POST" })
     if (!summary || (summary.available ?? 0) < 1) throw new Error("Sem créditos disponíveis.");
 
     // Insert lesson
-    const { data: lesson, error: insErr } = await (supabase as any)
+    const { data: lesson, error: insErr } = await supabase
       .from("lessons")
       .insert({
         student_id: userId,
@@ -199,7 +199,7 @@ export const bookLesson = createServerFn({ method: "POST" })
     if (insErr || !lesson) throw new Error(insErr?.message ?? "Falha ao agendar");
 
     // Reserve credit lot (FIFO) via RPC defined in earlier migrations
-    const { error: rpcErr } = await (supabase as any).rpc("reserve_credit_lot", {
+    const { error: rpcErr } = await supabase.rpc("reserve_credit_lot", {
       _lesson_id: lesson.id,
     });
     if (rpcErr) {
