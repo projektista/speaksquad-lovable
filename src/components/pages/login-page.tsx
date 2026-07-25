@@ -3,7 +3,6 @@ import { useState } from "react";
 import { AuthFrame, Field, inputCls } from "@/components/ui/auth-frame";
 import type { Lang, LoginContent } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 
 export function LoginPage({ content, lang }: { content: LoginContent; lang: Lang }) {
   const [show, setShow] = useState(false);
@@ -30,15 +29,14 @@ export function LoginPage({ content, lang }: { content: LoginContent; lang: Lang
 
   async function onGoogle() {
     setError(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}${dashTo}` },
     });
-    if (result.error) {
-      setError(result.error.message ?? String(result.error));
+    if (error) {
+      setError(error.message);
       return;
     }
-    if (result.redirected) return;
-    navigate({ to: dashTo });
   }
 
   return (
