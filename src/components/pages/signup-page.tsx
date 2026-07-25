@@ -3,7 +3,6 @@ import { useMemo, useState } from "react";
 import { AuthFrame, Field, inputCls } from "@/components/ui/auth-frame";
 import type { Lang, SignupContent } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 
 export function SignupPage({ content, lang }: { content: SignupContent; lang: Lang }) {
   const [name, setName] = useState("");
@@ -101,17 +100,16 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
 
   async function onGoogle() {
     setError(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}${dashTo}` },
     });
-    if (result.error) {
-      setError(result.error.message ?? String(result.error));
+    if (error) {
+      setError(error.message);
       return;
     }
-    if (result.redirected) return;
     // Auth gate will forward Google signups without birth_date to
     // /complete-profile automatically.
-    navigate({ to: dashTo });
   }
 
   return (
