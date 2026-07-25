@@ -1,5 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { Database } from "@/integrations/supabase/types";
+
+type ProfilesUpdate = Database["public"]["Tables"]["profiles"]["Update"];
+type LessonsInsert = Database["public"]["Tables"]["lessons"]["Insert"];
 
 /**
  * Returns the current student's credit summary and next upcoming lesson.
@@ -84,9 +88,9 @@ export const updateMyProfile = createServerFn({ method: "POST" })
     learning_goal?: string;
   }) => data)
   .handler(async ({ data, context }) => {
-    const patch: Record<string, string | null> = {};
+    const patch: ProfilesUpdate = {};
     for (const [k, v] of Object.entries(data)) {
-      if (v !== undefined) patch[k] = v || null;
+      if (v !== undefined) (patch as Record<string, string | null>)[k] = v || null;
     }
     const { error } = await context.supabase
       .from("profiles")
@@ -184,22 +188,24 @@ export const bookLesson = createServerFn({ method: "POST" })
     if (!summary || (summary.available ?? 0) < 1) throw new Error("Sem créditos disponíveis.");
 
     // Insert lesson
+    const insertRow = {
+      student_id: userId,
+      teacher_id: slot.teacher_id,
+      scheduled_at: data.starts_at,
+      duration_min: 50,
+      mode: data.mode,
+      status: "scheduled" as const,
+    };
     const { data: lesson, error: insErr } = await supabase
       .from("lessons")
-      .insert({
-        student_id: userId,
-        teacher_id: slot.teacher_id,
-        scheduled_at: data.starts_at,
-        duration_min: 50,
-        mode: data.mode,
-        status: "scheduled",
-      })
+      .insert(insertRow as unknown as LessonsInsert)
       .select("id")
       .single();
     if (insErr || !lesson) throw new Error(insErr?.message ?? "Falha ao agendar");
 
     // Reserve credit lot (FIFO) via RPC defined in earlier migrations
     const { error: rpcErr } = await supabase.rpc("reserve_credit_lot", {
+      _user_id: userId,
       _lesson_id: lesson.id,
     });
     if (rpcErr) {
