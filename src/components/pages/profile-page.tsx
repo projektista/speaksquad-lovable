@@ -23,13 +23,13 @@ export function ProfilePage({ content, lang }: { content: ProfileContent; lang: 
     getMyProfile().then((p) => {
       if (p) {
         setName(p.name ?? "");
-        setBirthDate((p as any).birth_date ?? "");
-        setBio((p as any).bio ?? "");
-        setLevel((p as any).english_level ?? "beginner");
-        setMc((p as any).minecraft_gamertag ?? "");
-        setFn((p as any).fortnite_nickname ?? "");
-        setInterests((p as any).interests ?? "");
-        setGoal((p as any).learning_goal ?? "");
+        setBirthDate(p.birth_date ?? "");
+        setBio(p.bio ?? "");
+        setLevel(p.english_level ?? "beginner");
+        setMc(p.minecraft_gamertag ?? "");
+        setFn(p.fortnite_nickname ?? "");
+        setInterests(p.interests ?? "");
+        setGoal(p.learning_goal ?? "");
       }
       setLoaded(true);
     });
