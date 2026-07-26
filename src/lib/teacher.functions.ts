@@ -102,7 +102,7 @@ export const getTeacherAvailabilityRange = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertTeacher(context);
     const [slotsRes, lessonsRes] = await Promise.all([
-      (context.supabase as any)
+      context.supabase
         .from("teacher_availability_slots")
         .select("id, starts_at, status")
         .eq("teacher_id", context.userId)
@@ -136,7 +136,7 @@ export const setSlot = createServerFn({ method: "POST" })
     if (lesson) throw new Error("Slot já reservado por uma aula.");
 
     if (data.state === "off") {
-      await (context.supabase as any)
+      await context.supabase
         .from("teacher_availability_slots")
         .delete()
         .eq("teacher_id", context.userId)
@@ -144,7 +144,7 @@ export const setSlot = createServerFn({ method: "POST" })
       return { ok: true };
     }
 
-    await (context.supabase as any)
+    await context.supabase
       .from("teacher_availability_slots")
       .upsert(
         {
@@ -166,7 +166,7 @@ export const listStudents = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertTeacher(context);
-    const supabase = context.supabase as any;
+    const { supabase } = context;
 
     const { data: roleRows, error: rolesErr } = await supabase
       .from("user_roles")
@@ -235,7 +235,7 @@ export const getStudentDetail = createServerFn({ method: "POST" })
   .inputValidator((data: { studentId: string }) => data)
   .handler(async ({ data, context }) => {
     await assertTeacher(context);
-    const supabase = context.supabase as any;
+    const { supabase } = context;
     const studentId = data.studentId;
 
     const [profileRes, summaryRes, lotsRes, lessonsRes] = await Promise.all([
