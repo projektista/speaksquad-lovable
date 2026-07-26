@@ -60,7 +60,11 @@ export function TeacherSchedulePage() {
       data: { from: weekStart.toISOString(), to: weekEnd.toISOString() },
     });
     const map: Record<string, "available" | "blocked"> = {};
-    for (const s of res.slots) map[new Date(s.starts_at).toISOString()] = s.status as any;
+    for (const s of res.slots) {
+      if (s.status === "available" || s.status === "blocked") {
+        map[new Date(s.starts_at).toISOString()] = s.status;
+      }
+    }
     setSlotMap(map);
     setBookedSet(new Set(res.lessons.map((l) => new Date(l.scheduled_at).toISOString())));
   }
