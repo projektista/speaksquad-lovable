@@ -207,7 +207,9 @@ export const listStudents = createServerFn({ method: "GET" })
     const profileById = new Map<string, any>();
     for (const p of profilesRes.data ?? []) profileById.set(p.id, p);
     const summaryById = new Map<string, any>();
-    for (const s of summariesRes.data ?? []) summaryById.set(s.user_id, s);
+    for (const s of summariesRes.data ?? []) {
+      if (s.user_id) summaryById.set(s.user_id, s);
+    }
     const lastLessonById = new Map<string, string>();
     for (const l of lessonsRes.data ?? []) {
       if (!lastLessonById.has(l.student_id)) {
