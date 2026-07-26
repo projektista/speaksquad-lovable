@@ -39,7 +39,7 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
   }, [id]);
 
   useEffect(() => {
-    const studentId = (detail as any)?.lesson?.student_id;
+    const studentId = detail?.lesson?.student_id;
     if (!studentId) return;
     getPreviousLessonsNotes({ data: { studentId, excludeLessonId: id, limit: 3 } })
       .then((rows) => setPrev(rows as Prev[]))
@@ -98,8 +98,7 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
   if (err && !detail) return <AppShell lang={lang} title={t.metaTitle}><div className="text-magenta">{err}</div></AppShell>;
   if (!detail) return <AppShell lang={lang} title={t.metaTitle}><div className="text-muted">{t.loading}</div></AppShell>;
 
-  const { lesson, student, viewerIsTeacher } = detail;
-  const teacher = (detail as any).teacher as { id: string; name: string | null; bio: string | null } | null;
+  const { lesson, student, teacher, viewerIsTeacher } = detail;
   const isFinished = ["completed", "student_cancelled", "teacher_cancelled", "no_show", "late_cancel"].includes(lesson.status);
 
   return (
