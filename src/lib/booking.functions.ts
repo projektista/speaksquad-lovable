@@ -188,17 +188,17 @@ export const bookLesson = createServerFn({ method: "POST" })
     if (!summary || (summary.available ?? 0) < 1) throw new Error("Sem créditos disponíveis.");
 
     // Insert lesson
-    const insertRow = {
+    const insertRow: LessonsInsert = {
       student_id: userId,
       teacher_id: slot.teacher_id,
       scheduled_at: data.starts_at,
       duration_min: 50,
       mode: data.mode,
-      status: "scheduled" as const,
+      status: "scheduled",
     };
     const { data: lesson, error: insErr } = await supabase
       .from("lessons")
-      .insert(insertRow as unknown as LessonsInsert)
+      .insert(insertRow)
       .select("id")
       .single();
     if (insErr || !lesson) throw new Error(insErr?.message ?? "Falha ao agendar");
