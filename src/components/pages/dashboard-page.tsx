@@ -33,21 +33,39 @@ export function DashboardPage({ content, lang }: { content: DashboardContent; la
   const totalCompleted = data?.totalCompleted ?? 0;
   const next = data?.nextLesson ?? null;
   const nextFmt = next ? formatDateTime(next.scheduled_at, lang) : null;
+  const lowCredits = !isLoading && available <= 1;
 
   return (
     <AppShell lang={lang} title={content.title} subtitle={content.subtitle} credits={available}>
       <div className="grid gap-4 md:grid-cols-3">
+        {/* Credits card */}
         <Reveal>
-          <div className="card-hair p-5">
+          <div
+            className={`card-hair p-5 ${
+              lowCredits
+                ? "border-[color:var(--magenta)] shadow-[0_0_24px_-8px_color-mix(in_oklab,var(--magenta)_45%,transparent)]"
+                : ""
+            }`}
+          >
             <div className="font-mono-alt text-xs text-muted">{content.creditsLabel}</div>
-            <div className="mt-2 font-display text-4xl text-cyan">
-              {isLoading ? "—" : available}
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className={`font-display text-4xl ${lowCredits ? "text-magenta" : "text-cyan"}`}>
+                {isLoading ? "—" : available}
+              </span>
+              {lowCredits && (
+                <span className="badge-pulse">{content.lowCreditsAlert}</span>
+              )}
             </div>
-            <Link to={p("/credits")} className="btn-outline mt-4 w-full !py-2 text-xs">
-              {content.buyMore}
+            <Link
+              to={p("/credits")}
+              className={`mt-4 w-full !py-2 text-xs ${lowCredits ? "btn-primary" : "btn-outline"}`}
+            >
+              {content.buyCreditsCta}
             </Link>
           </div>
         </Reveal>
+
+        {/* Next lesson card */}
         <Reveal delay={80}>
           <div className="card-hair p-5">
             <div className="font-mono-alt text-xs text-muted">{content.nextLessonLabel}</div>
@@ -55,34 +73,33 @@ export function DashboardPage({ content, lang }: { content: DashboardContent; la
               <>
                 <div className="mt-2 font-display text-lg">{nextFmt.date}</div>
                 <div className="font-mono-alt text-sm text-cyan">{nextFmt.time} JST</div>
-                <div className="mt-1 font-mono-alt text-xs text-muted capitalize">
-                  {next.mode}
-                </div>
+                <div className="mt-1 font-mono-alt text-xs text-muted capitalize">{next.mode}</div>
                 <Link
                   to={p(`/lessons/${next.id}`)}
-                  className="btn-outline mt-4 w-full !py-2 text-xs"
+                  className="btn-primary mt-4 w-full !py-2 text-xs"
                 >
-                  {content.seeDetails}
+                  {content.viewLessonDetailsCta}
                 </Link>
               </>
             ) : (
               <>
-                <div className="mt-2 font-mono-alt text-sm text-muted">
-                  {lang === "jp" ? "予約なし" : "Nenhuma aula agendada"}
+                <div className="mt-2 font-display text-lg text-foreground">
+                  {content.noNextLessonTitle}
                 </div>
-                <Link to={p("/schedule")} className="btn-outline mt-4 w-full !py-2 text-xs">
-                  {content.scheduleCta}
+                <p className="mt-1 text-sm text-muted">{content.noNextLessonLead}</p>
+                <Link to={p("/schedule")} className="btn-primary mt-4 w-full !py-2 text-xs">
+                  {content.scheduleFromEmptyCta}
                 </Link>
               </>
             )}
           </div>
         </Reveal>
+
+        {/* Total completed card */}
         <Reveal delay={160}>
           <div className="card-hair p-5">
             <div className="font-mono-alt text-xs text-muted">{content.totalLabel}</div>
-            <div className="mt-2 font-display text-4xl">
-              {isLoading ? "—" : totalCompleted}
-            </div>
+            <div className="mt-2 font-display text-4xl">{isLoading ? "—" : totalCompleted}</div>
             <Link to={p("/lessons")} className="btn-outline mt-4 w-full !py-2 text-xs">
               {content.history}
             </Link>

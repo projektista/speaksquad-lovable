@@ -362,10 +362,14 @@ export type DashboardContent = {
   subtitle: string;
   creditsLabel: string;
   buyMore: string;
+  buyCreditsCta: string;
+  lowCreditsAlert: string;
   nextLessonLabel: string;
   nextLessonDate: string;
   nextLessonMode: string;
   seeDetails: string;
+  viewLessonDetailsCta: string;
+  scheduleNowCta: string;
   totalLabel: string;
   history: string;
   nextStepCode: string;
@@ -373,6 +377,9 @@ export type DashboardContent = {
   nextStepLead: string;
   scheduleCta: string;
   noNextLesson: string;
+  noNextLessonTitle: string;
+  noNextLessonLead: string;
+  scheduleFromEmptyCta: string;
   quickActionsCode: string;
   quickActionsTitle: string;
   quickScheduleTitle: string;
@@ -391,10 +398,14 @@ export const dashboardContent: Record<Lang, DashboardContent> = {
     subtitle: "Sua central de controle.",
     creditsLabel: "créditos_disponíveis",
     buyMore: "Comprar mais",
+    buyCreditsCta: "Comprar créditos",
+    lowCreditsAlert: "Você está com poucos créditos",
     nextLessonLabel: "próxima_aula",
     nextLessonDate: "Ter · 15 jul",
     nextLessonMode: "Minecraft · Survival",
     seeDetails: "Ver detalhes",
+    viewLessonDetailsCta: "Ver detalhes da aula",
+    scheduleNowCta: "Agendar agora",
     totalLabel: "total_de_aulas",
     history: "Histórico",
     nextStepCode: "// próximo_passo",
@@ -402,6 +413,9 @@ export const dashboardContent: Record<Lang, DashboardContent> = {
     nextStepLead: "Escolha um horário aberto pelo Hugo esta semana.",
     scheduleCta: "Agendar aula",
     noNextLesson: "Nenhuma aula agendada",
+    noNextLessonTitle: "Nenhuma aula agendada",
+    noNextLessonLead: "Escolha um horário e agende sua próxima aula.",
+    scheduleFromEmptyCta: "Agendar agora",
     quickActionsCode: "// ações_rápidas",
     quickActionsTitle: "O que você quer fazer agora?",
     quickScheduleTitle: "Agendar aula",
@@ -418,10 +432,14 @@ export const dashboardContent: Record<Lang, DashboardContent> = {
     subtitle: "あなたのコントロールパネル。",
     creditsLabel: "残りクレジット",
     buyMore: "追加購入",
+    buyCreditsCta: "クレジットを購入",
+    lowCreditsAlert: "クレジットが残りわずかです",
     nextLessonLabel: "次のレッスン",
     nextLessonDate: "火 · 7月15日",
     nextLessonMode: "Minecraft · Survival",
     seeDetails: "詳細を見る",
+    viewLessonDetailsCta: "レッスン詳細を見る",
+    scheduleNowCta: "今すぐ予約",
     totalLabel: "合計レッスン数",
     history: "履歴",
     nextStepCode: "// next_step",
@@ -429,6 +447,9 @@ export const dashboardContent: Record<Lang, DashboardContent> = {
     nextStepLead: "今週の空き時間からお選びください。",
     scheduleCta: "レッスンを予約",
     noNextLesson: "予約されたレッスンはありません",
+    noNextLessonTitle: "予約されたレッスンはありません",
+    noNextLessonLead: "空き時間を選んで次のレッスンを予約しましょう。",
+    scheduleFromEmptyCta: "今すぐ予約",
     quickActionsCode: "// クイックアクション",
     quickActionsTitle: "何をしますか?",
     quickScheduleTitle: "レッスンを予約",
