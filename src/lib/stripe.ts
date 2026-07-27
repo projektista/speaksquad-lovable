@@ -1,4 +1,5 @@
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
+export { CREDIT_PACKAGES, type PackageCode } from "@/lib/pricing";
 
 export type StripeEnv = "sandbox" | "live";
 
@@ -25,11 +26,3 @@ export function getStripeEnvironment(): StripeEnv {
   if (key.startsWith("pk_test_")) return "sandbox";
   return "live";
 }
-
-export const CREDIT_PACKAGES = {
-  single: { priceId: "credit_single", credits: 1, expiryDays: 30, amountJpy: 2800 },
-  pack5: { priceId: "credit_pack5", credits: 5, expiryDays: 45, amountJpy: 13000 },
-  pack10: { priceId: "credit_pack10", credits: 10, expiryDays: 90, amountJpy: 24000 },
-} as const;
-
-export type PackageCode = keyof typeof CREDIT_PACKAGES;
