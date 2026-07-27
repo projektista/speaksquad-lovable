@@ -5,12 +5,7 @@ import {
   createStripeClient,
   getStripeErrorMessage,
 } from "@/lib/stripe.server";
-
-const PACKAGES: Record<string, { priceId: string; credits: number; expiryDays: number; amountJpy: number }> = {
-  single: { priceId: "credit_single", credits: 1, expiryDays: 30, amountJpy: 2800 },
-  pack5: { priceId: "credit_pack5", credits: 5, expiryDays: 45, amountJpy: 13000 },
-  pack10: { priceId: "credit_pack10", credits: 10, expiryDays: 90, amountJpy: 24000 },
-};
+import { CREDIT_PACKAGES } from "@/lib/pricing";
 
 type CheckoutResult = { clientSecret: string } | { error: string };
 
