@@ -48,16 +48,16 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     returnUrl: string;
     environment?: StripeEnv;
   }) => {
-    if (!PACKAGES[data.packageCode]) throw new Error("Invalid package");
+    if (!CREDIT_PACKAGES[data.packageCode]) throw new Error("Invalid package");
     return data;
   })
   .handler(async ({ data, context }): Promise<CheckoutResult> => {
     try {
       const stripe = createStripeClient(data.environment);
-      const pkg = PACKAGES[data.packageCode];
+      const pkg = CREDIT_PACKAGES[data.packageCode];
 
-      const prices = await stripe.prices.list({ lookup_keys: [pkg.priceId] });
-      if (!prices.data.length) throw new Error(`Price not found: ${pkg.priceId}`);
+      const prices = await stripe.prices.list({ lookup_keys: [pkg.lookupKey] });
+      if (!prices.data.length) throw new Error(`Price not found: ${pkg.lookupKey}`);
       const stripePrice = prices.data[0];
 
       const { userId, supabase } = context;
