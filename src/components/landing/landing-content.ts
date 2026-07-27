@@ -248,7 +248,7 @@ export const ptContent: LandingContent = {
     intro: "Se sua dúvida não estiver aqui, é só perguntar antes da aula experimental.",
     items: [
       { q: "Meu filho precisa já saber inglês para começar?", a: "Não. Atendemos desde quem nunca estudou até níveis avançados. Na aula experimental avaliamos o nível atual e ajustamos o ritmo a partir daí." },
-      { q: "Os créditos expiram?", a: "Sim. Aula avulsa expira em 20 dias, pacote de 5 em 45 dias e pacote de 10 em 90 dias — para incentivar o uso frequente." },
+      { q: "Os créditos expiram?", a: formatExpiryFaq("pt") },
       { q: "Posso cancelar ou remarcar uma aula agendada?", a: "Sim, com antecedência mínima informada no agendamento. Avisos de última hora podem consumir o crédito da aula." },
       { q: "Dois irmãos podem fazer aula juntos?", a: "Preferimos aulas individuais. É comum as crianças caírem no português entre si durante a aula, o que reduz o tempo real de prática em inglês." },
       { q: "Preciso ter o jogo comprado antes da aula experimental?", a: "Sim, o aluno precisa ter Minecraft ou Fortnite instalado e funcionando no dispositivo que for usar." },
