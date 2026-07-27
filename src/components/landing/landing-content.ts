@@ -1,3 +1,13 @@
+import {
+  CREDIT_PACKAGES,
+  formatExpiryDays,
+  formatExpiryFaq,
+  formatJpyPrice,
+  formatPricingPer,
+  formatSavePercent,
+} from "@/lib/pricing";
+import type { Lang } from "@/lib/i18n";
+
 export type PricingTier = {
   name: string;
   price: string;
