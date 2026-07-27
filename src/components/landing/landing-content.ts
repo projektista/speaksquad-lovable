@@ -351,9 +351,9 @@ export const jpContent: LandingContent = {
     popularBadge: "[ 人気 ]",
     buyCta: "購入する",
     tiers: [
-      { name: "単発", price: "¥2.800", per: "1レッスン", features: ["50分レッスン × 1", "有効期限 20日", "柔軟な予約"], footer: "契約なし。入会金なし。", featured: false, save: null },
-      { name: "5回パック", price: "¥13.000", per: "1回あたり ¥2.600", save: "約7%オフ", features: ["50分レッスン × 5", "有効期限 45日", "柔軟な予約", "優先予約"], footer: "まずは無料体験から。", featured: true },
-      { name: "10回パック", price: "¥24.000", per: "1回あたり ¥2.400", save: "約14%オフ", features: ["50分レッスン × 10", "有効期限 90日", "柔軟な予約", "優先予約"], footer: "契約なし。隠れた費用なし。", featured: false },
+      { name: "単発", price: formatJpyPrice(CREDIT_PACKAGES.single.amountJpy), per: formatPricingPer(CREDIT_PACKAGES.single.amountJpy, CREDIT_PACKAGES.single.credits, "jp"), features: ["50分レッスン × 1", formatExpiryDays(CREDIT_PACKAGES.single.expiryDays, "jp"), "柔軟な予約"], footer: "契約なし。入会金なし。", featured: false, save: null },
+      { name: "5回パック", price: formatJpyPrice(CREDIT_PACKAGES.pack5.amountJpy), per: formatPricingPer(CREDIT_PACKAGES.pack5.amountJpy, CREDIT_PACKAGES.pack5.credits, "jp"), save: formatSavePercent(CREDIT_PACKAGES.pack5.amountJpy, CREDIT_PACKAGES.pack5.credits, "jp"), features: ["50分レッスン × 5", formatExpiryDays(CREDIT_PACKAGES.pack5.expiryDays, "jp"), "柔軟な予約", "優先予約"], footer: "まずは無料体験から。", featured: true },
+      { name: "10回パック", price: formatJpyPrice(CREDIT_PACKAGES.pack10.amountJpy), per: formatPricingPer(CREDIT_PACKAGES.pack10.amountJpy, CREDIT_PACKAGES.pack10.credits, "jp"), save: formatSavePercent(CREDIT_PACKAGES.pack10.amountJpy, CREDIT_PACKAGES.pack10.credits, "jp"), features: ["50分レッスン × 10", formatExpiryDays(CREDIT_PACKAGES.pack10.expiryDays, "jp"), "柔軟な予約", "優先予約"], footer: "契約なし。隠れた費用なし。", featured: false },
     ],
   },
   requisitos: {
