@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 async function getRoles(ctx: { supabase: any; userId: string }) {
   const { data } = await ctx.supabase
@@ -109,7 +110,8 @@ export const finalizeLesson = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const roles = await getRoles(context);
     if (!roles.includes("teacher") && !roles.includes("admin")) throw new Error("Forbidden");
-    await context.supabase.rpc("consume_credit_lot", { _lesson_id: data.lessonId });
+    // service_role-only RPC — role already checked above with the user's client.
+    await supabaseAdmin.rpc("consume_credit_lot", { _lesson_id: data.lessonId });
     const patch: { status: "completed"; feedback?: string | null; vocabulary_notes?: string | null } = { status: "completed" };
     if (data.feedback !== undefined) patch.feedback = data.feedback || null;
     if (data.vocabulary !== undefined) patch.vocabulary_notes = data.vocabulary || null;
@@ -124,8 +126,9 @@ export const teacherCancelLesson = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const roles = await getRoles(context);
     if (!roles.includes("teacher") && !roles.includes("admin")) throw new Error("Forbidden");
-    // Release credit and extend expiration by 30 days as compensation
-    await context.supabase.rpc("release_credit_lot", {
+    // Release credit and extend expiration by 30 days as compensation.
+    // service_role-only RPC — role already checked above with the user's client.
+    await supabaseAdmin.rpc("release_credit_lot", {
       _lesson_id: data.lessonId,
       _extend_days: 30,
     });
@@ -143,8 +146,9 @@ export const teacherMarkNoShow = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const roles = await getRoles(context);
     if (!roles.includes("teacher") && !roles.includes("admin")) throw new Error("Forbidden");
-    // Consume the credit (student pays)
-    await context.supabase.rpc("consume_credit_lot", { _lesson_id: data.lessonId });
+    // Consume the credit (student pays). service_role-only RPC — role
+    // already checked above with the user's client.
+    await supabaseAdmin.rpc("consume_credit_lot", { _lesson_id: data.lessonId });
     const { error } = await context.supabase
       .from("lessons")
       .update({ status: "no_show", cancelled_at: new Date().toISOString(), cancelled_by: "teacher" })
@@ -168,16 +172,21 @@ export const studentCancelLesson = createServerFn({ method: "POST" })
 
     const hoursUntil = (new Date(lesson.scheduled_at).getTime() - Date.now()) / (1000 * 60 * 60);
     if (hoursUntil < 6) {
-      // Late cancel — credit is consumed
-      await context.supabase.rpc("consume_credit_lot", { _lesson_id: data.lessonId });
+      // Late cancel — credit is consumed.
+      // consume_credit_lot only grants EXECUTE to service_role (by design,
+      // see 20260715093907 migration) — ownership/status/timing were already
+      // validated above with the user's own client, so it's safe to use the
+      // admin client here just for this privileged RPC call.
+      await supabaseAdmin.rpc("consume_credit_lot", { _lesson_id: data.lessonId });
       await context.supabase
         .from("lessons")
         .update({ status: "late_cancel", cancelled_at: new Date().toISOString(), cancelled_by: "student" })
         .eq("id", data.lessonId);
       return { ok: true, refunded: false };
     }
-    // Normal cancel — credit released, no extension
-    await context.supabase.rpc("release_credit_lot", { _lesson_id: data.lessonId, _extend_days: 0 });
+    // Normal cancel — credit released, no extension.
+    // Same reasoning as above: release_credit_lot is service_role-only.
+    await supabaseAdmin.rpc("release_credit_lot", { _lesson_id: data.lessonId, _extend_days: 0 });
     await context.supabase
       .from("lessons")
       .update({ status: "student_cancelled", cancelled_at: new Date().toISOString(), cancelled_by: "student" })
