@@ -18,9 +18,11 @@ export function ProfilePage({ content, lang }: { content: ProfileContent; lang: 
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    getMyProfile().then((p) => {
+    getMyProfile()
+      .then((p) => {
       if (p) {
         setName(p.name ?? "");
         setBirthDate(p.birth_date ?? "");
@@ -31,29 +33,36 @@ export function ProfilePage({ content, lang }: { content: ProfileContent; lang: 
         setInterests(p.interests ?? "");
         setGoal(p.learning_goal ?? "");
       }
-      setLoaded(true);
-    });
+      })
+      .catch((e: any) => setErr(e?.message ?? String(e)))
+      .finally(() => setLoaded(true));
   }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
     setSaved(false);
-    await updateMyProfile({
-      data: {
-        name,
-        birth_date: birthDate,
-        bio,
-        english_level: level,
-        minecraft_gamertag: mc,
-        fortnite_nickname: fn,
-        interests,
-        learning_goal: goal,
-      },
-    });
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setErr(null);
+    try {
+      await updateMyProfile({
+        data: {
+          name,
+          birth_date: birthDate,
+          bio,
+          english_level: level,
+          minecraft_gamertag: mc,
+          fortnite_nickname: fn,
+          interests,
+          learning_goal: goal,
+        },
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (e: any) {
+      setErr(e?.message ?? String(e));
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -143,6 +152,7 @@ export function ProfilePage({ content, lang }: { content: ProfileContent; lang: 
               {saving ? "..." : content.save}
             </button>
             {saved && <span className="text-cyan text-sm">{content.saved}</span>}
+            {err && <span className="text-magenta text-sm">{err}</span>}
           </div>
         </form>
       )}

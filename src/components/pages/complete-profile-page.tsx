@@ -41,6 +41,7 @@ export function CompleteProfilePage({
           setGoal(p.learning_goal ?? "");
         }
       })
+      .catch((e: any) => setErr(e?.message ?? String(e)))
       .finally(() => setLoaded(true));
   }, []);
 
