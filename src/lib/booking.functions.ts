@@ -65,13 +65,16 @@ export const getMyLessons = createServerFn({ method: "GET" })
 export const getMyProfile = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data } = await context.supabase
+    const { data, error } = await context.supabase
       .from("profiles")
       .select(
         "id, name, bio, english_level, minecraft_gamertag, fortnite_nickname, birth_date, interests, learning_goal",
       )
       .eq("id", context.userId)
       .maybeSingle();
+    // Surface DB errors (e.g. missing GRANTs) instead of rendering an empty
+    // form that looks like data loss.
+    if (error) throw new Error(error.message);
     return data;
   });
 
@@ -117,10 +120,15 @@ export const getProfileCompletion = createServerFn({ method: "GET" })
         .eq("id", context.userId)
         .maybeSingle(),
     ]);
+    // If the read itself fails, do NOT force a redirect to /complete-profile —
+    // that would trap the user in a loop on a purely infrastructural error.
+    if (profRes.error) {
+      return { complete: true, isStaff: false, error: profRes.error.message };
+    }
     const roles = (rolesRes.data ?? []).map((r: any) => r.role);
     const isStaff = roles.includes("teacher") || roles.includes("admin");
     const complete = isStaff || Boolean(profRes.data?.birth_date);
-    return { complete, isStaff };
+    return { complete, isStaff, error: null as string | null };
   });
 
 /**
