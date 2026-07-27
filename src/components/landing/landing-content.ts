@@ -199,9 +199,9 @@ export const ptContent: LandingContent = {
     popularBadge: "[ mais_popular ]",
     buyCta: "Comprar",
     tiers: [
-      { name: "Unitário", price: "¥2.800", per: "por aula", features: ["1 aula de 50 minutos", "Expira em 20 dias", "Flexibilidade total"], footer: "Sem contrato. Sem matrícula.", featured: false, save: null },
-      { name: "Pacote 5", price: "¥13.000", per: "¥2.600 por aula", save: "economize ~7%", features: ["5 aulas de 50 minutos", "Expira em 45 dias", "Flexibilidade total", "Prioridade no agendamento"], footer: "Teste uma aula grátis antes.", featured: true },
-      { name: "Pacote 10", price: "¥24.000", per: "¥2.400 por aula", save: "economize ~14%", features: ["10 aulas de 50 minutos", "Expira em 90 dias", "Flexibilidade total", "Prioridade no agendamento"], footer: "Sem contrato. Sem surpresas.", featured: false },
+      { name: "Unitário", price: formatJpyPrice(CREDIT_PACKAGES.single.amountJpy), per: formatPricingPer(CREDIT_PACKAGES.single.amountJpy, CREDIT_PACKAGES.single.credits, "pt"), features: ["1 aula de 50 minutos", formatExpiryDays(CREDIT_PACKAGES.single.expiryDays, "pt"), "Flexibilidade total"], footer: "Sem contrato. Sem matrícula.", featured: false, save: null },
+      { name: "Pacote 5", price: formatJpyPrice(CREDIT_PACKAGES.pack5.amountJpy), per: formatPricingPer(CREDIT_PACKAGES.pack5.amountJpy, CREDIT_PACKAGES.pack5.credits, "pt"), save: formatSavePercent(CREDIT_PACKAGES.pack5.amountJpy, CREDIT_PACKAGES.pack5.credits, "pt"), features: ["5 aulas de 50 minutos", formatExpiryDays(CREDIT_PACKAGES.pack5.expiryDays, "pt"), "Flexibilidade total", "Prioridade no agendamento"], footer: "Teste uma aula grátis antes.", featured: true },
+      { name: "Pacote 10", price: formatJpyPrice(CREDIT_PACKAGES.pack10.amountJpy), per: formatPricingPer(CREDIT_PACKAGES.pack10.amountJpy, CREDIT_PACKAGES.pack10.credits, "pt"), save: formatSavePercent(CREDIT_PACKAGES.pack10.amountJpy, CREDIT_PACKAGES.pack10.credits, "pt"), features: ["10 aulas de 50 minutos", formatExpiryDays(CREDIT_PACKAGES.pack10.expiryDays, "pt"), "Flexibilidade total", "Prioridade no agendamento"], footer: "Sem contrato. Sem surpresas.", featured: false },
     ],
   },
   requisitos: {
