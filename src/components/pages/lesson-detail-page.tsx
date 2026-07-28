@@ -11,7 +11,17 @@ import {
   teacherCancelLesson,
   teacherMarkNoShow,
 } from "@/lib/lesson.functions";
-import { lessonDetailContent, type Lang } from "@/lib/i18n";
+import { lessonDetailContent, lessonStatusLabel, type Lang } from "@/lib/i18n";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type Detail = Awaited<ReturnType<typeof getLessonDetail>>;
 type Msg = { id: string; sender_id: string; content: string; created_at: string };
@@ -30,6 +40,7 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
   const [feedback, setFeedback] = useState("");
   const [vocab, setVocab] = useState("");
   const [acting, setActing] = useState(false);
+  const [confirm, setConfirm] = useState<null | { title: string; run: () => Promise<any> }>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -107,7 +118,7 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
         <div className="card-hair space-y-3 p-5">
           <div>
             <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.statusLabel}</div>
-            <div className="text-lg">{lesson.status}</div>
+            <div className="text-lg">{lessonStatusLabel(lesson.status, lang)}</div>
           </div>
           <div>
             <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.modeLabel}</div>
@@ -183,14 +194,24 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
                 </button>
                 <button
                   disabled={acting}
-                  onClick={() => act(() => teacherCancelLesson({ data: { lessonId: id } }))}
+                  onClick={() =>
+                    setConfirm({
+                      title: t.confirmTitleTeacherCancel,
+                      run: () => teacherCancelLesson({ data: { lessonId: id } }),
+                    })
+                  }
                   className="btn-outline !py-1 text-xs"
                 >
                   {t.cancelMine}
                 </button>
                 <button
                   disabled={acting}
-                  onClick={() => act(() => teacherMarkNoShow({ data: { lessonId: id } }))}
+                  onClick={() =>
+                    setConfirm({
+                      title: t.confirmTitleNoShow,
+                      run: () => teacherMarkNoShow({ data: { lessonId: id } }),
+                    })
+                  }
                   className="btn-outline !py-1 text-xs border-magenta text-magenta"
                 >
                   {t.markNoShow}
@@ -204,7 +225,12 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
               <div className="text-xs text-muted">{t.cancelPolicy}</div>
               <button
                 disabled={acting}
-                onClick={() => act(() => studentCancelLesson({ data: { lessonId: id } }))}
+                onClick={() =>
+                  setConfirm({
+                    title: t.confirmTitleStudentCancel,
+                    run: () => studentCancelLesson({ data: { lessonId: id } }),
+                  })
+                }
                 className="btn-outline !py-1 text-xs"
               >
                 {t.studentCancel}
@@ -304,6 +330,28 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
           </ul>
         )}
       </div>
+
+      <AlertDialog open={!!confirm} onOpenChange={(open) => !open && setConfirm(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{confirm?.title}</AlertDialogTitle>
+            <AlertDialogDescription>{t.cancelPolicy}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={acting}>{t.confirmNo}</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={acting}
+              onClick={() => {
+                const c = confirm;
+                setConfirm(null);
+                if (c) act(c.run);
+              }}
+            >
+              {t.confirmYes}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AppShell>
   );
 }
