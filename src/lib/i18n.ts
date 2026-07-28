@@ -307,6 +307,13 @@ export const signupContent: Record<Lang, SignupContent> = {
       { value: "other", label: "Outro" },
     ],
     birthDateRequired: "Informe a data de nascimento do aluno",
+    successTitle: "Cadastro concluído!",
+    successBody: (email: string) =>
+      `Enviamos um e-mail de confirmação para ${email}. Confirme seu e-mail para poder agendar sua primeira aula grátis.`,
+    successSpam: "Não recebeu em alguns minutos? Verifique sua caixa de spam ou lixo eletrônico.",
+    successResend: "Reenviar e-mail de confirmação",
+    successResending: "Reenviando...",
+    successResent: "E-mail reenviado.",
   },
   jp: {
     metaTitle: "新規登録 — SpeakSquad",
@@ -359,6 +366,13 @@ export const signupContent: Record<Lang, SignupContent> = {
       { value: "other", label: "その他" },
     ],
     birthDateRequired: "生徒の生年月日を入力してください",
+    successTitle: "登録が完了しました!",
+    successBody: (email: string) =>
+      `${email} 宛に確認メールを送信しました。メールを確認すると、初回無料レッスンの予約ができます。`,
+    successSpam: "数分経ってもメールが届かない場合は、迷惑メールフォルダをご確認ください。",
+    successResend: "確認メールを再送する",
+    successResending: "送信中...",
+    successResent: "確認メールを再送しました。",
   },
 };
 
