@@ -19,7 +19,9 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
   const [goal, setGoal] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sentMsg, setSentMsg] = useState<string | null>(null);
+  const [sentTo, setSentTo] = useState<string | null>(null);
+  const [resending, setResending] = useState(false);
+  const [resentMsg, setResentMsg] = useState<string | null>(null);
   const navigate = useNavigate();
   const strength = useMemo(() => {
     let s = 0;
@@ -35,7 +37,7 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    setSentMsg(null);
+    setSentTo(null);
     if (pw !== pw2) {
       setError(content.passwordMismatch);
       return;
@@ -91,10 +93,66 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       return;
     }
     setLoading(false);
-    setSentMsg(
-      lang === "jp"
-        ? "確認メールを送信しました。メールを確認してリンクをクリックしてください。"
-        : "Enviamos um email de confirmação. Clique no link para ativar sua conta.",
+    setSentTo(email);
+  }
+
+  async function onResend() {
+    setResending(true);
+    setError(null);
+    setResentMsg(null);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email: sentTo ?? email,
+      options: { emailRedirectTo: `${window.location.origin}${dashTo}` },
+    });
+    setResending(false);
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    setResentMsg(content.successResent);
+  }
+
+  if (sentTo) {
+    return (
+      <AuthFrame
+        lang={lang}
+        code="auth_03"
+        title={content.successTitle}
+        subtitle={content.successBody(sentTo)}
+        footer={
+          <>
+            {content.hasAccount}{" "}
+            <Link to={loginTo} className="text-cyan hover:text-magenta">
+              {content.login}
+            </Link>
+          </>
+        }
+      >
+        <div className="space-y-5">
+          <p className="font-mono-alt text-[11px] leading-relaxed text-muted">
+            {content.successSpam}
+          </p>
+          {error && (
+            <div className="rounded-[3px] border border-[color:var(--magenta)] bg-[color:var(--bg3)] p-2 font-mono-alt text-xs text-magenta">
+              {error}
+            </div>
+          )}
+          {resentMsg && (
+            <div className="rounded-[3px] border border-[color:var(--cyan)] bg-[color:var(--bg3)] p-2 font-mono-alt text-xs text-cyan">
+              {resentMsg}
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={onResend}
+            disabled={resending}
+            className="btn-outline w-full disabled:opacity-50"
+          >
+            {resending ? content.successResending : content.successResend}
+          </button>
+        </div>
+      </AuthFrame>
     );
   }
 
@@ -324,11 +382,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
         {error && (
           <div className="rounded-[3px] border border-[color:var(--magenta)] bg-[color:var(--bg3)] p-2 font-mono-alt text-xs text-magenta">
             {error}
-          </div>
-        )}
-        {sentMsg && (
-          <div className="rounded-[3px] border border-[color:var(--cyan)] bg-[color:var(--bg3)] p-2 font-mono-alt text-xs text-cyan">
-            {sentMsg}
           </div>
         )}
         <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">
