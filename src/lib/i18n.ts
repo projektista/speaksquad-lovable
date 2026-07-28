@@ -719,6 +719,11 @@ export type LessonDetailContent = {
   bioMissing: string;
   feedbackPlaceholder: string;
   vocabPlaceholder: string;
+  confirmTitleStudentCancel: string;
+  confirmTitleTeacherCancel: string;
+  confirmTitleNoShow: string;
+  confirmYes: string;
+  confirmNo: string;
 };
 
 export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
@@ -751,6 +756,11 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
     bioMissing: "Sem biografia ainda.",
     feedbackPlaceholder: "feedback (opcional)",
     vocabPlaceholder: "vocabulário aprendido (opcional)",
+    confirmTitleStudentCancel: "Deseja realmente cancelar esta aula?",
+    confirmTitleTeacherCancel: "Deseja realmente cancelar esta aula?",
+    confirmTitleNoShow: "Deseja realmente marcar falta (no-show) nesta aula?",
+    confirmYes: "SIM",
+    confirmNo: "NÃO",
   },
   jp: {
     metaTitle: "レッスン · SpeakSquad",
@@ -781,6 +791,11 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
     bioMissing: "自己紹介はまだありません。",
     feedbackPlaceholder: "フィードバック(任意)",
     vocabPlaceholder: "学んだ語彙(任意)",
+    confirmTitleStudentCancel: "このレッスンをキャンセルしてもよろしいですか？",
+    confirmTitleTeacherCancel: "このレッスンをキャンセルしてもよろしいですか？",
+    confirmTitleNoShow: "このレッスンを無断欠席(ノーショー)として記録しますか？",
+    confirmYes: "はい",
+    confirmNo: "いいえ",
   },
 };
 
