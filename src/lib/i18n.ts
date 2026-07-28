@@ -247,6 +247,12 @@ export type SignupContent = {
   goalPlaceholder: string;
   goalOptions: { value: string; label: string }[];
   birthDateRequired: string;
+  successTitle: string;
+  successBody: (email: string) => string;
+  successSpam: string;
+  successResend: string;
+  successResending: string;
+  successResent: string;
 };
 
 export const signupContent: Record<Lang, SignupContent> = {
