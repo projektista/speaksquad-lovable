@@ -524,6 +524,41 @@ export type LessonsListContent = {
   statusLabels: Record<string, string>;
 };
 
+/* ------------------------------------------------------------------ */
+/* Lesson status labels (shared)                                        */
+/* ------------------------------------------------------------------ */
+
+export type LessonStatus =
+  | "scheduled"
+  | "completed"
+  | "student_cancelled"
+  | "teacher_cancelled"
+  | "late_cancel"
+  | "no_show";
+
+export const lessonStatusLabels: Record<Lang, Record<string, string>> = {
+  pt: {
+    scheduled: "Agendada",
+    completed: "Concluída",
+    student_cancelled: "Cancelada pelo aluno",
+    teacher_cancelled: "Cancelada pelo professor",
+    late_cancel: "Cancelamento tardio",
+    no_show: "Falta (no-show)",
+  },
+  jp: {
+    scheduled: "予約済み",
+    completed: "完了",
+    student_cancelled: "生徒によるキャンセル",
+    teacher_cancelled: "先生によるキャンセル",
+    late_cancel: "期限後のキャンセル",
+    no_show: "無断欠席(ノーショー)",
+  },
+};
+
+export function lessonStatusLabel(status: string, lang: Lang = "pt"): string {
+  return lessonStatusLabels[lang][status] ?? status;
+}
+
 export const lessonsListContent: Record<Lang, LessonsListContent> = {
   pt: {
     metaTitle: "Minhas aulas — SpeakSquad",
@@ -535,14 +570,7 @@ export const lessonsListContent: Record<Lang, LessonsListContent> = {
     filterUpcoming: "Próximas",
     filterPast: "Anteriores",
     open: "Abrir",
-    statusLabels: {
-      scheduled: "agendada",
-      completed: "concluída",
-      student_cancelled: "cancelada por você",
-      teacher_cancelled: "cancelada pelo professor",
-      late_cancel: "cancelamento tardio",
-      no_show: "no-show",
-    },
+    statusLabels: lessonStatusLabels.pt,
   },
   jp: {
     metaTitle: "レッスン一覧 — SpeakSquad",
@@ -554,14 +582,7 @@ export const lessonsListContent: Record<Lang, LessonsListContent> = {
     filterUpcoming: "今後",
     filterPast: "過去",
     open: "開く",
-    statusLabels: {
-      scheduled: "予約済み",
-      completed: "完了",
-      student_cancelled: "自分でキャンセル",
-      teacher_cancelled: "先生がキャンセル",
-      late_cancel: "遅いキャンセル",
-      no_show: "ノーショー",
-    },
+    statusLabels: lessonStatusLabels.jp,
   },
 };
 
@@ -698,6 +719,11 @@ export type LessonDetailContent = {
   bioMissing: string;
   feedbackPlaceholder: string;
   vocabPlaceholder: string;
+  confirmTitleStudentCancel: string;
+  confirmTitleTeacherCancel: string;
+  confirmTitleNoShow: string;
+  confirmYes: string;
+  confirmNo: string;
 };
 
 export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
@@ -730,6 +756,11 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
     bioMissing: "Sem biografia ainda.",
     feedbackPlaceholder: "feedback (opcional)",
     vocabPlaceholder: "vocabulário aprendido (opcional)",
+    confirmTitleStudentCancel: "Deseja realmente cancelar esta aula?",
+    confirmTitleTeacherCancel: "Deseja realmente cancelar esta aula?",
+    confirmTitleNoShow: "Deseja realmente marcar falta (no-show) nesta aula?",
+    confirmYes: "SIM",
+    confirmNo: "NÃO",
   },
   jp: {
     metaTitle: "レッスン · SpeakSquad",
@@ -760,6 +791,11 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
     bioMissing: "自己紹介はまだありません。",
     feedbackPlaceholder: "フィードバック(任意)",
     vocabPlaceholder: "学んだ語彙(任意)",
+    confirmTitleStudentCancel: "このレッスンをキャンセルしてもよろしいですか？",
+    confirmTitleTeacherCancel: "このレッスンをキャンセルしてもよろしいですか？",
+    confirmTitleNoShow: "このレッスンを無断欠席(ノーショー)として記録しますか？",
+    confirmYes: "はい",
+    confirmNo: "いいえ",
   },
 };
 

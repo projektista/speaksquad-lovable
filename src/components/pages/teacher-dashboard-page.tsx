@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/app-shell";
 import { getTeacherOverview } from "@/lib/teacher.functions";
+import { lessonStatusLabel } from "@/lib/i18n";
 
 type Overview = Awaited<ReturnType<typeof getTeacherOverview>>;
 
@@ -51,7 +52,7 @@ function Section({ title, items, empty }: { title: string; items: any[]; empty: 
                 })}
               </div>
               <div className="text-sm capitalize">
-                {l.mode} · <span className="text-muted">{l.status}</span>
+                {l.mode} · <span className="text-muted">{lessonStatusLabel(l.status, "pt")}</span>
               </div>
             </Link>
           </li>
