@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/app-shell";
 import { getTeacherAllLessons } from "@/lib/teacher.functions";
+import { lessonStatusLabel } from "@/lib/i18n";
 
 export function TeacherLessonsPage() {
   const [lessons, setLessons] = useState<any[]>([]);
@@ -23,7 +24,7 @@ export function TeacherLessonsPage() {
               onClick={() => setFilter(s)}
               className={`btn-outline !py-1 !px-2 ${filter === s ? "border-cyan text-cyan" : ""}`}
             >
-              {s}
+              {s === "all" ? "Todas" : lessonStatusLabel(s, "pt")}
             </button>
           ),
         )}
@@ -52,7 +53,7 @@ export function TeacherLessonsPage() {
                   })}
                 </td>
                 <td className="p-2 capitalize">{l.mode}</td>
-                <td className="p-2">{l.status}</td>
+                <td className="p-2">{lessonStatusLabel(l.status, "pt")}</td>
                 <td className="p-2 text-muted">{l.student_id.slice(0, 8)}</td>
                 <td className="p-2">
                   <Link to="/lessons/$id" params={{ id: l.id }} className="text-cyan hover:underline">
