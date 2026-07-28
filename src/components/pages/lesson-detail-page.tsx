@@ -339,15 +339,14 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={acting}>{t.confirmNo}</AlertDialogCancel>
-            <AlertDialogAction
+         <AlertDialogAction
               disabled={acting}
               onClick={() => {
                 const c = confirm;
-                setConfirm(null);
-                if (c) act(c.run);
+                if (c) act(c.run).then(() => setConfirm(null));
               }}
             >
-              {t.confirmYes}
+              {acting ? t.confirmLoading : t.confirmYes}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
