@@ -744,6 +744,7 @@ export type LessonDetailContent = {
   confirmTitleNoShow: string;
   confirmYes: string;
   confirmNo: string;
+  confirmLoading: string;
 };
 
 export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
@@ -781,6 +782,7 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
     confirmTitleNoShow: "Deseja realmente marcar falta (no-show) nesta aula?",
     confirmYes: "SIM",
     confirmNo: "NÃO",
+    confirmLoading: "Processando...",
   },
   jp: {
     metaTitle: "レッスン · SpeakSquad",
@@ -816,6 +818,7 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
     confirmTitleNoShow: "このレッスンを無断欠席(ノーショー)として記録しますか？",
     confirmYes: "はい",
     confirmNo: "いいえ",
+    confirmLoading: "処理中...",
   },
 };
 
