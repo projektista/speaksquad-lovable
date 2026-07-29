@@ -65,7 +65,15 @@ export function CompleteProfilePage({
           fortnite_nickname: fn,
         },
       });
-      navigate({ to: lang === "jp" ? "/dashboard" : "/ptbr/dashboard" });
+      let staff = false;
+      try {
+        staff = (await getProfileCompletion()).isStaff;
+      } catch {
+        staff = false;
+      }
+      navigate({
+        to: staff ? "/teacher/dashboard" : lang === "jp" ? "/dashboard" : "/ptbr/dashboard",
+      });
     } catch (e: any) {
       setErr(e.message ?? String(e));
     } finally {
