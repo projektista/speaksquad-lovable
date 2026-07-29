@@ -6,6 +6,9 @@ import { inputCls, Field } from "@/components/ui/auth-frame";
 export function TeacherProfilePage() {
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
+  const [mc, setMc] = useState("");
+  const [fn, setFn] = useState("");
+  const [zoom, setZoom] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -15,6 +18,9 @@ export function TeacherProfilePage() {
       if (p) {
         setName(p.name ?? "");
         setBio(p.bio ?? "");
+        setMc(p.minecraft_gamertag ?? "");
+        setFn(p.fortnite_nickname ?? "");
+        setZoom(p.zoom_link ?? "");
       }
       setLoaded(true);
     });
@@ -24,7 +30,9 @@ export function TeacherProfilePage() {
     e.preventDefault();
     setSaving(true);
     setSaved(false);
-    await updateTeacherProfile({ data: { name, bio } });
+    await updateTeacherProfile({
+      data: { name, bio, minecraft_gamertag: mc, fortnite_nickname: fn, zoom_link: zoom },
+    });
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -46,6 +54,25 @@ export function TeacherProfilePage() {
               onChange={(e) => setBio(e.target.value)}
             />
           </Field>
+          <Field label="Minecraft gamertag">
+            <input className={inputCls} value={mc} onChange={(e) => setMc(e.target.value)} />
+          </Field>
+          <Field label="Fortnite nickname">
+            <input className={inputCls} value={fn} onChange={(e) => setFn(e.target.value)} />
+          </Field>
+          <Field label="Link do Zoom">
+            <input
+              type="url"
+              inputMode="url"
+              placeholder="https://zoom.us/j/..."
+              className={inputCls}
+              value={zoom}
+              onChange={(e) => setZoom(e.target.value)}
+            />
+          </Field>
+          <p className="font-mono-alt text-[11px] text-muted">
+            Este link fixo é usado como sala de todas as suas aulas.
+          </p>
           <button type="submit" disabled={saving} className="btn-primary">
             {saving ? "..." : "Salvar"}
           </button>

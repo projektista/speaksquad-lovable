@@ -29,7 +29,7 @@ export function AdminShell({
             </span>
             <span className="text-muted">console · hugo@speaksquad.jp</span>
           </div>
-          <Link to="/dashboard" className="btn-ghost !p-0 text-xs">
+          <Link to="/teacher/dashboard" className="btn-ghost !p-0 text-xs">
             ← sair do admin
           </Link>
         </div>

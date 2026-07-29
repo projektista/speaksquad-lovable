@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/app-shell";
 import { Field, inputCls } from "@/components/ui/auth-frame";
-import { getMyProfile, updateMyProfile } from "@/lib/booking.functions";
+import { getMyProfile, getProfileCompletion, updateMyProfile } from "@/lib/booking.functions";
 import type { CompleteProfileContent, Lang, ProfileContent, SignupContent } from "@/lib/i18n";
 
 export function CompleteProfilePage({
@@ -65,7 +65,15 @@ export function CompleteProfilePage({
           fortnite_nickname: fn,
         },
       });
-      navigate({ to: lang === "jp" ? "/dashboard" : "/ptbr/dashboard" });
+      let staff = false;
+      try {
+        staff = (await getProfileCompletion()).isStaff;
+      } catch {
+        staff = false;
+      }
+      navigate({
+        to: staff ? "/teacher/dashboard" : lang === "jp" ? "/dashboard" : "/ptbr/dashboard",
+      });
     } catch (e: any) {
       setErr(e.message ?? String(e));
     } finally {

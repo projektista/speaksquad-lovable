@@ -70,7 +70,7 @@ export const getTeacherProfile = createServerFn({ method: "GET" })
     await assertTeacher(context);
     const { data } = await context.supabase
       .from("profiles")
-      .select("id, name, bio, english_level, minecraft_gamertag, fortnite_nickname")
+      .select("id, name, bio, english_level, minecraft_gamertag, fortnite_nickname, zoom_link")
       .eq("id", context.userId)
       .maybeSingle();
     return data;
@@ -78,12 +78,31 @@ export const getTeacherProfile = createServerFn({ method: "GET" })
 
 export const updateTeacherProfile = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { name?: string; bio?: string }) => data)
+  .inputValidator(
+    (data: {
+      name?: string;
+      bio?: string;
+      minecraft_gamertag?: string;
+      fortnite_nickname?: string;
+      zoom_link?: string;
+    }) => data,
+  )
   .handler(async ({ data, context }) => {
     await assertTeacher(context);
-    const patch: { name?: string; bio?: string | null } = {};
+    const patch: {
+      name?: string;
+      bio?: string | null;
+      minecraft_gamertag?: string | null;
+      fortnite_nickname?: string | null;
+      zoom_link?: string | null;
+    } = {};
     if (data.name !== undefined) patch.name = data.name;
     if (data.bio !== undefined) patch.bio = data.bio;
+    if (data.minecraft_gamertag !== undefined)
+      patch.minecraft_gamertag = data.minecraft_gamertag || null;
+    if (data.fortnite_nickname !== undefined)
+      patch.fortnite_nickname = data.fortnite_nickname || null;
+    if (data.zoom_link !== undefined) patch.zoom_link = data.zoom_link.trim() || null;
     await context.supabase.from("profiles").update(patch).eq("id", context.userId);
     return { ok: true };
   });
