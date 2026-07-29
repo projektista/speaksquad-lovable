@@ -12,19 +12,25 @@ export const Route = createFileRoute("/_authenticated")({
 
     const path = location.pathname;
     const isCompletePath =
-      path === "/complete-profile" ||
-      path === "/ptbr/complete-profile";
+      path === "/complete-profile" || path === "/ptbr/complete-profile";
     const isTeacherPath = path.startsWith("/teacher/");
-    if (!isCompletePath && !isTeacherPath) {
-      const { complete } = await getProfileCompletion();
-      if (!complete) {
-        const to = path.startsWith("/ptbr")
-          ? "/ptbr/complete-profile"
-          : "/complete-profile";
-        throw redirect({ to });
-      }
+
+    const { complete, isStaff } = await getProfileCompletion();
+
+    // Student-only areas: staff (teacher/admin) never belong here.
+    const studentOnly = ["/dashboard", "/schedule", "/credits"];
+    const bare = path.startsWith("/ptbr") ? path.slice("/ptbr".length) : path;
+    if (isStaff && studentOnly.includes(bare)) {
+      throw redirect({ to: "/teacher/dashboard" });
     }
-    return { user: data.user };
+
+    if (!isCompletePath && !isTeacherPath && !complete) {
+      const to = path.startsWith("/ptbr")
+        ? "/ptbr/complete-profile"
+        : "/complete-profile";
+      throw redirect({ to });
+    }
+    return { user: data.user, isStaff };
   },
   component: () => <Outlet />,
 });

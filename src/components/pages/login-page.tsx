@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AuthFrame, Field, inputCls } from "@/components/ui/auth-frame";
 import type { Lang, LoginContent } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
+import { getProfileCompletion } from "@/lib/booking.functions";
 
 export function LoginPage({ content, lang }: { content: LoginContent; lang: Lang }) {
   const [show, setShow] = useState(false);
@@ -19,12 +20,19 @@ export function LoginPage({ content, lang }: { content: LoginContent; lang: Lang
     setError(null);
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
     if (error) {
+      setLoading(false);
       setError(error.message);
       return;
     }
-    navigate({ to: dashTo });
+    let staff = false;
+    try {
+      staff = (await getProfileCompletion()).isStaff;
+    } catch {
+      staff = false;
+    }
+    setLoading(false);
+    navigate({ to: staff ? "/teacher/dashboard" : dashTo });
   }
 
   async function onGoogle() {
