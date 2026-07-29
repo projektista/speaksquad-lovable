@@ -128,8 +128,8 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
             <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.durationLabel}</div>
             <div>{lesson.duration_min} {t.minutes}</div>
           </div>
-          {lesson.meet_url && (
-            <a href={lesson.meet_url} target="_blank" rel="noreferrer" className="btn-primary inline-flex">
+          {teacher?.zoom_link && (
+            <a href={teacher.zoom_link} target="_blank" rel="noreferrer" className="btn-primary inline-flex">
               {t.openZoom}
             </a>
           )}

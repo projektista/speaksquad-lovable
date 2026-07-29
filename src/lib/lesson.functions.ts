@@ -37,7 +37,7 @@ export const getLessonDetail = createServerFn({ method: "POST" })
     const { data: teacher } = lesson.teacher_id
       ? await context.supabase
           .from("profiles")
-          .select("id, name, bio")
+          .select("id, name, bio, zoom_link")
           .eq("id", lesson.teacher_id)
           .maybeSingle()
       : { data: null };
