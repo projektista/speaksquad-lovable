@@ -3,6 +3,8 @@ import { useEffect, useState, type ReactNode } from "react";
 import { BrandMark } from "@/components/fx/brand-mark";
 import { supabase } from "@/integrations/supabase/client";
 import { useRoles } from "@/hooks/use-role";
+import { useAppTheme } from "@/hooks/use-app-theme";
+import { Moon, Sun } from "lucide-react";
 
 type Lang = "pt" | "jp";
 
@@ -51,6 +53,32 @@ export function AppShell({
   const navigate = useNavigate();
   const signOutLabel = lang === "jp" ? "ログアウト" : "Sair";
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, toggle } = useAppTheme();
+  const themeLabel =
+    theme === "dark"
+      ? lang === "jp"
+        ? "ライトモードに切り替え"
+        : "Mudar para modo claro"
+      : lang === "jp"
+        ? "ダークモードに切り替え"
+        : "Mudar para modo escuro";
+  const themeButton = (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={themeLabel}
+      title={themeLabel}
+      aria-pressed={theme === "light"}
+      className="flex w-full items-center gap-2 rounded-[4px] border border-hair px-3 py-2 font-mono-alt text-xs text-muted transition-colors hover:border-[color:var(--cyan)] hover:text-cyan"
+    >
+      {theme === "dark" ? (
+        <Sun className="h-4 w-4" aria-hidden="true" />
+      ) : (
+        <Moon className="h-4 w-4" aria-hidden="true" />
+      )}
+      <span>{theme === "dark" ? (lang === "jp" ? "ライト" : "Claro") : lang === "jp" ? "ダーク" : "Escuro"}</span>
+    </button>
+  );
 
   useEffect(() => {
     setMobileOpen(false);
@@ -74,11 +102,25 @@ export function AppShell({
   const cursor = accent === "magenta" ? "text-magenta" : "text-cyan";
 
   return (
-    <div className="app-surface min-h-screen text-foreground">
-      <div className="sticky top-0 z-40 border-b border-hair bg-[rgba(13,17,23,0.85)] backdrop-blur md:hidden">
+    <div className={`app-surface min-h-screen text-foreground ${theme === "light" ? "theme-light" : ""}`}>
+      <div className="sticky top-0 z-40 border-b border-hair bg-[color:var(--bg2)]/90 backdrop-blur md:hidden">
         <div className="flex h-14 items-center justify-between px-4">
           <BrandMark to={lang === "jp" ? "/" : "/ptbr"} size="sm" />
-          <button
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggle}
+              aria-label={themeLabel}
+              aria-pressed={theme === "light"}
+              className="btn-ghost"
+            >
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <Moon className="h-4 w-4" aria-hidden="true" />
+              )}
+            </button>
+            <button
             type="button"
             aria-label="Menu"
             className="btn-ghost"
@@ -86,6 +128,7 @@ export function AppShell({
           >
             {mobileOpen ? "×" : "≡"}
           </button>
+          </div>
         </div>
         {mobileOpen && (
           <div className="border-t border-hair bg-bg2">
@@ -163,13 +206,14 @@ export function AppShell({
           >
             ← {signOutLabel}
           </button>
+          <div className="mt-2">{themeButton}</div>
         </aside>
 
         <main className="min-w-0 flex-1">
           <div className="mb-6 border-b border-hair pb-4">
             <div className="section-label mb-2">// {title.toLowerCase().replace(/\s+/g, "_")}</div>
             <h1 className="font-display text-2xl md:text-3xl">{title}</h1>
-            {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
+            {subtitle && <p className="mt-1 text-base text-muted">{subtitle}</p>}
           </div>
           {children}
         </main>

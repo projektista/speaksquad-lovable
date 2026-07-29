@@ -194,6 +194,8 @@
   color-scheme: dark;
   background: #1a2233;
   color: #f8fafc;
+  font-size: 1.0625rem;
+  line-height: 1.7;
 }
 .app-surface .text-muted { color: #cbd5e1; }
 .app-surface .section-label {
@@ -201,6 +203,43 @@
   letter-spacing: 0.14em;
   color: #d8b4fe;
 }
+
+/* Light theme — internal app pages only (never the public landing). */
+.app-surface.theme-light {
+  --bg: #f4f6fb;
+  --bg2: #ffffff;
+  --bg3: #e8ecf6;
+  --border: #d3dae8;
+  --border2: #b9c3d6;
+  --text: #131a26;
+  --foreground: #131a26;
+  --card: #ffffff;
+  --card-foreground: #131a26;
+  --popover: #ffffff;
+  --popover-foreground: #131a26;
+  --input: #ffffff;
+  --secondary: #e8ecf6;
+  --secondary-foreground: #131a26;
+  --muted: #4a5670;
+  --muted-foreground: #4a5670;
+  --soft: #1f2937;
+  --cyan: #0084a8;
+  --magenta: #c2005a;
+  --violet: #6d3fd4;
+  --success: #00795d;
+  --warn: #a16207;
+  color-scheme: light;
+  background: #f4f6fb;
+  color: #131a26;
+}
+.app-surface.theme-light .text-muted { color: #4a5670; }
+.app-surface.theme-light .section-label { color: #6d3fd4; }
+.app-surface.theme-light .btn-primary { color: #ffffff; }
+
+/* Internal pages read a touch larger than the landing. */
+.app-surface .text-xs { font-size: 0.8125rem; }
+.app-surface .text-sm { font-size: 0.9375rem; }
+.app-surface .text-base { font-size: 1.0625rem; }
 
 @utility border-hair { border: 1px solid var(--border); }
 @utility border-hair2 { border: 1px solid var(--border2); }
