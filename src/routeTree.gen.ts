@@ -9,14 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermosRouteImport } from './routes/termos'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PtbrIndexRouteImport } from './routes/ptbr.index'
 import { Route as JpIndexRouteImport } from './routes/jp.index'
+import { Route as PtbrTermosRouteImport } from './routes/ptbr.termos'
 import { Route as PtbrSignupRouteImport } from './routes/ptbr.signup'
+import { Route as PtbrPrivacidadeRouteImport } from './routes/ptbr.privacidade'
 import { Route as PtbrLoginRouteImport } from './routes/ptbr.login'
 import { Route as PtbrContatoRouteImport } from './routes/ptbr.contato'
 import { Route as JpSplatRouteImport } from './routes/jp.$'
@@ -44,9 +48,19 @@ import { Route as AuthenticatedTeacherAlunosIdRouteImport } from './routes/_auth
 import { Route as AuthenticatedPtbrLessonsIdRouteImport } from './routes/_authenticated/ptbr.lessons.$id'
 import { Route as AuthenticatedPtbrCheckoutReturnRouteImport } from './routes/_authenticated/ptbr.checkout.return'
 
+const TermosRoute = TermosRouteImport.update({
+  id: '/termos',
+  path: '/termos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadeRoute = PrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -78,9 +92,19 @@ const JpIndexRoute = JpIndexRouteImport.update({
   path: '/jp/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PtbrTermosRoute = PtbrTermosRouteImport.update({
+  id: '/ptbr/termos',
+  path: '/ptbr/termos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PtbrSignupRoute = PtbrSignupRouteImport.update({
   id: '/ptbr/signup',
   path: '/ptbr/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PtbrPrivacidadeRoute = PtbrPrivacidadeRouteImport.update({
+  id: '/ptbr/privacidade',
+  path: '/ptbr/privacidade',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PtbrLoginRoute = PtbrLoginRouteImport.update({
@@ -236,7 +260,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/signup': typeof SignupRoute
+  '/termos': typeof TermosRoute
   '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -245,7 +271,9 @@ export interface FileRoutesByFullPath {
   '/jp/$': typeof JpSplatRoute
   '/ptbr/contato': typeof PtbrContatoRoute
   '/ptbr/login': typeof PtbrLoginRoute
+  '/ptbr/privacidade': typeof PtbrPrivacidadeRoute
   '/ptbr/signup': typeof PtbrSignupRoute
+  '/ptbr/termos': typeof PtbrTermosRoute
   '/jp/': typeof JpIndexRoute
   '/ptbr/': typeof PtbrIndexRoute
   '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
@@ -271,7 +299,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/signup': typeof SignupRoute
+  '/termos': typeof TermosRoute
   '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/credits': typeof AuthenticatedCreditsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -280,7 +310,9 @@ export interface FileRoutesByTo {
   '/jp/$': typeof JpSplatRoute
   '/ptbr/contato': typeof PtbrContatoRoute
   '/ptbr/login': typeof PtbrLoginRoute
+  '/ptbr/privacidade': typeof PtbrPrivacidadeRoute
   '/ptbr/signup': typeof PtbrSignupRoute
+  '/ptbr/termos': typeof PtbrTermosRoute
   '/jp': typeof JpIndexRoute
   '/ptbr': typeof PtbrIndexRoute
   '/checkout/return': typeof AuthenticatedCheckoutReturnRoute
@@ -308,7 +340,9 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/contato': typeof ContatoRoute
   '/login': typeof LoginRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/signup': typeof SignupRoute
+  '/termos': typeof TermosRoute
   '/_authenticated/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/_authenticated/credits': typeof AuthenticatedCreditsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -317,7 +351,9 @@ export interface FileRoutesById {
   '/jp/$': typeof JpSplatRoute
   '/ptbr/contato': typeof PtbrContatoRoute
   '/ptbr/login': typeof PtbrLoginRoute
+  '/ptbr/privacidade': typeof PtbrPrivacidadeRoute
   '/ptbr/signup': typeof PtbrSignupRoute
+  '/ptbr/termos': typeof PtbrTermosRoute
   '/jp/': typeof JpIndexRoute
   '/ptbr/': typeof PtbrIndexRoute
   '/_authenticated/checkout/return': typeof AuthenticatedCheckoutReturnRoute
@@ -345,7 +381,9 @@ export interface FileRouteTypes {
     | '/'
     | '/contato'
     | '/login'
+    | '/privacidade'
     | '/signup'
+    | '/termos'
     | '/complete-profile'
     | '/credits'
     | '/dashboard'
@@ -354,7 +392,9 @@ export interface FileRouteTypes {
     | '/jp/$'
     | '/ptbr/contato'
     | '/ptbr/login'
+    | '/ptbr/privacidade'
     | '/ptbr/signup'
+    | '/ptbr/termos'
     | '/jp/'
     | '/ptbr/'
     | '/checkout/return'
@@ -380,7 +420,9 @@ export interface FileRouteTypes {
     | '/'
     | '/contato'
     | '/login'
+    | '/privacidade'
     | '/signup'
+    | '/termos'
     | '/complete-profile'
     | '/credits'
     | '/dashboard'
@@ -389,7 +431,9 @@ export interface FileRouteTypes {
     | '/jp/$'
     | '/ptbr/contato'
     | '/ptbr/login'
+    | '/ptbr/privacidade'
     | '/ptbr/signup'
+    | '/ptbr/termos'
     | '/jp'
     | '/ptbr'
     | '/checkout/return'
@@ -416,7 +460,9 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/contato'
     | '/login'
+    | '/privacidade'
     | '/signup'
+    | '/termos'
     | '/_authenticated/complete-profile'
     | '/_authenticated/credits'
     | '/_authenticated/dashboard'
@@ -425,7 +471,9 @@ export interface FileRouteTypes {
     | '/jp/$'
     | '/ptbr/contato'
     | '/ptbr/login'
+    | '/ptbr/privacidade'
     | '/ptbr/signup'
+    | '/ptbr/termos'
     | '/jp/'
     | '/ptbr/'
     | '/_authenticated/checkout/return'
@@ -453,11 +501,15 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   ContatoRoute: typeof ContatoRoute
   LoginRoute: typeof LoginRoute
+  PrivacidadeRoute: typeof PrivacidadeRoute
   SignupRoute: typeof SignupRoute
+  TermosRoute: typeof TermosRoute
   JpSplatRoute: typeof JpSplatRoute
   PtbrContatoRoute: typeof PtbrContatoRoute
   PtbrLoginRoute: typeof PtbrLoginRoute
+  PtbrPrivacidadeRoute: typeof PtbrPrivacidadeRoute
   PtbrSignupRoute: typeof PtbrSignupRoute
+  PtbrTermosRoute: typeof PtbrTermosRoute
   JpIndexRoute: typeof JpIndexRoute
   PtbrIndexRoute: typeof PtbrIndexRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -465,11 +517,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/termos': {
+      id: '/termos'
+      path: '/termos'
+      fullPath: '/termos'
+      preLoaderRoute: typeof TermosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidade': {
+      id: '/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof PrivacidadeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -514,11 +580,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JpIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ptbr/termos': {
+      id: '/ptbr/termos'
+      path: '/ptbr/termos'
+      fullPath: '/ptbr/termos'
+      preLoaderRoute: typeof PtbrTermosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ptbr/signup': {
       id: '/ptbr/signup'
       path: '/ptbr/signup'
       fullPath: '/ptbr/signup'
       preLoaderRoute: typeof PtbrSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ptbr/privacidade': {
+      id: '/ptbr/privacidade'
+      path: '/ptbr/privacidade'
+      fullPath: '/ptbr/privacidade'
+      preLoaderRoute: typeof PtbrPrivacidadeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ptbr/login': {
@@ -764,11 +844,15 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   ContatoRoute: ContatoRoute,
   LoginRoute: LoginRoute,
+  PrivacidadeRoute: PrivacidadeRoute,
   SignupRoute: SignupRoute,
+  TermosRoute: TermosRoute,
   JpSplatRoute: JpSplatRoute,
   PtbrContatoRoute: PtbrContatoRoute,
   PtbrLoginRoute: PtbrLoginRoute,
+  PtbrPrivacidadeRoute: PtbrPrivacidadeRoute,
   PtbrSignupRoute: PtbrSignupRoute,
+  PtbrTermosRoute: PtbrTermosRoute,
   JpIndexRoute: JpIndexRoute,
   PtbrIndexRoute: PtbrIndexRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
@@ -776,13 +860,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
