@@ -5,7 +5,7 @@ import { listStudents } from "@/lib/teacher.functions";
 
 type Row = Awaited<ReturnType<typeof listStudents>>[number];
 
-export const Route = createFileRoute("/_authenticated/teacher/alunos")({
+export const Route = createFileRoute("/_authenticated/teacher/alunos/")({
   component: TeacherStudentsPage,
 });
 
