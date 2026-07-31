@@ -2,8 +2,8 @@ import { Link } from "@tanstack/react-router";
 
 export function SiteFooter({ lang = "pt" }: { lang?: "pt" | "jp" }) {
   const jp = lang === "jp";
-  const privacyTo = jp ? "/privacidade" : "/ptbr/privacidade";
-  const termsTo = jp ? "/termos" : "/ptbr/termos";
+  const privacyTo = jp ? "/privacy" : "/ptbr/privacy";
+  const termsTo = jp ? "/terms" : "/ptbr/terms";
   return (
     <footer className="border-t border-hair bg-bg2/60">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-5 py-8 text-center font-mono-alt text-xs text-muted">

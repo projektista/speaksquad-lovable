@@ -27,14 +27,14 @@ export function SiteHeader({ lang = "pt" }: { lang?: Lang }) {
           { href: "#flow", label: "レッスンの流れ" },
           { href: "#pricing", label: "料金" },
           { href: "#faq", label: "FAQ" },
-          { href: "/contato", label: "お問い合わせ", isRoute: true },
+          { href: "/contact", label: "お問い合わせ", isRoute: true },
         ]
       : [
           { href: "#method", label: "Método" },
           { href: "#flow", label: "Fluxo da aula" },
           { href: "#pricing", label: "Preço" },
           { href: "#faq", label: "FAQ" },
-          { href: "/ptbr/contato", label: "CONTATO", isRoute: true },
+          { href: "/ptbr/contact", label: "CONTATO", isRoute: true },
         ];
 
   return (

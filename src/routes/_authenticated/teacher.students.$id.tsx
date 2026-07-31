@@ -6,7 +6,7 @@ import { getStudentDetail, grantStudentCredits } from "@/lib/teacher.functions";
 
 type Detail = Awaited<ReturnType<typeof getStudentDetail>>;
 
-export const Route = createFileRoute("/_authenticated/teacher/alunos/$id")({
+export const Route = createFileRoute("/_authenticated/teacher/students/$id")({
   component: TeacherStudentDetailPage,
 });
 
@@ -73,7 +73,7 @@ function TeacherStudentDetailPage() {
       subtitle={data?.email || undefined}
     >
       <div className="mb-4">
-        <Link to="/teacher/alunos" className="font-mono-alt text-xs text-muted hover:text-cyan">
+        <Link to="/teacher/students" className="font-mono-alt text-xs text-muted hover:text-cyan">
           ← voltar
         </Link>
       </div>

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { TeacherProfilePage } from "@/components/pages/teacher-profile-page";
 
-export const Route = createFileRoute("/_authenticated/teacher/perfil")({
+export const Route = createFileRoute("/_authenticated/teacher/profile")({
   head: () => ({
     meta: [
       { title: "Perfil professor · SpeakSquad" },

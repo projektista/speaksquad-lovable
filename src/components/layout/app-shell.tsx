@@ -27,10 +27,10 @@ const studentItemsByLang: Record<Lang, Array<{ to: string; label: string }>> = {
 
 const teacherItems: Array<{ to: string; label: string }> = [
   { to: "/teacher/dashboard", label: "Dashboard" },
-  { to: "/teacher/agendamento", label: "Agenda" },
-  { to: "/teacher/aulas", label: "Aulas" },
-  { to: "/teacher/alunos", label: "Alunos" },
-  { to: "/teacher/perfil", label: "Perfil" },
+  { to: "/teacher/schedule", label: "Agenda" },
+  { to: "/teacher/lessons", label: "Aulas" },
+  { to: "/teacher/students", label: "Alunos" },
+  { to: "/teacher/profile", label: "Perfil" },
 ];
 
 export function AppShell({
