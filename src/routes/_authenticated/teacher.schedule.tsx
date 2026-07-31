@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { TeacherSchedulePage } from "@/components/pages/teacher-schedule-page";
 
-export const Route = createFileRoute("/_authenticated/teacher/agendamento")({
+export const Route = createFileRoute("/_authenticated/teacher/schedule")({
   head: () => ({
     meta: [
       { title: "Agendamento · SpeakSquad" },

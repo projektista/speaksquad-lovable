@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LegalPage } from "@/components/pages/legal-page";
 import { termsContent } from "@/lib/legal-content";
 
-export const Route = createFileRoute("/termos")({
+export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
       { title: termsContent.jp.metaTitle },

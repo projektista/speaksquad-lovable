@@ -5,7 +5,7 @@ import { listStudents } from "@/lib/teacher.functions";
 
 type Row = Awaited<ReturnType<typeof listStudents>>[number];
 
-export const Route = createFileRoute("/_authenticated/teacher/alunos/")({
+export const Route = createFileRoute("/_authenticated/teacher/students/")({
   component: TeacherStudentsPage,
 });
 
@@ -56,7 +56,7 @@ function TeacherStudentsPage() {
                   <tr key={r.id} className="border-t border-hair hover:bg-bg2">
                     <td className="px-3 py-2">
                       <Link
-                        to="/teacher/alunos/$id"
+                        to="/teacher/students/$id"
                         params={{ id: r.id }}
                         className="hover:text-cyan"
                       >
