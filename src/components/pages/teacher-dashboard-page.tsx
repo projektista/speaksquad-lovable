@@ -21,7 +21,7 @@ export function TeacherDashboardPage() {
       {err && <div className="card-hair p-4 text-magenta">{err}</div>}
       {!data && !err && <div className="text-muted">carregando...</div>}
       {data && (
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="flex flex-col gap-6">
           <Section title="Hoje" items={data.today} empty="Nenhuma aula hoje." />
           <Section title="Próximas" items={data.upcoming} empty="Sem próximas aulas." />
           <Section title="Últimas 5" items={data.recent} empty="Sem aulas recentes." />
