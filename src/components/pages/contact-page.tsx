@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SectionLabel } from "@/components/fx/section-label";
@@ -34,12 +35,8 @@ export function ContactPage({ content, lang }: { content: ContactContent; lang: 
 
           <div className="mt-12 grid gap-8 md:grid-cols-[1fr_320px]">
             <Reveal delay={160} variant="slide-left">
-              <BracketFrame className="card-tilt p-6">
-                {sent ? (
-                  <div className="py-8 text-center font-mono-alt text-sm text-success">
-                    {content.sentMsg}
-                  </div>
-                ) : (
+              <BracketFrame className="p-6">
+                {(
                   <form
                     className="space-y-4"
                     onSubmit={(e) => {
@@ -115,6 +112,20 @@ export function ContactPage({ content, lang }: { content: ContactContent; lang: 
           </div>
         </div>
       </section>
+      {sent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg/80 p-5 backdrop-blur-sm">
+          <BracketFrame className="w-full max-w-md bg-bg2 p-8 text-center">
+            <div className="font-display text-2xl text-cyan">{content.sentTitle}</div>
+            <p className="mt-4 text-sm text-soft">{content.sentNote}</p>
+            <Link
+              to={lang === "jp" ? "/" : "/ptbr"}
+              className="btn-primary btn-shine mt-8 w-full justify-center"
+            >
+              {content.sentHome}
+            </Link>
+          </BracketFrame>
+        </div>
+      )}
       <SiteFooter lang={lang} />
     </div>
   );
