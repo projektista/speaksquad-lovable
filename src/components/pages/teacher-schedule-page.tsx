@@ -132,16 +132,15 @@ export function TeacherSchedulePage() {
           <span><span className="inline-block h-3 w-3 border border-hair align-middle" /> indisponível</span>
         </div>
 
-        <table className="w-full table-fixed border-collapse font-mono-alt text-[11px]">
+        <table className="w-full table-fixed border-collapse font-mono-alt text-[13px]">
           <thead>
             <tr>
-              <th className="w-14 border-b border-hair p-1 text-muted">hora</th>
               {days.map((d, i) => {
                 const isToday = d.toDateString() === today.toDateString();
                 return (
-                  <th key={i} className={`border-b border-hair p-1 ${isToday ? "text-cyan" : "text-muted"}`}>
+                  <th key={i} className={`border-b border-hair p-2 text-[13px] ${isToday ? "text-cyan" : "text-muted"}`}>
                     <div>{DAYS[d.getDay()]}</div>
-                    <div className="text-[10px] opacity-80">{fmtDay(d)}</div>
+                    <div className="text-[12px] opacity-80">{fmtDay(d)}</div>
                   </th>
                 );
               })}
@@ -150,27 +149,24 @@ export function TeacherSchedulePage() {
           <tbody>
             {HOURS.map((hour) => (
               <tr key={hour}>
-                <td className="border-b border-hair p-1 text-right text-muted">
-                  {String(hour).padStart(2, "0")}:00
-                </td>
                 {days.map((day, di) => {
                   const iso = toIso(day, hour);
                   const s = cellState(day, hour);
                   const isPast = new Date(iso).getTime() <= Date.now();
                   return (
-                    <td key={di} className="border-b border-hair p-0.5">
+                    <td key={di} className="border-b border-hair p-1">
                       <button
                         type="button"
                         disabled={busy === iso || s === "booked" || isPast}
                         onClick={() => toggle(day, hour)}
-                        className={`block h-8 w-full border ${stateColor(s)} ${
+                        className={`block h-10 w-full border ${stateColor(s)} ${
                           busy === iso ? "opacity-50" : ""
                         } ${isPast && s === "off" ? "opacity-30" : ""} ${
                           s !== "booked" && !isPast ? "hover:brightness-125" : ""
                         }`}
                         aria-label={`${DAYS[day.getDay()]} ${fmtDay(day)} ${String(hour).padStart(2, "0")}:00`}
                       >
-                        <span className="text-[10px]">{String(hour).padStart(2, "0")}:00</span>
+                        <span className="text-[13px]">{String(hour).padStart(2, "0")}:00</span>
                       </button>
                     </td>
                   );
