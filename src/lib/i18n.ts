@@ -83,6 +83,9 @@ export type ContactContent = {
   };
   submit: string;
   sentMsg: string;
+  sentTitle: string;
+  sentNote: string;
+  sentHome: string;
   info: {
     emailLabel: string;
     hoursLabel: string;
@@ -111,8 +114,11 @@ export const contactContent: Record<Lang, ContactContent> = {
       message: "Mensagem",
       messagePlaceholder: "Escreva sua mensagem...",
     },
-    submit: "Enviar mensagem",
+    submit: "Enviar",
     sentMsg: "✓ Mensagem enviada. Obrigado — retornaremos em breve.",
+    sentTitle: "Mensagem enviada com sucesso",
+    sentNote: "Nossa equipe fará o possível para responder o mais rápido possível.",
+    sentHome: "Voltar para a Homepage",
     info: {
       emailLabel: "Email",
       hoursLabel: "Horário",
@@ -139,8 +145,11 @@ export const contactContent: Record<Lang, ContactContent> = {
       message: "メッセージ",
       messagePlaceholder: "メッセージをご入力ください...",
     },
-    submit: "送信する",
+    submit: "送信",
     sentMsg: "✓ 送信完了。ありがとうございます。近日中にご返信いたします。",
+    sentTitle: "メッセージを送信しました",
+    sentNote: "スタッフができるだけ早くご返信いたします。",
+    sentHome: "ホームページに戻る",
     info: {
       emailLabel: "メール",
       hoursLabel: "受付時間",
