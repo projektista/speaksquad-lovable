@@ -61,7 +61,22 @@ export const getTeacherAllLessons = createServerFn({ method: "GET" })
       .select("id, scheduled_at, mode, status, student_id, feedback, meet_url")
       .order("scheduled_at", { ascending: false })
       .limit(200);
-    return data ?? [];
+    const lessons = data ?? [];
+
+    const studentIds = [...new Set(lessons.map((l: any) => l.student_id).filter(Boolean))];
+    const nameById = new Map<string, string>();
+    if (studentIds.length > 0) {
+      const { data: profiles } = await context.supabase
+        .from("profiles")
+        .select("id, name")
+        .in("id", studentIds);
+      for (const p of profiles ?? []) nameById.set(p.id, p.name);
+    }
+
+    return lessons.map((l: any) => ({
+      ...l,
+      student_name: nameById.get(l.student_id) ?? l.student_id,
+    }));
   });
 
 export const getTeacherProfile = createServerFn({ method: "GET" })
