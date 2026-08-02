@@ -1,8 +1,20 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { LandingPage } from "@/components/landing/landing-page";
 import { jpContent } from "@/components/landing/landing-content";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    if (typeof window === "undefined") return;
+    const stored = window.localStorage.getItem("speaksquad_lang");
+    if (stored) return; // usuário já tem preferência salva — respeita
+
+    const langs = [navigator.language, ...(navigator.languages ?? [])].filter(Boolean);
+    const prefersPt = langs.some((l) => l.toLowerCase().startsWith("pt"));
+    if (prefersPt) {
+      window.localStorage.setItem("speaksquad_lang", "pt-BR");
+      throw redirect({ to: "/ptbr", replace: true });
+    }
+  },
   head: () => ({
     meta: [
       { title: "SpeakSquad — ゲームで英語を身につける" },
