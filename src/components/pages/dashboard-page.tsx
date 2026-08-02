@@ -4,6 +4,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { Reveal } from "@/components/fx/reveal";
 import type { DashboardContent, Lang } from "@/lib/i18n";
 import { getMyOverview } from "@/lib/booking.functions";
+import { trackLoadError, trackLoadStart, trackLoadSuccess } from "@/lib/telemetry";
 
 function formatDateTime(iso: string, lang: Lang) {
   const d = new Date(iso);
@@ -26,7 +27,17 @@ export function DashboardPage({ content, lang }: { content: DashboardContent; la
   const p = (path: string) => (lang === "jp" ? path : `/ptbr${path}`);
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard-overview"],
-    queryFn: () => getMyOverview(),
+    queryFn: async () => {
+      const startedAt = trackLoadStart("student-dashboard");
+      try {
+        const result = await getMyOverview();
+        trackLoadSuccess("student-dashboard", startedAt);
+        return result;
+      } catch (e) {
+        trackLoadError("student-dashboard", e, { source: "getMyOverview", lang }, startedAt);
+        throw e;
+      }
+    },
   });
 
   const available = data?.available ?? 0;

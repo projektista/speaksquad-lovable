@@ -4,6 +4,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { Reveal } from "@/components/fx/reveal";
 import { getTeacherOverview } from "@/lib/teacher.functions";
 import { lessonStatusLabel } from "@/lib/i18n";
+import { trackLoadError, trackLoadStart, trackLoadSuccess } from "@/lib/telemetry";
 
 type Overview = Awaited<ReturnType<typeof getTeacherOverview>>;
 
@@ -15,11 +16,14 @@ export function TeacherDashboardPage() {
   const load = useCallback(async () => {
     setLoading(true);
     setErr(null);
+    const startedAt = trackLoadStart("teacher-dashboard");
     try {
       setData(await getTeacherOverview());
+      trackLoadSuccess("teacher-dashboard", startedAt);
     } catch (e: any) {
       setData(null);
       setErr(e?.message ?? String(e));
+      trackLoadError("teacher-dashboard", e, { source: "getTeacherOverview" }, startedAt);
     } finally {
       setLoading(false);
     }
