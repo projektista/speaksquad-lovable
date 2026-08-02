@@ -81,7 +81,7 @@ function Hero({ content }: { content: LandingContent }) {
           <SectionLabel n="00">
             <span className="text-magenta">&gt;_</span> {hero.label}
           </SectionLabel>
-          <h1 className="glitch-rgb mt-5 font-display text-4xl leading-[1.05] md:text-6xl">
+          <h1 className="glitch-rgb mt-6 font-display text-4xl leading-[1.05] sm:mt-8 md:mt-5 md:text-6xl">
             <span className="ss-clip-reveal block" style={{ color: COLOR.white }}>
               {hero.titleLine1}
             </span>
