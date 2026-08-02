@@ -53,7 +53,6 @@ export function LandingPage({
   content: LandingContent;
   lang: "pt" | "jp";
 }) {
-  useLangAutoDetect();
   return (
     <div className="min-h-screen bg-bg text-foreground" lang={content.htmlLang}>
       <SiteHeader lang={lang} />
