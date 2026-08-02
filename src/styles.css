@@ -284,7 +284,7 @@
   background: var(--cyan);
   color: #04121a;
   border: 1px solid var(--cyan);
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(.2,.7,.2,1);
   cursor: pointer;
   box-shadow: 0 0 0 0 rgba(0, 217, 255, 0);
   &:hover {
@@ -292,7 +292,10 @@
     border-color: var(--magenta);
     color: #fff;
     box-shadow: 0 0 24px -6px var(--magenta);
+    transform: translateY(-1px);
   }
+  &:active { transform: translateY(1px) scale(0.985); }
+  &:disabled { transform: none; opacity: 0.5; }
   &:focus-visible {
     outline: 2px solid var(--cyan);
     outline-offset: 2px;
@@ -314,12 +317,16 @@
   background: transparent;
   color: var(--cyan);
   border: 1px solid var(--border2);
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(.2,.7,.2,1);
   cursor: pointer;
   &:hover {
     border-color: var(--cyan);
     background: color-mix(in oklab, var(--cyan) 10%, transparent);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px -18px var(--cyan);
   }
+  &:active { transform: translateY(1px) scale(0.985); }
+  &:disabled { transform: none; opacity: 0.45; box-shadow: none; }
 }
 
 @utility btn-ghost {
@@ -346,6 +353,32 @@
   position: relative;
   transition: border-color 0.25s ease, transform 0.25s ease;
   &:hover { border-color: color-mix(in oklab, var(--cyan) 60%, var(--border)); }
+}
+
+/* Subtle lift + accent glow for content cards (microinteraction) */
+@utility card-lift {
+  transition:
+    transform 0.3s cubic-bezier(.2,.7,.2,1),
+    box-shadow 0.3s ease,
+    border-color 0.25s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 32px -24px color-mix(in oklab, var(--cyan) 60%, transparent);
+    border-color: color-mix(in oklab, var(--cyan) 55%, var(--border));
+  }
+}
+
+/* Tactile press feedback for buttons */
+@utility press {
+  transition:
+    transform 0.15s cubic-bezier(.2,.7,.2,1),
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+  &:hover { transform: translateY(-1px); }
+  &:active { transform: translateY(1px) scale(0.985); }
+  &:disabled { transform: none; }
 }
 
 @utility bracket-corners {

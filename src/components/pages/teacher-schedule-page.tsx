@@ -165,10 +165,12 @@ export function TeacherSchedulePage() {
                         type="button"
                         disabled={busy === iso || s === "booked" || isPast}
                         onClick={() => toggle(day, hour)}
-                        className={`block h-9 w-full border sm:h-10 ${stateColor(s)} ${
+                        className={`block h-9 w-full border transition-all duration-200 sm:h-10 ${stateColor(s)} ${
                           busy === iso ? "opacity-50" : ""
                         } ${isPast && s === "off" ? "opacity-30" : ""} ${
-                          s !== "booked" && !isPast ? "hover:brightness-125" : ""
+                          s !== "booked" && !isPast
+                            ? "hover:scale-[1.04] hover:brightness-125 active:scale-95"
+                            : ""
                         }`}
                         aria-label={`${DAYS[day.getDay()]} ${fmtDay(day)} ${String(hour).padStart(2, "0")}:00`}
                       >
