@@ -698,7 +698,7 @@
 .ss-reveal.is-visible.ss-reveal--slide-left  { animation: ss-slide-left 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
 .ss-reveal.is-visible.ss-reveal--slide-right { animation: ss-slide-right 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
 .ss-reveal.is-visible.ss-reveal--parallax    { animation: ss-parallax 0.9s cubic-bezier(.2,.7,.2,1) forwards; }
-.ss-reveal.is-visible.ss-reveal--clip        { animation: ss-clip-in 0.9s cubic-bezier(.2,.7,.2,1) forwards; opacity: 1; }
+.ss-reveal.is-visible.ss-reveal--clip        { animation: ss-clip-in 1.8s cubic-bezier(.2,.7,.2,1) forwards; opacity: 1; }
 
 @keyframes ss-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ss-slide-left  { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
