@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /ptbr/login
+Disallow: /signup
+Disallow: /ptbr/signup
+Disallow: /complete-profile
+Disallow: /ptbr/complete-profile
+Disallow: /dashboard
+Disallow: /ptbr/dashboard
+Disallow: /schedule
+Disallow: /ptbr/schedule
+Disallow: /credits
+Disallow: /ptbr/credits
+Disallow: /lessons
+Disallow: /ptbr/lessons
+Disallow: /profile
+Disallow: /ptbr/profile
+Disallow: /teacher/
+
+Sitemap: https://speaksquad.vercel.app/sitemap.xml
