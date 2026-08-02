@@ -31,11 +31,9 @@ Acesse `http://localhost:8080`.
 2. No Vercel: **Add New Project → Import Git Repository** e selecione o repo.
 3. Framework Preset: **Other** (Vercel detecta Vite/TanStack automaticamente).
 4. Build Command: `bun run build`
-5. Output Directory: `.output/public` (padrão do Nitro/TanStack Start)
+5. Output Directory: `.vercel/output` (o projeto já usa o preset Nitro `vercel`, configurado em `vite.config.ts`)
 6. Configure as variáveis de ambiente necessárias (`VITE_*` públicas e segredos de servidor).
 7. Deploy.
-
-> Observação: o template usa Nitro com preset Cloudflare por padrão. Para produção 100% Vercel-native, ajuste o preset do Nitro para `vercel` em `vite.config.ts` se precisar de funções serverless no runtime da Vercel.
 
 ## Estrutura
 
