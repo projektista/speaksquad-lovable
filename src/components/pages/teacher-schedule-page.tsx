@@ -104,27 +104,30 @@ export function TeacherSchedulePage() {
       title="Minha agenda"
       subtitle="Clique numa célula para alternar: indisponível → disponível → bloqueado → indisponível. Aulas já reservadas aparecem em magenta e não podem ser alteradas aqui."
     >
-      <div className="mb-4 flex items-center justify-between gap-3">
+      <div className="mb-4 grid grid-cols-2 items-center gap-3 sm:flex sm:justify-between">
         <button
-          className="btn-outline !py-2 text-xs"
+          className="btn-outline !py-2 text-xs whitespace-nowrap"
           disabled={weekOffset <= 0}
           onClick={() => setWeekOffset((w) => Math.max(0, w - 1))}
         >
           ← Semana anterior
         </button>
-        <div className="font-mono-alt text-sm text-muted">
-          {fmtRange(weekStart, addDays(weekEnd, -1))}
-        </div>
         <button
-          className="btn-outline !py-2 text-xs"
+          className="btn-outline !py-2 text-xs whitespace-nowrap sm:order-3"
           disabled={weekOffset >= maxOffset}
           onClick={() => setWeekOffset((w) => Math.min(maxOffset, w + 1))}
         >
           Próxima semana →
         </button>
+        <div className="col-span-2 text-center font-mono-alt text-sm text-muted sm:order-2 sm:col-span-1">
+          {fmtRange(weekStart, addDays(weekEnd, -1))}
+        </div>
       </div>
 
       <div className="card-hair overflow-x-auto p-3">
+        <p className="mb-2 font-mono-alt text-[11px] text-muted sm:hidden">
+          Arraste para o lado para ver a semana toda →
+        </p>
         <div className="mb-3 flex flex-wrap gap-4 font-mono-alt text-[11px]">
           <span><span className="inline-block h-3 w-3 border border-[color:var(--cyan)] bg-[color:var(--cyan)]/30 align-middle" /> disponível</span>
           <span><span className="inline-block h-3 w-3 border border-[color:var(--violet)] bg-[color:var(--violet)]/30 align-middle" /> bloqueado</span>
@@ -132,15 +135,18 @@ export function TeacherSchedulePage() {
           <span><span className="inline-block h-3 w-3 border border-hair align-middle" /> indisponível</span>
         </div>
 
-        <table className="w-full table-fixed border-collapse font-mono-alt text-[13px]">
+        <table className="w-full min-w-[640px] table-fixed border-collapse font-mono-alt text-[13px]">
           <thead>
             <tr>
               {days.map((d, i) => {
                 const isToday = d.toDateString() === today.toDateString();
                 return (
-                  <th key={i} className={`border-b border-hair p-2 text-[13px] ${isToday ? "text-cyan" : "text-muted"}`}>
+                  <th
+                    key={i}
+                    className={`whitespace-nowrap border-b border-hair p-1 text-[12px] sm:p-2 sm:text-[13px] ${isToday ? "text-cyan" : "text-muted"}`}
+                  >
                     <div>{DAYS[d.getDay()]}</div>
-                    <div className="text-[12px] opacity-80">{fmtDay(d)}</div>
+                    <div className="text-[11px] opacity-80 sm:text-[12px]">{fmtDay(d)}</div>
                   </th>
                 );
               })}
@@ -159,14 +165,16 @@ export function TeacherSchedulePage() {
                         type="button"
                         disabled={busy === iso || s === "booked" || isPast}
                         onClick={() => toggle(day, hour)}
-                        className={`block h-10 w-full border ${stateColor(s)} ${
+                        className={`block h-9 w-full border sm:h-10 ${stateColor(s)} ${
                           busy === iso ? "opacity-50" : ""
                         } ${isPast && s === "off" ? "opacity-30" : ""} ${
                           s !== "booked" && !isPast ? "hover:brightness-125" : ""
                         }`}
                         aria-label={`${DAYS[day.getDay()]} ${fmtDay(day)} ${String(hour).padStart(2, "0")}:00`}
                       >
-                        <span className="text-[13px]">{String(hour).padStart(2, "0")}:00</span>
+                        <span className="text-[11px] sm:text-[13px]">
+                          {String(hour).padStart(2, "0")}:00
+                        </span>
                       </button>
                     </td>
                   );
