@@ -54,7 +54,7 @@ export function TeacherLessonsPage() {
                 </td>
                 <td className="p-2 capitalize">{l.mode}</td>
                 <td className="p-2">{lessonStatusLabel(l.status, "pt")}</td>
-                <td className="p-2 text-muted">{l.student_id.slice(0, 8)}</td>
+                <td className="p-2 text-muted">{l.student_name}</td>
                 <td className="p-2">
                   <Link to="/lessons/$id" params={{ id: l.id }} className="text-cyan hover:underline">
                     abrir
