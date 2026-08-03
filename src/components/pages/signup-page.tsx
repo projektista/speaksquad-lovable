@@ -6,17 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 export function SignupPage({ content, lang }: { content: SignupContent; lang: Lang }) {
   const [name, setName] = useState("");
-  const [birthDate, setBirthDate] = useState("");
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
-  const [level, setLevel] = useState("");
-  const [bio, setBio] = useState("");
-  const [games, setGames] = useState<Array<"minecraft" | "fortnite">>([]);
-  const [minecraftTag, setMinecraftTag] = useState("");
-  const [fortniteTag, setFortniteTag] = useState("");
-  const [interests, setInterests] = useState("");
-  const [goal, setGoal] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sentTo, setSentTo] = useState<string | null>(null);
@@ -42,22 +34,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       setError(content.passwordMismatch);
       return;
     }
-    if (!birthDate) {
-      setError(content.birthDateRequired);
-      return;
-    }
-    if (games.length === 0) {
-      setError(content.gameRequired);
-      return;
-    }
-    if (games.includes("minecraft") && !minecraftTag.trim()) {
-      setError(content.gamertagRequired);
-      return;
-    }
-    if (games.includes("fortnite") && !fortniteTag.trim()) {
-      setError(content.gamertagRequired);
-      return;
-    }
     setLoading(true);
     // Pass EVERY signup field via options.data so the DB trigger
     // handle_new_user() writes them on the initial profile insert. Previously
@@ -70,15 +46,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
         emailRedirectTo: `${window.location.origin}${dashTo}`,
         data: {
           name,
-          birth_date: birthDate,
-          english_level: level || null,
-          bio: bio || null,
-          preferred_game: games[0] ?? null,
-          games,
-          minecraft_gamertag: minecraftTag.trim() || null,
-          fortnite_nickname: fortniteTag.trim() || null,
-          interests: interests.trim() || null,
-          learning_goal: goal || null,
         },
       },
     });
@@ -134,6 +101,138 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
             {content.successSpam}
           </p>
           {error && (
+            <div className="rounded-[3px] border border-[color:var(--magenta)] bg-[color:var(--bg3)] p-2 font-mono-alt text-xs text-magenta">
+              {error}
+            </div>
+          )}
+          {resentMsg && (
+            <div className="rounded-[3px] border border-[color:var(--cyan)] bg-[color:var(--bg3)] p-2 font-mono-alt text-xs text-cyan">
+              {resentMsg}
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={onResend}
+            disabled={resending}
+            className="btn-outline w-full disabled:opacity-50"
+          >
+            {resending ? content.successResending : content.successResend}
+          </button>
+        </div>
+      </AuthFrame>
+    );
+  }
+
+  async function onGoogle() {
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}${dashTo}` },
+    });
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    // Auth gate will forward Google signups without birth_date to
+    // /complete-profile automatically.
+  }
+
+  return (
+    <AuthFrame
+      lang={lang}
+      code="auth_02"
+      title={content.title}
+      subtitle={content.subtitle}
+      footer={
+        <>
+          {content.hasAccount}{" "}
+          <Link to={loginTo} className="text-cyan hover:text-magenta">
+            {content.login}
+          </Link>
+        </>
+      }
+    >
+      <form className="space-y-6" onSubmit={onSubmit}>
+        <section className="space-y-4">
+          <div className="font-mono-alt text-[11px] uppercase tracking-widest text-violet">
+            {content.sectionAccount}
+          </div>
+          <Field label={content.name}>
+            <input
+              type="text"
+              required
+              autoComplete="name"
+              placeholder={content.namePlaceholder}
+              className={inputCls}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Field>
+          <Field label={content.birthDate} hint={content.birthDateHint}>
+            <input
+              type="date"
+              required
+              className={inputCls}
+              value={birthDate}
+              max={new Date().toISOString().slice(0, 10)}
+              onChange={(e) => setBirthDate(e.target.value)}
+            />
+          </Field>
+          <Field label={content.email}>
+            <input
+              type="email"
+              required
+              autoComplete="email"
+              placeholder={content.emailPlaceholder}
+              className={inputCls}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Field>
+          <Field
+            label={content.password}
+            hint={`${content.strengthLabel}: ${content.strengths[strength] ?? content.strengths[0]}`}
+          >
+            <input
+              type="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              value={pw}
+              onChange={(e) => setPw(e.target.value)}
+              placeholder={content.passwordPlaceholder}
+              className={inputCls}
+            />
+            <div className="mt-2 flex gap-1">
+              {[0, 1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className={`h-1 flex-1 rounded ${
+                    i < strength
+                      ? strength >= 3
+                        ? "bg-[color:var(--success)]"
+                        : "bg-[color:var(--cyan)]"
+                      : "bg-[color:var(--bg3)]"
+                  }`}
+                />
+              ))}
+            </div>
+          </Field>
+          <Field label={content.confirmPassword}>
+            <input
+              type="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+              value={pw2}
+              onChange={(e) => setPw2(e.target.value)}
+              placeholder={content.confirmPasswordPlaceholder}
+              className={inputCls}
+            />
+          </Field>
+        </section>
+
+        {error && (
             <div className="rounded-[3px] border border-[color:var(--magenta)] bg-[color:var(--bg3)] p-2 font-mono-alt text-xs text-magenta">
               {error}
             </div>
