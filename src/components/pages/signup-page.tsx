@@ -35,18 +35,14 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       return;
     }
     setLoading(true);
-    // Pass EVERY signup field via options.data so the DB trigger
-    // handle_new_user() writes them on the initial profile insert. Previously
-    // we only ran a client-side UPDATE inside `if (data.session)`, which is
-    // skipped when email confirmation is on → data was silently lost.
+    // Only the essentials here. Birth date, game and gamertag are collected
+    // later, at the moment the student books their first lesson.
     const { data, error } = await supabase.auth.signUp({
       email,
       password: pw,
       options: {
         emailRedirectTo: `${window.location.origin}${dashTo}`,
-        data: {
-          name,
-        },
+        data: { name },
       },
     });
     if (error) {
@@ -78,6 +74,15 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       return;
     }
     setResentMsg(content.successResent);
+  }
+
+  async function onGoogle() {
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}${dashTo}` },
+    });
+    if (error) setError(error.message);
   }
 
   if (sentTo) {
@@ -123,20 +128,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
     );
   }
 
-  async function onGoogle() {
-    setError(null);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}${dashTo}` },
-    });
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    // Extra profile data (birth date, game, gamertag) is collected later,
-    // only when the student books their first lesson.
-  }
-
   return (
     <AuthFrame
       lang={lang}
@@ -219,242 +210,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
               placeholder={content.confirmPasswordPlaceholder}
               className={inputCls}
             />
-          </Field>
-        </section>
-
-        {error && (
-            <div className="rounded-[3px] border border-[color:var(--magenta)] bg-[color:var(--bg3)] p-2 font-mono-alt text-xs text-magenta">
-              {error}
-            </div>
-          )}
-          {resentMsg && (
-            <div className="rounded-[3px] border border-[color:var(--cyan)] bg-[color:var(--bg3)] p-2 font-mono-alt text-xs text-cyan">
-              {resentMsg}
-            </div>
-          )}
-          <button
-            type="button"
-            onClick={onResend}
-            disabled={resending}
-            className="btn-outline w-full disabled:opacity-50"
-          >
-            {resending ? content.successResending : content.successResend}
-          </button>
-        </div>
-      </AuthFrame>
-    );
-  }
-
-  async function onGoogle() {
-    setError(null);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}${dashTo}` },
-    });
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    // Extra profile data (birth date, game, gamertag) is collected later,
-    // only when the student books their first lesson.
-  }
-
-  return (
-    <AuthFrame
-      lang={lang}
-      code="auth_02"
-      title={content.title}
-      subtitle={content.subtitle}
-      footer={
-        <>
-          {content.hasAccount}{" "}
-          <Link to={loginTo} className="text-cyan hover:text-magenta">
-            {content.login}
-          </Link>
-        </>
-      }
-    >
-      <form className="space-y-6" onSubmit={onSubmit}>
-        <section className="space-y-4">
-          <div className="font-mono-alt text-[11px] uppercase tracking-widest text-violet">
-            {content.sectionAccount}
-          </div>
-          <Field label={content.name}>
-            <input
-              type="text"
-              required
-              autoComplete="name"
-              placeholder={content.namePlaceholder}
-              className={inputCls}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Field>
-          <Field label={content.email}>
-            <input
-              type="email"
-              required
-              autoComplete="email"
-              placeholder={content.emailPlaceholder}
-              className={inputCls}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Field>
-          <Field
-            label={content.password}
-            hint={`${content.strengthLabel}: ${content.strengths[strength] ?? content.strengths[0]}`}
-          >
-            <input
-              type="password"
-              required
-              minLength={8}
-              autoComplete="new-password"
-              value={pw}
-              onChange={(e) => setPw(e.target.value)}
-              placeholder={content.passwordPlaceholder}
-              className={inputCls}
-            />
-            <div className="mt-2 flex gap-1">
-              {[0, 1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className={`h-1 flex-1 rounded ${
-                    i < strength
-                      ? strength >= 3
-                        ? "bg-[color:var(--success)]"
-                        : "bg-[color:var(--cyan)]"
-                      : "bg-[color:var(--bg3)]"
-                  }`}
-                />
-              ))}
-            </div>
-          </Field>
-          <Field label={content.confirmPassword}>
-            <input
-              type="password"
-              required
-              minLength={8}
-              autoComplete="new-password"
-              value={pw2}
-              onChange={(e) => setPw2(e.target.value)}
-              placeholder={content.confirmPasswordPlaceholder}
-              className={inputCls}
-            />
-          </Field>
-        </section>
-
-        <div className="hair-divider" />
-
-        <section className="space-y-4">
-          <div className="font-mono-alt text-[11px] uppercase tracking-widest text-violet">
-            {content.sectionProfile}
-          </div>
-          <Field label={content.level}>
-            <select
-              required
-              value={level}
-              onChange={(e) => setLevel(e.target.value)}
-              className={inputCls}
-            >
-              <option value="" disabled>
-                {content.levelPlaceholder}
-              </option>
-              {content.levelOptions.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field label={content.bio} hint={`${bio.length}/300`}>
-            <textarea
-              maxLength={300}
-              rows={3}
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              placeholder={content.bioPlaceholder}
-              className={`${inputCls} resize-none`}
-            />
-          </Field>
-          <Field label={content.game}>
-            <div className="grid grid-cols-2 gap-3">
-              {(["minecraft", "fortnite"] as const).map((g) => {
-                const active = games.includes(g);
-                return (
-                  <button
-                    type="button"
-                    key={g}
-                    onClick={() =>
-                      setGames((cur) =>
-                        cur.includes(g) ? cur.filter((x) => x !== g) : [...cur, g],
-                      )
-                    }
-                    className={`card-hair p-4 text-left transition-all ${
-                      active ? "border-[color:var(--cyan)] bg-[color:var(--bg3)]" : ""
-                    }`}
-                  >
-                    <div className="font-mono-alt text-[10px] uppercase tracking-widest text-muted">
-                      [{active ? "×" : " "}]
-                    </div>
-                    <div className="mt-1 font-display text-base capitalize">{g}</div>
-                    <div className="mt-1 font-mono-alt text-[11px] text-muted">
-                      {g === "minecraft" ? content.minecraftTag : content.fortniteTag}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-            {games.includes("minecraft") && (
-              <div className="mt-3">
-                <Field label={content.minecraftGamertag}>
-                  <input
-                    type="text"
-                    required
-                    value={minecraftTag}
-                    onChange={(e) => setMinecraftTag(e.target.value)}
-                    placeholder="ex.: SteveGamer2026"
-                    className={inputCls}
-                  />
-                </Field>
-              </div>
-            )}
-            {games.includes("fortnite") && (
-              <div className="mt-3">
-                <Field label={content.fortniteNickname}>
-                  <input
-                    type="text"
-                    required
-                    value={fortniteTag}
-                    onChange={(e) => setFortniteTag(e.target.value)}
-                    placeholder="ex.: NinjaBR"
-                    className={inputCls}
-                  />
-                </Field>
-              </div>
-            )}
-          </Field>
-          <Field label={content.interests} hint={`${interests.length}/200`}>
-            <input
-              type="text"
-              maxLength={200}
-              placeholder={content.interestsPlaceholder}
-              className={inputCls}
-              value={interests}
-              onChange={(e) => setInterests(e.target.value)}
-            />
-          </Field>
-          <Field label={content.goal}>
-            <select
-              className={inputCls}
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-            >
-              <option value="">{content.goalPlaceholder}</option>
-              {content.goalOptions.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
           </Field>
         </section>
 
