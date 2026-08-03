@@ -19,6 +19,9 @@ function addDays(d: Date, n: number) {
 
 type Slot = { id: string; starts_at: string; teacher_id: string };
 
+const PENDING_KEY = "speaksquad_pending_booking";
+export type PendingBooking = { slot: Slot; mode: "minecraft" | "fortnite" };
+
 export function SchedulePage({ content, lang }: { content: ScheduleContent; lang: Lang }) {
   const navigate = useNavigate();
   const today = useMemo(() => new Date(), []);
@@ -35,6 +38,22 @@ export function SchedulePage({ content, lang }: { content: ScheduleContent; lang
   const [available, setAvailable] = useState<number>(0);
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [needsProfile, setNeedsProfile] = useState(false);
+
+  // Restore a booking interrupted by the profile checkpoint.
+  useEffect(() => {
+    const raw = sessionStorage.getItem(PENDING_KEY);
+    if (!raw) return;
+    sessionStorage.removeItem(PENDING_KEY);
+    try {
+      const pending = JSON.parse(raw) as PendingBooking;
+      if (new Date(pending.slot.starts_at).getTime() < Date.now()) return;
+      setMode(pending.mode);
+      setPickedSlot(pending.slot);
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   useEffect(() => {
     getMyOverview().then((o) => setAvailable(o.available)).catch(() => {});
@@ -63,7 +82,16 @@ export function SchedulePage({ content, lang }: { content: ScheduleContent; lang
       const path = lang === "jp" ? `/lessons/${res.lessonId}` : `/ptbr/lessons/${res.lessonId}`;
       navigate({ to: path });
     } catch (e: any) {
-      setErr(e.message ?? String(e));
+      const msg = e?.message ?? String(e);
+      if (String(msg).includes("PROFILE_INCOMPLETE")) {
+        sessionStorage.setItem(
+          PENDING_KEY,
+          JSON.stringify({ slot: pickedSlot, mode } satisfies PendingBooking),
+        );
+        setNeedsProfile(true);
+      } else {
+        setErr(msg);
+      }
     } finally {
       setBusy(false);
     }
@@ -89,6 +117,23 @@ export function SchedulePage({ content, lang }: { content: ScheduleContent; lang
     },
   } as const;
   const m = modalCopy[lang];
+
+  const profileCopy = {
+    pt: {
+      title: "Complete seu perfil",
+      body: "Para agendar, precisamos da data de nascimento e do seu nome de jogador no jogo escolhido. Leva menos de um minuto — depois você volta e confirma este mesmo horário.",
+      go: "Completar perfil",
+      cancel: "Agora não",
+    },
+    jp: {
+      title: "プロフィールを完成させてください",
+      body: "予約には生年月日と選択したゲームのゲーマータグが必要です。1分もかかりません。入力後、この時間枠に戻って確定できます。",
+      go: "プロフィールを入力",
+      cancel: "あとで",
+    },
+  } as const;
+  const pc = profileCopy[lang];
+  const completeProfileTo = lang === "jp" ? "/complete-profile" : "/ptbr/complete-profile";
 
   return (
     <AppShell lang={lang} title={content.title} subtitle={content.subtitle} credits={available}>
@@ -221,6 +266,34 @@ export function SchedulePage({ content, lang }: { content: ScheduleContent; lang
                 className="btn-primary !py-2 text-xs disabled:opacity-40"
               >
                 {available < 1 ? (lang === "jp" ? "クレジット不足" : "Sem créditos") : m.confirm}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {needsProfile && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="card-hair w-full max-w-md bg-bg2 p-6">
+            <div className="section-label">// {pc.title}</div>
+            <p className="mt-3 text-sm text-muted">{pc.body}</p>
+            <div className="mt-6 flex justify-end gap-2">
+              <button
+                type="button"
+                className="btn-outline !py-2 text-xs"
+                onClick={() => {
+                  sessionStorage.removeItem(PENDING_KEY);
+                  setNeedsProfile(false);
+                }}
+              >
+                {pc.cancel}
+              </button>
+              <button
+                type="button"
+                className="btn-primary !py-2 text-xs"
+                onClick={() => navigate({ to: completeProfileTo })}
+              >
+                {pc.go}
               </button>
             </div>
           </div>

@@ -27,8 +27,15 @@ export function CompleteProfilePage({
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [pendingMode, setPendingMode] = useState<"minecraft" | "fortnite" | null>(null);
 
   useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("speaksquad_pending_booking");
+      if (raw) setPendingMode(JSON.parse(raw)?.mode ?? null);
+    } catch {
+      /* ignore */
+    }
     getMyProfile()
       .then((p) => {
         if (p) {
@@ -52,6 +59,18 @@ export function CompleteProfilePage({
       setErr(signup.birthDateRequired);
       return;
     }
+    if (pendingMode === "minecraft" && !mc.trim()) {
+      setErr(signup.gamertagRequired);
+      return;
+    }
+    if (pendingMode === "fortnite" && !fn.trim()) {
+      setErr(signup.gamertagRequired);
+      return;
+    }
+    if (!pendingMode && !mc.trim() && !fn.trim()) {
+      setErr(signup.gamertagRequired);
+      return;
+    }
     setBusy(true);
     try {
       await updateMyProfile({
@@ -71,8 +90,17 @@ export function CompleteProfilePage({
       } catch {
         staff = false;
       }
+      const hasPending = Boolean(sessionStorage.getItem("speaksquad_pending_booking"));
       navigate({
-        to: staff ? "/teacher/dashboard" : lang === "jp" ? "/dashboard" : "/ptbr/dashboard",
+        to: staff
+          ? "/teacher/dashboard"
+          : hasPending
+            ? lang === "jp"
+              ? "/schedule"
+              : "/ptbr/schedule"
+            : lang === "jp"
+              ? "/dashboard"
+              : "/ptbr/dashboard",
       });
     } catch (e: any) {
       setErr(e.message ?? String(e));

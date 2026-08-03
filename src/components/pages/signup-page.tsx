@@ -6,17 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 export function SignupPage({ content, lang }: { content: SignupContent; lang: Lang }) {
   const [name, setName] = useState("");
-  const [birthDate, setBirthDate] = useState("");
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
-  const [level, setLevel] = useState("");
-  const [bio, setBio] = useState("");
-  const [games, setGames] = useState<Array<"minecraft" | "fortnite">>([]);
-  const [minecraftTag, setMinecraftTag] = useState("");
-  const [fortniteTag, setFortniteTag] = useState("");
-  const [interests, setInterests] = useState("");
-  const [goal, setGoal] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sentTo, setSentTo] = useState<string | null>(null);
@@ -42,44 +34,15 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       setError(content.passwordMismatch);
       return;
     }
-    if (!birthDate) {
-      setError(content.birthDateRequired);
-      return;
-    }
-    if (games.length === 0) {
-      setError(content.gameRequired);
-      return;
-    }
-    if (games.includes("minecraft") && !minecraftTag.trim()) {
-      setError(content.gamertagRequired);
-      return;
-    }
-    if (games.includes("fortnite") && !fortniteTag.trim()) {
-      setError(content.gamertagRequired);
-      return;
-    }
     setLoading(true);
-    // Pass EVERY signup field via options.data so the DB trigger
-    // handle_new_user() writes them on the initial profile insert. Previously
-    // we only ran a client-side UPDATE inside `if (data.session)`, which is
-    // skipped when email confirmation is on → data was silently lost.
+    // Only the essentials here. Birth date, game and gamertag are collected
+    // later, at the moment the student books their first lesson.
     const { data, error } = await supabase.auth.signUp({
       email,
       password: pw,
       options: {
         emailRedirectTo: `${window.location.origin}${dashTo}`,
-        data: {
-          name,
-          birth_date: birthDate,
-          english_level: level || null,
-          bio: bio || null,
-          preferred_game: games[0] ?? null,
-          games,
-          minecraft_gamertag: minecraftTag.trim() || null,
-          fortnite_nickname: fortniteTag.trim() || null,
-          interests: interests.trim() || null,
-          learning_goal: goal || null,
-        },
+        data: { name },
       },
     });
     if (error) {
@@ -111,6 +74,15 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       return;
     }
     setResentMsg(content.successResent);
+  }
+
+  async function onGoogle() {
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}${dashTo}` },
+    });
+    if (error) setError(error.message);
   }
 
   if (sentTo) {
@@ -156,20 +128,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
     );
   }
 
-  async function onGoogle() {
-    setError(null);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}${dashTo}` },
-    });
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    // Auth gate will forward Google signups without birth_date to
-    // /complete-profile automatically.
-  }
-
   return (
     <AuthFrame
       lang={lang}
@@ -199,16 +157,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
               className={inputCls}
               value={name}
               onChange={(e) => setName(e.target.value)}
-            />
-          </Field>
-          <Field label={content.birthDate} hint={content.birthDateHint}>
-            <input
-              type="date"
-              required
-              className={inputCls}
-              value={birthDate}
-              max={new Date().toISOString().slice(0, 10)}
-              onChange={(e) => setBirthDate(e.target.value)}
             />
           </Field>
           <Field label={content.email}>
@@ -262,120 +210,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
               placeholder={content.confirmPasswordPlaceholder}
               className={inputCls}
             />
-          </Field>
-        </section>
-
-        <div className="hair-divider" />
-
-        <section className="space-y-4">
-          <div className="font-mono-alt text-[11px] uppercase tracking-widest text-violet">
-            {content.sectionProfile}
-          </div>
-          <Field label={content.level}>
-            <select
-              required
-              value={level}
-              onChange={(e) => setLevel(e.target.value)}
-              className={inputCls}
-            >
-              <option value="" disabled>
-                {content.levelPlaceholder}
-              </option>
-              {content.levelOptions.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field label={content.bio} hint={`${bio.length}/300`}>
-            <textarea
-              maxLength={300}
-              rows={3}
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              placeholder={content.bioPlaceholder}
-              className={`${inputCls} resize-none`}
-            />
-          </Field>
-          <Field label={content.game}>
-            <div className="grid grid-cols-2 gap-3">
-              {(["minecraft", "fortnite"] as const).map((g) => {
-                const active = games.includes(g);
-                return (
-                  <button
-                    type="button"
-                    key={g}
-                    onClick={() =>
-                      setGames((cur) =>
-                        cur.includes(g) ? cur.filter((x) => x !== g) : [...cur, g],
-                      )
-                    }
-                    className={`card-hair p-4 text-left transition-all ${
-                      active ? "border-[color:var(--cyan)] bg-[color:var(--bg3)]" : ""
-                    }`}
-                  >
-                    <div className="font-mono-alt text-[10px] uppercase tracking-widest text-muted">
-                      [{active ? "×" : " "}]
-                    </div>
-                    <div className="mt-1 font-display text-base capitalize">{g}</div>
-                    <div className="mt-1 font-mono-alt text-[11px] text-muted">
-                      {g === "minecraft" ? content.minecraftTag : content.fortniteTag}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-            {games.includes("minecraft") && (
-              <div className="mt-3">
-                <Field label={content.minecraftGamertag}>
-                  <input
-                    type="text"
-                    required
-                    value={minecraftTag}
-                    onChange={(e) => setMinecraftTag(e.target.value)}
-                    placeholder="ex.: SteveGamer2026"
-                    className={inputCls}
-                  />
-                </Field>
-              </div>
-            )}
-            {games.includes("fortnite") && (
-              <div className="mt-3">
-                <Field label={content.fortniteNickname}>
-                  <input
-                    type="text"
-                    required
-                    value={fortniteTag}
-                    onChange={(e) => setFortniteTag(e.target.value)}
-                    placeholder="ex.: NinjaBR"
-                    className={inputCls}
-                  />
-                </Field>
-              </div>
-            )}
-          </Field>
-          <Field label={content.interests} hint={`${interests.length}/200`}>
-            <input
-              type="text"
-              maxLength={200}
-              placeholder={content.interestsPlaceholder}
-              className={inputCls}
-              value={interests}
-              onChange={(e) => setInterests(e.target.value)}
-            />
-          </Field>
-          <Field label={content.goal}>
-            <select
-              className={inputCls}
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-            >
-              <option value="">{content.goalPlaceholder}</option>
-              {content.goalOptions.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
           </Field>
         </section>
 

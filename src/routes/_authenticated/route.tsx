@@ -11,10 +11,6 @@ export const Route = createFileRoute("/_authenticated")({
     }
 
     const path = location.pathname;
-    const isCompletePath =
-      path === "/complete-profile" || path === "/ptbr/complete-profile";
-    const isTeacherPath = path.startsWith("/teacher/");
-
     const { complete, isStaff } = await getProfileCompletion();
 
     // Student-only areas: staff (teacher/admin) never belong here.
@@ -24,13 +20,9 @@ export const Route = createFileRoute("/_authenticated")({
       throw redirect({ to: "/teacher/dashboard" });
     }
 
-    if (!isCompletePath && !isTeacherPath && !complete) {
-      const to = path.startsWith("/ptbr")
-        ? "/ptbr/complete-profile"
-        : "/complete-profile";
-      throw redirect({ to });
-    }
-    return { user: data.user, isStaff };
+    // Profile completeness is no longer enforced here — it is checked only at
+    // booking time (see bookLesson / getProfileCompletion).
+    return { user: data.user, isStaff, profileComplete: complete };
   },
   component: () => <Outlet />,
 });
