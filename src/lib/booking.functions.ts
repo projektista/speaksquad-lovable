@@ -189,6 +189,18 @@ export const bookLesson = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 
+    // Profile checkpoint: birth date + gamertag for the chosen game.
+    const { data: prof } = await supabase
+      .from("profiles")
+      .select("birth_date, minecraft_gamertag, fortnite_nickname")
+      .eq("id", userId)
+      .maybeSingle();
+    const tag =
+      data.mode === "minecraft" ? prof?.minecraft_gamertag : prof?.fortnite_nickname;
+    if (!prof?.birth_date || !tag) {
+      throw new Error("PROFILE_INCOMPLETE");
+    }
+
     // Ensure slot is still available & not double-booked
     const [{ data: slot }, { data: existing }] = await Promise.all([
       supabase
