@@ -133,8 +133,8 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       setError(error.message);
       return;
     }
-    // Auth gate will forward Google signups without birth_date to
-    // /complete-profile automatically.
+    // Extra profile data (birth date, game, gamertag) is collected later,
+    // only when the student books their first lesson.
   }
 
   return (
@@ -166,16 +166,6 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
               className={inputCls}
               value={name}
               onChange={(e) => setName(e.target.value)}
-            />
-          </Field>
-          <Field label={content.birthDate} hint={content.birthDateHint}>
-            <input
-              type="date"
-              required
-              className={inputCls}
-              value={birthDate}
-              max={new Date().toISOString().slice(0, 10)}
-              onChange={(e) => setBirthDate(e.target.value)}
             />
           </Field>
           <Field label={content.email}>
