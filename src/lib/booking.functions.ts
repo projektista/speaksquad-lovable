@@ -104,9 +104,9 @@ export const updateMyProfile = createServerFn({ method: "POST" })
   });
 
 /**
- * Returns whether the current user's profile has the essentials filled in
- * (birth_date is the required signal). Used by the auth gate to redirect
- * incomplete profiles (e.g. Google signups) to /complete-profile.
+ * Returns whether the current user's profile has the fields required to book
+ * a lesson: birth_date + at least one game gamertag. Checked at booking time
+ * (not in the route gate) so signup stays friction-free.
  * Teachers/admins are always considered complete — they don't take lessons.
  */
 export const getProfileCompletion = createServerFn({ method: "GET" })
@@ -116,19 +116,39 @@ export const getProfileCompletion = createServerFn({ method: "GET" })
       context.supabase.from("user_roles").select("role").eq("user_id", context.userId),
       context.supabase
         .from("profiles")
-        .select("birth_date")
+        .select("birth_date, minecraft_gamertag, fortnite_nickname")
         .eq("id", context.userId)
         .maybeSingle(),
     ]);
-    // If the read itself fails, do NOT force a redirect to /complete-profile —
-    // that would trap the user in a loop on a purely infrastructural error.
+    // If the read itself fails, do NOT block the user on an infra error.
     if (profRes.error) {
-      return { complete: true, isStaff: false, error: profRes.error.message };
+      return {
+        complete: true,
+        isStaff: false,
+        missing: [] as string[],
+        hasMinecraft: true,
+        hasFortnite: true,
+        error: profRes.error.message,
+      };
     }
     const roles = (rolesRes.data ?? []).map((r: any) => r.role);
     const isStaff = roles.includes("teacher") || roles.includes("admin");
-    const complete = isStaff || Boolean(profRes.data?.birth_date);
-    return { complete, isStaff, error: null as string | null };
+    const p = profRes.data;
+    const hasMinecraft = Boolean(p?.minecraft_gamertag);
+    const hasFortnite = Boolean(p?.fortnite_nickname);
+    const missing: string[] = [];
+    if (!isStaff) {
+      if (!p?.birth_date) missing.push("birth_date");
+      if (!hasMinecraft && !hasFortnite) missing.push("gamertag");
+    }
+    return {
+      complete: missing.length === 0,
+      isStaff,
+      missing,
+      hasMinecraft,
+      hasFortnite,
+      error: null as string | null,
+    };
   });
 
 /**
