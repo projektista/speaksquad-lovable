@@ -3,10 +3,14 @@ import { LandingPage } from "@/components/landing/landing-page";
 import { jpContent } from "@/components/landing/landing-content";
 
 export const Route = createFileRoute("/")({
-  beforeLoad: () => {
+beforeLoad: () => {
     if (typeof window === "undefined") return;
     const stored = window.localStorage.getItem("speaksquad_lang");
-    if (stored) return; // usuário já tem preferência salva — respeita
+
+    if (stored === "pt-BR" || stored === "pt") {
+      throw redirect({ to: "/ptbr", replace: true });
+    }
+    if (stored) return; // preferência salva é japonês — respeita, fica em "/"
 
     const langs = [navigator.language, ...(navigator.languages ?? [])].filter(Boolean);
     const prefersPt = langs.some((l) => l.toLowerCase().startsWith("pt"));
