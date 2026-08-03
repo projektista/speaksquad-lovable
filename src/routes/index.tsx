@@ -1,12 +1,22 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { LandingPage } from "@/components/landing/landing-page";
 import { jpContent } from "@/components/landing/landing-content";
+import { getRequestHeader } from "@tanstack/react-start/server";
 
 export const Route = createFileRoute("/")({
 beforeLoad: () => {
-    if (typeof window === "undefined") return;
-    const stored = window.localStorage.getItem("speaksquad_lang");
+    const isServer = typeof window === "undefined";
 
+    if (isServer) {
+      const acceptLanguage = getRequestHeader("Accept-Language") ?? "";
+      const prefersPt = acceptLanguage.toLowerCase().includes("pt");
+      if (prefersPt) {
+        throw redirect({ to: "/ptbr", replace: true });
+      }
+      return;
+    }
+
+    const stored = window.localStorage.getItem("speaksquad_lang");
     if (stored === "pt-BR" || stored === "pt") {
       throw redirect({ to: "/ptbr", replace: true });
     }
