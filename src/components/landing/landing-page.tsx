@@ -356,7 +356,7 @@ function Pricing({ content }: { content: LandingContent }) {
 }
 
 function Requisitos({ content }: { content: LandingContent }) {
-  const { requisitos } = content;
+  const { requisitos, signupPath } = content;
   return (
     <section
       id="requirements"
@@ -392,6 +392,17 @@ function Requisitos({ content }: { content: LandingContent }) {
             </Reveal>
           ))}
         </div>
+        <Reveal delay={200}>
+          <div className="mt-10 flex justify-center">
+            <Link
+              to={signupPath}
+              className="btn-primary btn-shine px-7 py-3.5 text-center text-lg leading-snug md:text-xl"
+            >
+              <span className="block">{requisitos.ctaLine1}</span>
+              <span className="block">{requisitos.ctaLine2}</span>
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
