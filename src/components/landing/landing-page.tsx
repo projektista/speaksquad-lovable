@@ -9,7 +9,7 @@ import { ParticleField } from "@/components/fx/particle-field";
 import { BracketFrame } from "@/components/fx/bracket-frame";
 import { GlitchText } from "@/components/fx/glitch-text";
 import { ScrambleText } from "@/components/fx/scramble-text";
-import type { LandingContent } from "./landing-content";
+import type { FaqAnswer, LandingContent } from "./landing-content";
 import { useLangAutoDetect } from "@/lib/i18n";
 
 const COLOR: Record<"white" | "cyan" | "magenta", string> = {
@@ -475,7 +475,7 @@ function CTA({ content }: { content: LandingContent }) {
 
 function FAQ({ content }: { content: LandingContent }) {
   const { faq } = content;
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<string | null>("0-0");
   return (
     <section
       id="faq"
@@ -489,37 +489,75 @@ function FAQ({ content }: { content: LandingContent }) {
         <h2 className="glitch-rgb mt-4 font-display text-3xl md:text-5xl">FAQ</h2>
       </Reveal>
       <p className="mt-4 text-soft">{faq.intro}</p>
-      <div className="mt-8 space-y-2">
-        {faq.items.map((f, i) => {
-          const isOpen = open === i;
-          return (
-            <div key={f.q} className="card-hair card-tilt overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setOpen(isOpen ? null : i)}
-                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
-              >
-                <span className="font-display text-base">{f.q}</span>
-                <span
-                  className={`font-mono-alt text-magenta transition-transform ${
-                    isOpen ? "rotate-45" : ""
-                  }`}
-                >
-                  +
+      <div className="mt-10 space-y-10">
+        {faq.categories.map((cat, ci) => (
+          <div key={cat.title}>
+            <Reveal>
+              <h3 className="font-display text-xl text-cyan md:text-2xl">
+                <span className="mr-2 font-mono-alt text-xs text-muted">
+                  [{String(ci + 1).padStart(2, "0")}]
                 </span>
-              </button>
-              <div
-                className="grid transition-[grid-template-rows] duration-300"
-                style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
-              >
-                <div className="overflow-hidden">
-                  <div className="px-5 pb-4 text-sm leading-relaxed text-soft">{f.a}</div>
-                </div>
-              </div>
+                {cat.title}
+              </h3>
+            </Reveal>
+            <div className="mt-4 space-y-2">
+              {cat.items.map((f, i) => {
+                const key = `${ci}-${i}`;
+                const isOpen = open === key;
+                return (
+                  <div key={f.q} className="card-hair card-tilt overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setOpen(isOpen ? null : key)}
+                      className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                    >
+                      <span className="font-display text-base">{f.q}</span>
+                      <span
+                        className={`font-mono-alt text-magenta transition-transform ${
+                          isOpen ? "rotate-45" : ""
+                        }`}
+                      >
+                        +
+                      </span>
+                    </button>
+                    <div
+                      className="grid transition-[grid-template-rows] duration-300"
+                      style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
+                    >
+                      <div className="overflow-hidden">
+                        <div className="px-5 pb-4 text-sm leading-relaxed text-soft">
+                          <FaqAnswerText answer={f.a} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </section>
+  );
+}
+
+function FaqAnswerText({ answer }: { answer: FaqAnswer }) {
+  if (typeof answer === "string") return <>{answer}</>;
+  return (
+    <>
+      {answer.map((part, i) =>
+        typeof part === "string" ? (
+          <span key={i}>{part}</span>
+        ) : (
+          <Link
+            key={i}
+            to={part.to}
+            className="text-cyan underline underline-offset-4"
+          >
+            {part.text}
+          </Link>
+        ),
+      )}
+    </>
   );
 }
