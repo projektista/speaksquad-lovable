@@ -171,7 +171,8 @@ export const ptContent: LandingContent = {
     titleParts: [
       { text: "Como é o ", color: "white" },
       { text: "fluxo ", color: "magenta" },
-      { text: "da aula", color: "white" },
+      { text: "da ", color: "white" },
+      { text: "aula", color: "cyan" },
       { text: ".", color: "white" },
     ],
     intro: "Cada aula é dividida em três partes. Não é só \"entrar e jogar\".",
@@ -215,10 +216,13 @@ export const ptContent: LandingContent = {
   },
   requisitos: {
     label: "Antes de começar",
-    sectionN: "06",
-    titlePrefix: "O que você ",
-    titleHighlight: "precisa ter",
-    titleSuffix: ".",
+    sectionN: "06",    
+    titleParts: [
+      { text: "O que ", color: "cyan" },
+      { text: "você ", color: "white" },
+      { text: "precisa ", color: "magenta" },
+      { text: "ter.", color: "white" },
+    ],
     items: [
       { t: "Jogo instalado e atualizado", o: "No seu console ou PC" },
       { t: "Zoom", o: "Para a videochamada com o professor" },
@@ -246,8 +250,7 @@ export const ptContent: LandingContent = {
     titleParts: [
       { text: "Comece sua primeira\n", color: "white" },
       { text: "aula gratuita ", color: "cyan" },
-      { text: "já", color: "magenta" },
-      { text: ".", color: "white" },
+      { text: "JÁ!", color: "magenta" },
     ],
     lead: "Sem registro complicado. Sem cobrança escondida. 50 minutos de aula real, e depois você decide.",
     button: "Agendar aula experimental",
