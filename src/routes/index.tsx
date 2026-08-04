@@ -1,31 +1,28 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createIsomorphicFn } from "@tanstack/react-start";
 import { LandingPage } from "@/components/landing/landing-page";
 import { jpContent } from "@/components/landing/landing-content";
-import { getRequestHeader } from "@tanstack/react-start/server";
 
-export const Route = createFileRoute("/")({
-beforeLoad: () => {
-    const isServer = typeof window === "undefined";
-
-    if (isServer) {
-      const acceptLanguage = getRequestHeader("Accept-Language") ?? "";
-      const prefersPt = acceptLanguage.toLowerCase().includes("pt");
-      if (prefersPt) {
-        throw redirect({ to: "/ptbr", replace: true });
-      }
-      return;
-    }
-
+const detectPrefersPt = createIsomorphicFn()
+  .server(() => {
+    const { getRequestHeader } = require("@tanstack/react-start/server");
+    const acceptLanguage = getRequestHeader("Accept-Language") ?? "";
+    return acceptLanguage.toLowerCase().includes("pt");
+  })
+  .client(() => {
     const stored = window.localStorage.getItem("speaksquad_lang");
-    if (stored === "pt-BR" || stored === "pt") {
-      throw redirect({ to: "/ptbr", replace: true });
-    }
-    if (stored) return; // preferência salva é japonês — respeita, fica em "/"
+    if (stored === "pt-BR" || stored === "pt") return true;
+    if (stored) return false; // preferência salva é japonês — respeita
 
     const langs = [navigator.language, ...(navigator.languages ?? [])].filter(Boolean);
     const prefersPt = langs.some((l) => l.toLowerCase().startsWith("pt"));
-    if (prefersPt) {
-      window.localStorage.setItem("speaksquad_lang", "pt-BR");
+    if (prefersPt) window.localStorage.setItem("speaksquad_lang", "pt-BR");
+    return prefersPt;
+  });
+
+export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    if (detectPrefersPt()) {
       throw redirect({ to: "/ptbr", replace: true });
     }
   },
