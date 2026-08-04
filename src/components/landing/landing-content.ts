@@ -28,8 +28,9 @@ export type LandingContent = {
     typingSpeed: number;
     lead: string;
     ctaPrimary: string;
-    ctaSecondary: string;
     noCard: string;
+    requirementsNote: string;
+    requirementsLink: string;
     tags: string[];
     sideLabel: string;
     stats: { v: string; l: string }[];
@@ -78,6 +79,8 @@ export type LandingContent = {
     titleHighlight: string;
     titleSuffix?: string;
     items: { t: string; o: string }[];
+    ctaLine1: string;
+    ctaLine2: string;
   };
   sobre: {
     label: string;
@@ -114,8 +117,9 @@ export const ptContent: LandingContent = {
     lead:
       "Um método de ensino que usa conversação em jogos 1:1. Aprenda inglês fazendo o que você já gosta de fazer. Ideal para quem tem vontade de aprender e poucas oportunidades de praticar.",
     ctaPrimary: "Primeira aula grátis",
-    ctaSecondary: "Ver o método",
     noCard: "Sem cartão para a aula experimental.",
+    requirementsNote: "Só precisa ter o jogo e se cadastrar.",
+    requirementsLink: "Saiba mais",
     tags: ["Minecraft", "Fortnite", "Zoom"],
     sideLabel: "// VANTAGENS",
     stats: [
@@ -215,6 +219,8 @@ export const ptContent: LandingContent = {
       { t: "PC, tablet ou smartphone", o: "Qualquer um serve" },
       { t: "Fone com microfone", o: "Opcional, mas recomendado" },
     ],
+    ctaLine1: "Tenho tudo isso.",
+    ctaLine2: "Quero minha aula grátis!",
   },
   sobre: {
     label: "Sobre",
@@ -268,8 +274,9 @@ export const jpContent: LandingContent = {
     lead:
       "マンツーマンのゲーム内会話で学ぶ英語メソッド。すでに好きなことをしながら英語を伸ばします。学ぶ意欲はあるのに、練習の機会が少ない人に最適です。",
     ctaPrimary: "無料体験レッスン",
-    ctaSecondary: "メソッドを見る",
     noCard: "体験レッスンにクレジットカード不要。",
+    requirementsNote: "ゲームと登録だけでOK。",
+    requirementsLink: "詳しく見る",
     tags: ["Minecraft", "Fortnite", "Zoom"],
     sideLabel: "// メリット",
     stats: [
@@ -367,6 +374,8 @@ export const jpContent: LandingContent = {
       { t: "PC・タブレット・スマホ", o: "どれでも可" },
       { t: "マイク付きヘッドフォン", o: "任意ですが推奨" },
     ],
+    ctaLine1: "全部そろっています。",
+    ctaLine2: "無料レッスンを受けたい!",
   },
   sobre: {
     label: "紹介",

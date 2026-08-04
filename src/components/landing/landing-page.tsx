@@ -94,15 +94,21 @@ function Hero({ content }: { content: LandingContent }) {
           </h1>
           <p className="mt-6 max-w-xl text-soft">{hero.lead}</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link to={signupPath} className="btn-primary btn-shine">
+            <Link
+              to={signupPath}
+              className="btn-primary btn-shine px-7 py-3.5 text-lg md:text-xl"
+            >
               {hero.ctaPrimary}
             </Link>
-            <a href="#method" className="btn-outline">
-              {hero.ctaSecondary}
-            </a>
           </div>
           <p className="mt-4 flex items-center gap-2 font-mono-alt text-xs text-muted">
             <span className="text-success">✓</span> {hero.noCard}
+          </p>
+          <p className="mt-2 flex flex-wrap items-center gap-2 font-mono-alt text-xs text-muted">
+            <span className="text-success">✓</span> {hero.requirementsNote}{" "}
+            <a href="#requirements" className="text-cyan underline underline-offset-4">
+              {hero.requirementsLink}
+            </a>
           </p>
           <div className="mt-8 flex flex-wrap gap-2 font-mono-alt text-xs">
             {hero.tags.map((t) => (
@@ -350,7 +356,7 @@ function Pricing({ content }: { content: LandingContent }) {
 }
 
 function Requisitos({ content }: { content: LandingContent }) {
-  const { requisitos } = content;
+  const { requisitos, signupPath } = content;
   return (
     <section
       id="requirements"
@@ -386,6 +392,17 @@ function Requisitos({ content }: { content: LandingContent }) {
             </Reveal>
           ))}
         </div>
+        <Reveal delay={200}>
+          <div className="mt-10 flex justify-center">
+            <Link
+              to={signupPath}
+              className="btn-primary btn-shine px-7 py-3.5 text-center text-lg leading-snug md:text-xl"
+            >
+              <span className="block">{requisitos.ctaLine1}</span>
+              <span className="block">{requisitos.ctaLine2}</span>
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
