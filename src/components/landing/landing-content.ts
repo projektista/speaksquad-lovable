@@ -17,6 +17,12 @@ export type PricingTier = {
   featured: boolean;
 };
 
+export type FaqAnswer = string | (string | { text: string; to: string })[];
+
+export type FaqItem = { q: string; a: FaqAnswer };
+
+export type FaqCategory = { title: string; items: FaqItem[] };
+
 export type LandingContent = {
   htmlLang: string;
   signupPath: "/signup" | "/ptbr/signup";
@@ -101,7 +107,7 @@ export type LandingContent = {
     label: string;
     sectionN: string;
     intro: string;
-    items: { q: string; a: string }[];
+    categories: FaqCategory[];
   };
 };
 
