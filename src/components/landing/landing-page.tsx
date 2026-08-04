@@ -396,7 +396,7 @@ function Requisitos({ content }: { content: LandingContent }) {
           <div className="mt-10 flex justify-center">
             <Link
               to={signupPath}
-              className="btn-primary btn-shine px-7 py-3.5 text-center text-lg leading-snug md:text-xl"
+              className="btn-primary btn-shine flex-col gap-0.5 px-7 py-3.5 text-center text-lg leading-snug md:text-xl"
             >
               <span className="block">{requisitos.ctaLine1}</span>
               <span className="block">{requisitos.ctaLine2}</span>
