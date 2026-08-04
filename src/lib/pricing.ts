@@ -61,7 +61,7 @@ export function formatSavePercent(
 
 export function formatExpiryFaq(lang: Lang): string {
   if (lang === "jp") {
-    return `はい。単発は${CREDIT_PACKAGES.single.expiryDays}日、5回パックは${CREDIT_PACKAGES.pack5.expiryDays}日、10回パックは${CREDIT_PACKAGES.pack10.expiryDays}日で有効期限が切れます。継続利用を促すための設定です。`;
+    return `はい。単発は${CREDIT_PACKAGES.single.expiryDays}日、5回パックは${CREDIT_PACKAGES.pack5.expiryDays}日、10回パックは${CREDIT_PACKAGES.pack10.expiryDays}日で有効期限が切れます。`;
   }
-  return `Sim. Aula avulsa expira em ${CREDIT_PACKAGES.single.expiryDays} dias, pacote de 5 em ${CREDIT_PACKAGES.pack5.expiryDays} dias e pacote de 10 em ${CREDIT_PACKAGES.pack10.expiryDays} dias — para incentivar o uso frequente.`;
+  return `Sim. Aula avulsa expira em ${CREDIT_PACKAGES.single.expiryDays} dias, pacote de 5 em ${CREDIT_PACKAGES.pack5.expiryDays} dias e pacote de 10 em ${CREDIT_PACKAGES.pack10.expiryDays} dias.`;
 }
