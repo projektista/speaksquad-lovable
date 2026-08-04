@@ -17,6 +17,12 @@ export type PricingTier = {
   featured: boolean;
 };
 
+export type FaqAnswer = string | (string | { text: string; to: string })[];
+
+export type FaqItem = { q: string; a: FaqAnswer };
+
+export type FaqCategory = { title: string; items: FaqItem[] };
+
 export type LandingContent = {
   htmlLang: string;
   signupPath: "/signup" | "/ptbr/signup";
@@ -101,7 +107,7 @@ export type LandingContent = {
     label: string;
     sectionN: string;
     intro: string;
-    items: { q: string; a: string }[];
+    categories: FaqCategory[];
   };
 };
 
@@ -251,13 +257,80 @@ export const ptContent: LandingContent = {
     label: "Perguntas frequentes",
     sectionN: "09",
     intro: "Se sua dúvida não estiver aqui, é só perguntar antes da aula experimental.",
-    items: [
-      { q: "Meu filho precisa já saber inglês para começar?", a: "Não. Atendemos desde quem nunca estudou até níveis avançados. Na aula experimental avaliamos o nível atual e ajustamos o ritmo a partir daí." },
-      { q: "Os créditos expiram?", a: formatExpiryFaq("pt") },
-      { q: "Posso cancelar ou remarcar uma aula agendada?", a: "Sim, com antecedência mínima informada no agendamento. Avisos de última hora podem consumir o crédito da aula." },
-      { q: "Dois irmãos podem fazer aula juntos?", a: "Preferimos aulas individuais. É comum as crianças caírem no português entre si durante a aula, o que reduz o tempo real de prática em inglês." },
-      { q: "Preciso ter o jogo comprado antes da aula experimental?", a: "Sim, o aluno precisa ter Minecraft ou Fortnite instalado e funcionando no dispositivo que for usar." },
-      { q: "Como funciona o pagamento?", a: "Pelo Stripe, com criptografia completa. Seus dados de cartão não ficam armazenados na SpeakSquad." },
+    categories: [
+      {
+        title: "Sobre o método",
+        items: [
+          { q: "Preciso já falar inglês para começar?", a: "Não. Atendemos desde iniciantes até níveis avançados. Na aula gratuita, avaliamos o nível atual e ajustamos o ritmo a partir daí." },
+          { q: "Como funciona uma aula, na prática?", a: "Cada aula tem 50 minutos e é dividida em três partes: uma introdução relaxada (revisão do que foi visto antes e foco do dia), o momento de jogo em si (onde o vocabulário e as expressões aparecem naturalmente conforme a situação do jogo), e uma revisão final para reforçar o que foi praticado." },
+          { q: "Por que aprender inglês jogando funciona?", a: "Porque tira o peso de \u201cestudar\u201d uma matéria chata. Você já gosta de jogar — a aula aproveita esse interesse genuíno para criar repetição natural de vocabulário e situações de comunicação real, sem parecer exercício de sala de aula." },
+          { q: "Quais jogos vocês usam?", a: "Minecraft e Fortnite. A escolha do jogo é feita no seu perfil e pode ser ajustada conforme sua preferência." },
+          { q: "Terei sempre o mesmo professor?", a: "Sim. A continuidade com um único professor é um dos pilares do método — ele acompanha seu progresso, nível e histórico de aulas ao longo do tempo, o que permite um ensino mais personalizado do que trocar de professor a cada aula." },
+        ],
+      },
+      {
+        title: "Segurança e confiança",
+        items: [
+          { q: "As aulas são dadas por uma pessoa real?", a: "Sim. As aulas são conduzidas por Hugo, fundador do SpeakSquad — não há IA nem professor terceirizado. É a mesma pessoa que acompanha o progresso do seu filho ao longo do tempo." },
+          { q: "As aulas são gravadas?", a: "Não gravamos áudio ou vídeo das aulas. O que fica registrado é um resumo em texto do vocabulário trabalhado, disponível para consulta no histórico da aula." },
+          { q: "Como posso acompanhar o progresso do meu filho?", a: "Cada aula gera um breve relatório com o vocabulário e as expressões trabalhadas, visível na página da aula dentro da plataforma." },
+          { q: "O jogo usado na aula tem chat público ou contato com estranhos?", a: "As aulas acontecem em ambiente controlado, dentro de uma sessão privada entre aluno e professor. Não há exposição a chat público ou jogadores desconhecidos durante o horário da aula." },
+          { q: "Quem pode criar a conta — eu ou meu filho?", a: "O cadastro e a compra de créditos devem ser feitos por um responsável adulto. A criança participa apenas do momento da aula em si." },
+          {
+            q: "Vocês têm alguma política específica para menores de idade?",
+            a: [
+              "Sim — veja nossa ",
+              { text: "Política de Privacidade", to: "/ptbr/privacy" },
+              " para detalhes sobre como tratamos dados de menores, e os ",
+              { text: "Termos de Uso", to: "/ptbr/terms" },
+              " para as regras de conduta durante as aulas.",
+            ],
+          },
+        ],
+      },
+      {
+        title: "Agendamento e cancelamento",
+        items: [
+          { q: "Posso cancelar ou remarcar uma aula agendada?", a: "Sim, desde que seja feito com pelo menos 6 horas de antecedência — nesse caso, o crédito volta integralmente para sua conta. Cancelamentos com menos de 6 horas de antecedência não têm o crédito devolvido." },
+          { q: "O que acontece se eu (ou meu filho) não comparecer à aula?", a: "Se não houver comparecimento dentro de 10 minutos do horário agendado, o crédito da aula é consumido, sem devolução. Recomendamos entrar com alguma antecedência para evitar isso." },
+          { q: "Como faço para agendar uma aula?", a: "Pelo menu \u201cAgendar\u201d no seu painel — lá você vê os horários que o professor deixou disponíveis numa agenda semanal navegável, e escolhe o que for melhor pra você." },
+          { q: "Posso agendar aulas para várias semanas à frente?", a: "Sim, a agenda permite navegar e escolher horários com bastante antecedência, dentro da disponibilidade aberta pelo professor." },
+        ],
+      },
+      {
+        title: "Créditos e pagamento",
+        items: [
+          { q: "Os créditos têm validade?", a: formatExpiryFaq("pt") },
+          { q: "Quais formas de pagamento vocês aceitam?", a: "Pagamento via Stripe, com cartão de crédito. O SpeakSquad não armazena os dados do seu cartão." },
+          { q: "Emitem recibo ou nota fiscal?", a: "Você recebe automaticamente um recibo de pagamento por e-mail assim que a compra é confirmada. Para necessidades específicas de nota fiscal, entre em contato conosco." },
+          {
+            q: "Se eu não usar todos os créditos do pacote, posso pedir reembolso?",
+            a: [
+              "Créditos não utilizados dentro do prazo de validade não são reembolsáveis em dinheiro. Veja os detalhes completos nos ",
+              { text: "Termos de Compra de Créditos", to: "/ptbr/terms" },
+              ".",
+            ],
+          },
+          { q: "Posso comprar mais créditos mesmo tendo créditos ativos?", a: "Sim, você pode comprar novos pacotes a qualquer momento — os créditos se acumulam, cada lote mantendo sua própria data de expiração." },
+        ],
+      },
+      {
+        title: "Aspectos práticos",
+        items: [
+          { q: "Preciso comprar o jogo antes da aula gratuita?", a: "Sim, é necessário ter o Minecraft ou Fortnite instalado para participar, inclusive da aula gratuita." },
+          { q: "Posso ter aula com meu irmão/irmã ao mesmo tempo?", a: "Recomendamos aulas individuais. Quando irmãos fazem aula juntos, é comum que voltem a falar em português entre si, o que reduz o tempo real de prática em inglês." },
+          { q: "O que preciso ter para participar de uma aula?", a: "O jogo (Minecraft ou Fortnite) instalado, em PC ou console; Zoom, para a videochamada com o professor; um dispositivo com câmera (PC, tablet ou celular); fone de ouvido com microfone (recomendado, mas não obrigatório)." },
+          {
+            q: "O que acontece se a internet cair no meio da aula?",
+            a: [
+              "Ter uma conexão estável e um dispositivo funcionando é responsabilidade do aluno, então a regra geral é: problema técnico do seu lado = crédito consumido, mesmo que o professor espere os 50 minutos completos da aula. A única exceção é avisar dentro dos primeiros 10 minutos do horário marcado que a conexão ou o dispositivo estão com problema — nesse caso, devolvemos o crédito. Se você entrar, cair depois disso e não conseguir voltar na hora, ainda pode contestar em até 2 horas após o horário da aula. Já se o problema for da nossa parte (professor ou plataforma), o crédito é sempre devolvido. Veja os detalhes completos nos ",
+              { text: "Termos de Compra de Créditos", to: "/ptbr/terms" },
+              ".",
+            ],
+          },
+          { q: "As aulas são sempre no mesmo horário toda semana?", a: "Não necessariamente — você escolhe o horário que quiser dentro da disponibilidade do professor a cada semana, sem compromisso de horário fixo recorrente (a menos que prefira agendar dessa forma)." },
+        ],
+      },
     ],
   },
 };
@@ -406,13 +479,80 @@ export const jpContent: LandingContent = {
     label: "よくある質問",
     sectionN: "09",
     intro: "ここに答えがない質問は、体験レッスンの前に気軽にお問い合わせください。",
-    items: [
-      { q: "英語が全く話せなくても大丈夫ですか?", a: "はい。初心者から上級者まで対応します。無料体験でレベルを確認し、そこから進度を調整します。" },
-      { q: "クレジットに有効期限はありますか?", a: formatExpiryFaq("jp") },
-      { q: "予約のキャンセル・変更はできますか?", a: "予約時に案内する期限内であれば可能です。直前のキャンセルはクレジットを消費する場合があります。" },
-      { q: "兄弟で一緒にレッスンできますか?", a: "個別レッスンを推奨します。兄弟だと日本語で話してしまい、英語練習の時間が減る傾向があります。" },
-      { q: "無料体験の前にゲームを買う必要はありますか?", a: "はい。MinecraftまたはFortniteをインストール済みの状態でご参加ください。" },
-      { q: "支払い方法は?", a: "Stripe決済です。カード情報はSpeakSquadに保存されません。" },
+    categories: [
+      {
+        title: "メソッドについて",
+        items: [
+          { q: "英語が全く話せなくても始められますか?", a: "はい。初心者から上級者まで対応します。無料体験でレベルを確認し、そこから進度を調整します。" },
+          { q: "レッスンは実際どんな流れですか?", a: "1レッスン50分で、3つのパートに分かれます。まずは軽い導入(前回の復習と今日のポイント)、次にゲーム本編(ゲームの状況に合わせて語彙や表現が自然に出てきます)、最後に振り返りで練習した内容を定着させます。" },
+          { q: "ゲームで英語を学ぶのがなぜ効くのですか?", a: "「勉強しなきゃ」という負担がなくなるからです。もともと好きなゲームを使うので、語彙のくり返しやリアルなコミュニケーションが自然に生まれ、教室の練習問題のようになりません。" },
+          { q: "使うゲームは何ですか?", a: "MinecraftとFortniteです。使うゲームはプロフィールで選べ、好みに合わせて変更できます。" },
+          { q: "先生はいつも同じ人ですか?", a: "はい。同じ先生が担当し続けることがメソッドの柱です。進み具合・レベル・レッスン履歴を把握しているので、毎回先生が変わる場合よりも個別に合わせた指導ができます。" },
+        ],
+      },
+      {
+        title: "安全性・信頼性",
+        items: [
+          { q: "レッスンは実在の人が担当しますか?", a: "はい。SpeakSquad創業者のHugoが担当します。AIや外部委託の講師ではありません。お子さんの成長を同じ人がずっと見守ります。" },
+          { q: "レッスンは録画されますか?", a: "音声や映像の録画はしません。記録として残るのは、学んだ語彙をまとめたテキストのサマリーだけで、レッスン履歴から確認できます。" },
+          { q: "子どもの進み具合はどう確認できますか?", a: "毎回のレッスンごとに、学んだ語彙や表現の短いレポートが作成され、プラットフォーム内のレッスンページで見られます。" },
+          { q: "レッスン中のゲームに公開チャットや知らない人との接触はありますか?", a: "レッスンは生徒と先生だけのプライベートなセッション内、管理された環境で行います。レッスン中に公開チャットや見知らぬプレイヤーに触れることはありません。" },
+          { q: "アカウントは保護者と子どものどちらが作りますか?", a: "登録とクレジットの購入は成人の保護者が行ってください。お子さんはレッスンの時間のみ参加します。" },
+          {
+            q: "未成年に関する方針はありますか?",
+            a: [
+              "はい。未成年のデータの扱いについては",
+              { text: "プライバシーポリシー", to: "/privacy" },
+              "を、レッスン中のルールについては",
+              { text: "利用規約", to: "/terms" },
+              "をご覧ください。",
+            ],
+          },
+        ],
+      },
+      {
+        title: "予約とキャンセル",
+        items: [
+          { q: "予約のキャンセル・変更はできますか?", a: "はい。6時間前までであれば可能で、その場合クレジットは全額返却されます。6時間を切ってからのキャンセルはクレジットが返却されません。" },
+          { q: "レッスンに参加できなかった場合はどうなりますか?", a: "予約時刻から10分以内に参加がない場合、そのレッスンのクレジットは消費され、返却されません。少し早めの入室をおすすめします。" },
+          { q: "予約はどうやってしますか?", a: "ダッシュボードの「予約」メニューからです。先生が公開している空き枠を週表示のカレンダーで確認し、都合のいい時間を選べます。" },
+          { q: "何週間も先まで予約できますか?", a: "はい。先生が公開している範囲内であれば、かなり先の枠まで選んで予約できます。" },
+        ],
+      },
+      {
+        title: "クレジットとお支払い",
+        items: [
+          { q: "クレジットに有効期限はありますか?", a: formatExpiryFaq("jp") },
+          { q: "支払い方法は?", a: "Stripeによるクレジットカード決済です。カード情報はSpeakSquadに保存されません。" },
+          { q: "領収書は発行されますか?", a: "購入が確定すると、決済の領収書がメールで自動的に届きます。それ以外の書類が必要な場合はお問い合わせください。" },
+          {
+            q: "使い切らなかったクレジットは返金されますか?",
+            a: [
+              "有効期限内に使わなかったクレジットの現金返金はありません。詳細は",
+              { text: "クレジット購入規約", to: "/terms" },
+              "をご覧ください。",
+            ],
+          },
+          { q: "クレジットが残っていても追加購入できますか?", a: "はい。いつでも新しいパックを購入できます。クレジットは加算され、それぞれのパックごとに有効期限が管理されます。" },
+        ],
+      },
+      {
+        title: "参加に必要なもの",
+        items: [
+          { q: "無料体験の前にゲームを買う必要はありますか?", a: "はい。無料体験も含め、MinecraftまたはFortniteをインストール済みの状態でご参加ください。" },
+          { q: "兄弟姉妹で一緒にレッスンできますか?", a: "個別レッスンを推奨します。兄弟だと日本語で話してしまい、英語を実際に使う時間が減る傾向があります。" },
+          { q: "レッスンに必要なものは?", a: "ゲーム(MinecraftまたはFortnite)をPCかコンソールにインストール済みであること、先生とのビデオ通話用のZoom、カメラ付きの端末(PC・タブレット・スマホ)、マイク付きイヤホン(推奨、必須ではありません)。" },
+          {
+            q: "レッスン中にインターネットが切れたらどうなりますか?",
+            a: [
+              "安定した通信環境と動作する端末を用意するのは生徒側の責任です。そのため原則として、生徒側の技術的な問題はクレジット消費となり、先生が50分まるごと待った場合も同じです。例外は、予約時刻から10分以内に通信や端末の不具合を連絡いただいた場合で、そのときはクレジットを返却します。入室後にそれ以降で切断し戻れなかった場合も、レッスン時刻から2時間以内であれば申し立てできます。こちら側(先生またはプラットフォーム)の問題であれば、クレジットは必ず返却します。詳細は",
+              { text: "クレジット購入規約", to: "/terms" },
+              "をご覧ください。",
+            ],
+          },
+          { q: "レッスンは毎週同じ時間ですか?", a: "必ずしもそうではありません。毎週、先生の空き枠の中から好きな時間を選べます。固定の曜日・時間に縛られません(希望すればその形で予約することもできます)。" },
+        ],
+      },
     ],
   },
 };
