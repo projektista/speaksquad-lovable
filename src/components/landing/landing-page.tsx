@@ -300,7 +300,7 @@ function Pricing({ content }: { content: LandingContent }) {
       </Reveal>
       <Reveal delay={80} variant="clip">
         <h2 className="glitch-rgb mt-4 max-w-3xl font-display text-3xl md:text-5xl">
-          {pricing.title}
+          <ColoredTitle parts={pricing.titleParts} />
         </h2>
       </Reveal>
       <p className="mt-4 max-w-2xl text-soft">{pricing.intro}</p>
@@ -368,9 +368,7 @@ function Requisitos({ content }: { content: LandingContent }) {
         </Reveal>
         <Reveal delay={80} variant="clip">
           <h2 className="glitch-rgb mt-4 max-w-3xl font-display text-3xl md:text-5xl">
-            {requisitos.titlePrefix}
-            <span className="text-cyan">{requisitos.titleHighlight}</span>
-            {requisitos.titleSuffix}
+            <ColoredTitle parts={requisitos.titleParts} />
           </h2>
         </Reveal>
         <div className="mt-10 grid gap-3 md:grid-cols-2">
@@ -414,6 +412,11 @@ function Sobre({ content }: { content: LandingContent }) {
     <section id="about" className="section-glow-cyan mx-auto max-w-6xl px-5 py-20">
       <Reveal>
         <SectionLabel n={sobre.sectionN}>{sobre.label}</SectionLabel>
+      </Reveal>
+      <Reveal delay={80} variant="clip">
+        <h2 className="glitch-rgb mt-4 max-w-3xl font-display text-3xl md:text-5xl">
+          <ColoredTitle parts={sobre.titleParts} />
+        </h2>
       </Reveal>
       <div className="mt-6 grid gap-8 md:grid-cols-[280px_1fr] md:gap-12">
         <Reveal>
