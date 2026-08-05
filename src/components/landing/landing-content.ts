@@ -72,7 +72,7 @@ export type LandingContent = {
   pricing: {
     label: string;
     sectionN: string;
-    title: string;
+    titleParts: { text: string; color: "white" | "cyan" | "magenta" }[];
     intro: string;
     popularBadge: string;
     buyCta: string;
@@ -81,9 +81,7 @@ export type LandingContent = {
   requisitos: {
     label: string;
     sectionN: string;
-    titlePrefix: string;
-    titleHighlight: string;
-    titleSuffix?: string;
+    titleParts: { text: string; color: "white" | "cyan" | "magenta" }[];
     items: { t: string; o: string }[];
     ctaLine1: string;
     ctaLine2: string;
@@ -91,6 +89,7 @@ export type LandingContent = {
   sobre: {
     label: string;
     sectionN: string;
+    titleParts: { text: string; color: "white" | "cyan" | "magenta" }[];
     role: string;
     tag: string;
     paragraphs: string[];
