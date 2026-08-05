@@ -107,6 +107,8 @@ export type LandingContent = {
     label: string;
     sectionN: string;
     intro: string;
+    searchPlaceholder: string;
+    noResults: string;
     categories: FaqCategory[];
   };
 };
@@ -260,6 +262,8 @@ export const ptContent: LandingContent = {
     label: "Perguntas frequentes",
     sectionN: "09",
     intro: "Se sua dúvida não estiver aqui, é só perguntar antes da aula experimental.",
+    searchPlaceholder: "Buscar pergunta...",
+    noResults: "Nenhuma pergunta encontrada.",
     categories: [
       {
         title: "Sobre o método",
@@ -482,6 +486,8 @@ export const jpContent: LandingContent = {
     label: "よくある質問",
     sectionN: "09",
     intro: "ここに答えがない質問は、体験レッスンの前に気軽にお問い合わせください。",
+    searchPlaceholder: "質問を検索...",
+    noResults: "該当する質問が見つかりません。",
     categories: [
       {
         title: "メソッドについて",
