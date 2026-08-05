@@ -72,7 +72,7 @@ export type LandingContent = {
   pricing: {
     label: string;
     sectionN: string;
-    title: string;
+    titleParts: { text: string; color: "white" | "cyan" | "magenta" }[];
     intro: string;
     popularBadge: string;
     buyCta: string;
@@ -81,9 +81,7 @@ export type LandingContent = {
   requisitos: {
     label: string;
     sectionN: string;
-    titlePrefix: string;
-    titleHighlight: string;
-    titleSuffix?: string;
+    titleParts: { text: string; color: "white" | "cyan" | "magenta" }[];
     items: { t: string; o: string }[];
     ctaLine1: string;
     ctaLine2: string;
@@ -91,6 +89,7 @@ export type LandingContent = {
   sobre: {
     label: string;
     sectionN: string;
+    titleParts: { text: string; color: "white" | "cyan" | "magenta" }[];
     role: string;
     tag: string;
     paragraphs: string[];
@@ -206,7 +205,7 @@ export const ptContent: LandingContent = {
   pricing: {
     label: "Preço",
     sectionN: "05",
-    title: "Simples, transparente e direto.",
+    titleParts: [{ text: "Simples, transparente e direto.", color: "white" }],
     intro: "1 crédito = 1 aula de 50 minutos. Compre o que precisar, quando precisar.",
     popularBadge: "[ mais_popular ]",
     buyCta: "Comprar",
@@ -219,9 +218,11 @@ export const ptContent: LandingContent = {
   requisitos: {
     label: "Antes de começar",
     sectionN: "06",    
-    titlePrefix: "O que você ",
-    titleHighlight: "precisa",
-    titleSuffix: " ter.",
+    titleParts: [
+      { text: "O que você ", color: "white" },
+      { text: "precisa", color: "cyan" },
+      { text: " ter.", color: "white" },
+    ],
     items: [
       { t: "Jogo instalado e atualizado", o: "No seu console ou PC" },
       { t: "Zoom", o: "Para a videochamada com o professor" },
@@ -234,6 +235,7 @@ export const ptContent: LandingContent = {
   sobre: {
     label: "Sobre",
     sectionN: "07",
+    titleParts: [{ text: " ", color: "white" }],
     role: "Fundador · Instrutor · Gamer",
     tag: "[ tokyo · jst ]",
     paragraphs: [
@@ -429,7 +431,7 @@ export const jpContent: LandingContent = {
   pricing: {
     label: "料金",
     sectionN: "05",
-    title: "シンプル、明確、率直。",
+    titleParts: [{ text: "シンプル、明確、率直。", color: "white" }],
     intro: "1クレジット = 50分レッスン1回。必要な分だけ、必要なときに購入できます。",
     popularBadge: "[ 人気 ]",
     buyCta: "購入する",
@@ -442,9 +444,11 @@ export const jpContent: LandingContent = {
   requisitos: {
     label: "準備するもの",
     sectionN: "06",
-    titlePrefix: "必要なものは ",
-    titleHighlight: "シンプル",
-    titleSuffix: "。",
+    titleParts: [
+      { text: "必要なものは ", color: "white" },
+      { text: "シンプル", color: "cyan" },
+      { text: "。", color: "white" },
+    ],
     items: [
       { t: "ゲーム(インストール済み)", o: "PCまたはコンソール" },
       { t: "Zoom", o: "先生とのビデオ通話用" },
@@ -457,6 +461,7 @@ export const jpContent: LandingContent = {
   sobre: {
     label: "紹介",
     sectionN: "07",
+    titleParts: [{ text: " ", color: "white" }],
     role: "創設者 · 講師 · ゲーマー",
     tag: "[ tokyo · jst ]",
     paragraphs: [
