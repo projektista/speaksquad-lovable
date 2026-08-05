@@ -219,12 +219,9 @@ export const ptContent: LandingContent = {
   requisitos: {
     label: "Antes de começar",
     sectionN: "06",    
-    titleParts: [
-      { text: "O que ", color: "cyan" },
-      { text: "você ", color: "white" },
-      { text: "precisa ", color: "magenta" },
-      { text: "ter.", color: "white" },
-    ],
+    titlePrefix: "O que você ",
+    titleHighlight: "precisa",
+    titleSuffix: " ter.",
     items: [
       { t: "Jogo instalado e atualizado", o: "No seu console ou PC" },
       { t: "Zoom", o: "Para a videochamada com o professor" },
