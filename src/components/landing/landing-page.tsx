@@ -476,11 +476,45 @@ function CTA({ content }: { content: LandingContent }) {
 function FAQ({ content }: { content: LandingContent }) {
   const { faq } = content;
   const [open, setOpen] = useState<string | null>("0-0");
+  const [openCats, setOpenCats] = useState<number[]>([]);
+  const [query, setQuery] = useState("");
+
+  const q = query.trim().toLowerCase();
+  const categories = faq.categories
+    .map((cat, ci) => ({
+      cat,
+      ci,
+      items: q
+        ? cat.items.filter(
+            (f) =>
+              f.q.toLowerCase().includes(q) ||
+              answerToText(f.a).toLowerCase().includes(q),
+          )
+        : cat.items,
+    }))
+    .filter((c) => c.items.length > 0);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.categories.flatMap((cat) =>
+      cat.items.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: answerToText(f.a) },
+      })),
+    ),
+  };
+
   return (
     <section
       id="faq"
       className="section-glow-magenta bg-grid-parallax relative mx-auto max-w-4xl px-5 py-20"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ParticleField density={16} className="opacity-40" />
       <Reveal>
         <SectionLabel n={faq.sectionN}>{faq.label}</SectionLabel>
@@ -489,19 +523,57 @@ function FAQ({ content }: { content: LandingContent }) {
         <h2 className="glitch-rgb mt-4 font-display text-3xl md:text-5xl">FAQ</h2>
       </Reveal>
       <p className="mt-4 text-soft">{faq.intro}</p>
-      <div className="mt-10 space-y-10">
-        {faq.categories.map((cat, ci) => (
+      <div className="mt-6">
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={faq.searchPlaceholder}
+          aria-label={faq.searchPlaceholder}
+          className="w-full rounded-[4px] border-hair bg-bg2 px-4 py-3 font-mono-alt text-sm text-foreground outline-none placeholder:text-muted focus:border-[color:var(--cyan)]"
+        />
+      </div>
+      {categories.length === 0 && (
+        <p className="mt-8 font-mono-alt text-sm text-muted">{faq.noResults}</p>
+      )}
+      <div className="mt-10 space-y-6">
+        {categories.map(({ cat, ci, items }) => {
+          const catOpen = q.length > 0 || openCats.includes(ci);
+          return (
           <div key={cat.title}>
             <Reveal>
-              <h3 className="font-display text-xl text-cyan md:text-2xl">
-                <span className="mr-2 font-mono-alt text-xs text-muted">
-                  [{String(ci + 1).padStart(2, "0")}]
+              <button
+                type="button"
+                onClick={() =>
+                  setOpenCats((prev) =>
+                    prev.includes(ci) ? prev.filter((x) => x !== ci) : [...prev, ci],
+                  )
+                }
+                aria-expanded={catOpen}
+                className="flex w-full items-center justify-between gap-4 border-b border-hair pb-3 text-left"
+              >
+                <h3 className="font-display text-xl text-cyan md:text-2xl">
+                  <span className="mr-2 font-mono-alt text-xs text-muted">
+                    [{String(ci + 1).padStart(2, "0")}]
+                  </span>
+                  {cat.title}
+                </h3>
+                <span
+                  className={`font-mono-alt text-lg text-magenta transition-transform ${
+                    catOpen ? "rotate-45" : ""
+                  }`}
+                >
+                  +
                 </span>
-                {cat.title}
-              </h3>
+              </button>
             </Reveal>
+            <div
+              className="grid transition-[grid-template-rows] duration-300"
+              style={{ gridTemplateRows: catOpen ? "1fr" : "0fr" }}
+            >
+              <div className="overflow-hidden">
             <div className="mt-4 space-y-2">
-              {cat.items.map((f, i) => {
+              {items.map((f, i) => {
                 const key = `${ci}-${i}`;
                 const isOpen = open === key;
                 return (
@@ -534,11 +606,19 @@ function FAQ({ content }: { content: LandingContent }) {
                 );
               })}
             </div>
+              </div>
+            </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
+}
+
+function answerToText(answer: FaqAnswer): string {
+  if (typeof answer === "string") return answer;
+  return answer.map((p) => (typeof p === "string" ? p : p.text)).join("");
 }
 
 function FaqAnswerText({ answer }: { answer: FaqAnswer }) {
