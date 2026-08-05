@@ -586,7 +586,9 @@ function FAQ({ content }: { content: LandingContent }) {
                       onClick={() => setOpen(isOpen ? null : key)}
                       className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                     >
-                      <span className="font-display text-base">{f.q}</span>
+                      <span className="font-display text-base">
+                        <Highlighted text={f.q} query={q} />
+                      </span>
                       <span
                         className={`font-mono-alt text-magenta transition-transform ${
                           isOpen ? "rotate-45" : ""
@@ -601,7 +603,7 @@ function FAQ({ content }: { content: LandingContent }) {
                     >
                       <div className="overflow-hidden">
                         <div className="px-5 pb-4 text-sm leading-relaxed text-soft">
-                          <FaqAnswerText answer={f.a} />
+                          <FaqAnswerText answer={f.a} query={q} />
                         </div>
                       </div>
                     </div>
@@ -624,20 +626,45 @@ function answerToText(answer: FaqAnswer): string {
   return answer.map((p) => (typeof p === "string" ? p : p.text)).join("");
 }
 
-function FaqAnswerText({ answer }: { answer: FaqAnswer }) {
-  if (typeof answer === "string") return <>{answer}</>;
+function Highlighted({ text, query }: { text: string; query: string }) {
+  const term = query.trim();
+  if (!term) return <>{text}</>;
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const parts = text.split(new RegExp(`(${escaped})`, "gi"));
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === term.toLowerCase() ? (
+          <mark
+            key={i}
+            className="rounded bg-cyan/25 px-0.5 text-cyan"
+          >
+            {part}
+          </mark>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+function FaqAnswerText({ answer, query = "" }: { answer: FaqAnswer; query?: string }) {
+  if (typeof answer === "string") return <Highlighted text={answer} query={query} />;
   return (
     <>
       {answer.map((part, i) =>
         typeof part === "string" ? (
-          <span key={i}>{part}</span>
+          <span key={i}>
+            <Highlighted text={part} query={query} />
+          </span>
         ) : (
           <Link
             key={i}
             to={part.to}
             className="text-cyan underline underline-offset-4"
           >
-            {part.text}
+            <Highlighted text={part.text} query={query} />
           </Link>
         ),
       )}
