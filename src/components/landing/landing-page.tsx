@@ -151,8 +151,9 @@ function Metodo({ content }: { content: LandingContent }) {
   return (
     <section
       id="method"
-      className="section-glow-cyan bg-grid-parallax relative mx-auto max-w-6xl px-5 py-20"
+      className="section-glow-cyan bg-grid-parallax relative"
     >
+      <div className="mx-auto max-w-6xl px-5 py-20">
       <Reveal>
         <SectionLabel n={metodo.sectionN}>{metodo.label}</SectionLabel>
       </Reveal>
@@ -168,6 +169,7 @@ function Metodo({ content }: { content: LandingContent }) {
         <Reveal delay={200} variant="slide-right">
           <p className="text-soft">{metodo.p2}</p>
         </Reveal>
+      </div>
       </div>
       <ParticleField density={18} className="opacity-60" />
     </section>
@@ -213,8 +215,9 @@ function Fluxo({ content }: { content: LandingContent }) {
   return (
     <section
       id="flow"
-      className="section-glow-violet bg-grid-parallax mx-auto max-w-6xl px-5 py-20"
+      className="section-glow-violet bg-grid-parallax relative"
     >
+      <div className="mx-auto max-w-6xl px-5 py-20">
       <Reveal>
         <SectionLabel n={fluxo.sectionN}>{fluxo.label}</SectionLabel>
       </Reveal>
@@ -244,6 +247,7 @@ function Fluxo({ content }: { content: LandingContent }) {
             </div>
           </Reveal>
         ))}
+      </div>
       </div>
     </section>
   );
@@ -292,9 +296,10 @@ function Pricing({ content }: { content: LandingContent }) {
   return (
     <section
       id="pricing"
-      className="section-glow-magenta bg-grid-parallax relative mx-auto max-w-6xl px-5 py-20"
+      className="section-glow-magenta bg-grid-parallax relative"
     >
       <ParticleField density={22} className="opacity-40" />
+      <div className="mx-auto max-w-6xl px-5 py-20">
       <Reveal>
         <SectionLabel n={pricing.sectionN}>{pricing.label}</SectionLabel>
       </Reveal>
@@ -350,6 +355,7 @@ function Pricing({ content }: { content: LandingContent }) {
             </div>
           </Reveal>
         ))}
+      </div>
       </div>
     </section>
   );
