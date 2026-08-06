@@ -1,11 +1,11 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { createIsomorphicFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
 import { LandingPage } from "@/components/landing/landing-page";
 import { jpContent } from "@/components/landing/landing-content";
 
 const detectPrefersPt = createIsomorphicFn()
   .server(() => {
-    const { getRequestHeader } = require("@tanstack/react-start/server");
     const acceptLanguage = getRequestHeader("Accept-Language") ?? "";
     return acceptLanguage.toLowerCase().includes("pt");
   })
