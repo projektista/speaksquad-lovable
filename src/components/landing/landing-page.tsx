@@ -415,7 +415,8 @@ function Requisitos({ content }: { content: LandingContent }) {
 function Sobre({ content }: { content: LandingContent }) {
   const { sobre } = content;
   return (
-    <section id="about" className="section-glow-cyan mx-auto max-w-6xl px-5 py-20">
+    <section id="about" className="section-glow-cyan relative">
+      <div className="mx-auto max-w-6xl px-5 py-20">
       <Reveal>
         <SectionLabel n={sobre.sectionN}>{sobre.label}</SectionLabel>
       </Reveal>
@@ -438,12 +439,13 @@ function Sobre({ content }: { content: LandingContent }) {
           </BracketFrame>
         </Reveal>
         <Reveal delay={100}>
-          <div className="space-y-4 text-soft">
+          <div className="max-w-2xl space-y-4 text-soft">
             {sobre.paragraphs.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
           </div>
         </Reveal>
+      </div>
       </div>
     </section>
   );
@@ -518,13 +520,14 @@ function FAQ({ content }: { content: LandingContent }) {
   return (
     <section
       id="faq"
-      className="section-glow-magenta bg-grid-parallax relative mx-auto max-w-4xl px-5 py-20"
+      className="section-glow-magenta bg-grid-parallax relative"
     >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ParticleField density={16} className="opacity-40" />
+      <div className="mx-auto max-w-4xl px-5 py-20">
       <Reveal>
         <SectionLabel n={faq.sectionN}>{faq.label}</SectionLabel>
       </Reveal>
@@ -622,6 +625,7 @@ function FAQ({ content }: { content: LandingContent }) {
           </div>
           );
         })}
+      </div>
       </div>
     </section>
   );
