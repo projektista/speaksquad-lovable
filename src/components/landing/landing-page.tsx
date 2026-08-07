@@ -515,7 +515,7 @@ function FAQ({ content }: { content: LandingContent }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={faq.searchPlaceholder}
             aria-label={faq.searchPlaceholder}
-            className="w-full rounded-[4px] border-hair bg-bg2 px-4 py-3 font-mono-alt text-sm text-foreground outline-none placeholder:text-muted focus:border-[color:var(--cyan)]"
+            className="focus-ring w-full rounded-[4px] border-hair bg-bg2 px-4 py-3 font-mono-alt text-sm text-foreground transition-colors duration-200 placeholder:text-muted hover:border-hair2 focus:border-[color:var(--cyan)]"
           />
         </div>
         {categories.length === 0 && (
@@ -535,16 +535,16 @@ function FAQ({ content }: { content: LandingContent }) {
                       )
                     }
                     aria-expanded={catOpen}
-                    className="flex w-full items-center justify-between gap-4 border-b border-hair pb-3 text-left"
+                    className="focus-ring group flex w-full items-center justify-between gap-4 border-b border-hair pb-3 text-left transition-colors duration-200 hover:border-[color:var(--cyan)]"
                   >
-                    <h3 className="font-display text-xl text-cyan md:text-2xl">
+                    <h3 className="font-display text-xl text-cyan transition-colors duration-200 group-hover:text-magenta md:text-2xl">
                       <span className="mr-2 font-mono-alt text-xs text-muted">
                         [{String(ci + 1).padStart(2, "0")}]
                       </span>
                       {cat.title}
                     </h3>
                     <span
-                      className={`font-mono-alt text-lg text-magenta transition-transform ${
+                      className={`font-mono-alt text-lg text-magenta transition-transform duration-300 ${
                         catOpen ? "rotate-45" : ""
                       }`}
                     >
@@ -562,17 +562,18 @@ function FAQ({ content }: { content: LandingContent }) {
                         const key = `${ci}-${i}`;
                         const isOpen = open === key;
                         return (
-                          <div key={f.q} className="card-hair card-tilt overflow-hidden">
+                          <div key={f.q} className="card-hair card-lift overflow-hidden">
                             <button
                               type="button"
                               onClick={() => setOpen(isOpen ? null : key)}
-                              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                              aria-expanded={isOpen}
+                              className="focus-ring flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors duration-200 hover:text-cyan"
                             >
                               <span className="font-display text-base">
                                 <Highlighted text={f.q} query={q} />
                               </span>
                               <span
-                                className={`font-mono-alt text-magenta transition-transform ${
+                                className={`font-mono-alt text-magenta transition-transform duration-300 ${
                                   isOpen ? "rotate-45" : ""
                                 }`}
                               >
