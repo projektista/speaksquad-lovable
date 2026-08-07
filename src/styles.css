@@ -59,8 +59,8 @@
   --color-soft: var(--soft);
   --color-success: var(--success);
   --color-warn: var(--warn);
-  --font-display: "Space Mono", "Noto Sans JP", ui-monospace, monospace;
-  --font-mono: "IBM Plex Mono", "Noto Sans JP", ui-monospace, monospace;
+  --font-display: "Space Mono", "Zen Kaku Gothic New", ui-monospace, monospace;
+  --font-mono: "IBM Plex Mono", "M PLUS 1 Code", ui-monospace, monospace;
   --font-body: "Atkinson Hyperlegible", "Noto Sans JP", system-ui, sans-serif;
 }
 
