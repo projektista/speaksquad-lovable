@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { AppShell } from "@/components/layout/app-shell";
+import { createFileRoute } from "@tanstack/react-router";
+import { CheckoutReturnPage } from "@/components/pages/checkout-return-page";
 
 export const Route = createFileRoute("/_authenticated/ptbr/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
@@ -8,29 +8,5 @@ export const Route = createFileRoute("/_authenticated/ptbr/checkout/return")({
   head: () => ({
     meta: [{ title: "Pagamento · SpeakSquad" }, { name: "robots", content: "noindex" }],
   }),
-  component: ReturnPage,
+  component: () => <CheckoutReturnPage lang="pt" sessionId={Route.useSearch().session_id} />,
 });
-
-function ReturnPage() {
-  const { session_id } = Route.useSearch();
-  return (
-    <AppShell lang="pt" title="Pagamento" subtitle="Obrigado pela compra">
-      <div className="card-hair p-6">
-        {session_id ? (
-          <>
-            <h2 className="font-display text-xl">Pagamento concluído</h2>
-            <p className="mt-2 text-sm text-muted">
-              Seus créditos serão adicionados em instantes. Você pode agendar sua próxima aula agora.
-            </p>
-            <div className="mt-6 flex gap-3">
-              <Link to="/ptbr/schedule" className="btn-primary">Agendar aula</Link>
-              <Link to="/ptbr/dashboard" className="btn-outline">Dashboard</Link>
-            </div>
-          </>
-        ) : (
-          <p className="text-sm text-muted">Sessão não encontrada.</p>
-        )}
-      </div>
-    </AppShell>
-  );
-}
