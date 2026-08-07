@@ -353,6 +353,30 @@
   position: relative;
   transition: border-color 0.25s ease, transform 0.25s ease;
   &:hover { border-color: color-mix(in oklab, var(--cyan) 60%, var(--border)); }
+  &:focus-within {
+    border-color: color-mix(in oklab, var(--cyan) 70%, var(--border));
+  }
+}
+
+/* Consistent keyboard focus ring across interactive elements */
+@utility focus-ring {
+  outline: none;
+  &:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+    border-radius: var(--radius);
+  }
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
 }
 
 /* Subtle lift + accent glow for content cards (microinteraction) */
@@ -713,4 +737,28 @@
     scroll-behavior: auto !important;
   }
   .ss-reveal { opacity: 1 !important; }
+
+  /* Kill ambient/background motion entirely and attenuate intensity */
+  .hero-aurora::before,
+  .bg-grid-parallax::before,
+  .section-glow-cyan::before,
+  .section-glow-magenta::before,
+  .section-glow-violet::before,
+  .section-scanlines::after {
+    animation: none !important;
+    opacity: 0.5;
+  }
+
+  /* No transform-based hover effects */
+  .card-tilt:hover,
+  .card-lift:hover,
+  .press:hover,
+  .press:active,
+  .btn-primary:hover,
+  .btn-outline:hover,
+  .hover-scale:hover {
+    transform: none !important;
+  }
+  .btn-shine::after { display: none !important; }
+  .caret, .badge-pulse { animation: none !important; }
 }

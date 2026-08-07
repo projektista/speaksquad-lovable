@@ -18,6 +18,14 @@ export function Reveal({ children, delay = 0, as = "div", className = "", style,
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Respect reduced-motion: show content immediately, no observer/animation.
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setVisible(true);
+      return;
+    }
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
