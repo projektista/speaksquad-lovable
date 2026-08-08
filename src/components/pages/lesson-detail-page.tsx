@@ -90,7 +90,7 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
     el.style.overflowY = el.scrollHeight > max ? "auto" : "hidden";
   }, [text]);
 
-  async function send(e: React.FormEvent) {
+  async function send(e: { preventDefault: () => void }) {
     e.preventDefault();
     if (!text.trim()) return;
     const content = text;
