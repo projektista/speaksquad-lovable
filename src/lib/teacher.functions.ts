@@ -289,7 +289,9 @@ export const getStudentDetail = createServerFn({ method: "POST" })
         .maybeSingle(),
       supabase
         .from("credit_lots")
-        .select("id, status, source, note, created_at, expires_at, consumed_at, reserved_for_lesson_id")
+        .select(
+          "id, status, source, note, created_at, expires_at, consumed_at, reserved_for_lesson_id, purchase_id",
+        )
         .eq("user_id", studentId)
         .order("created_at", { ascending: false }),
       supabase
