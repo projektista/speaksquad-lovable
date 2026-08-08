@@ -721,6 +721,12 @@ export const profileContent: Record<Lang, ProfileContent> = {
 
 export type LessonDetailContent = {
   metaTitle: string;
+  pageTitle: string;
+  dateLabel: string;
+  timeLabel: string;
+  remindersTitle: string;
+  remindersText: string;
+  viewTeacherProfile: string;
   loading: string;
   statusLabel: string;
   modeLabel: string;
@@ -759,6 +765,13 @@ export type LessonDetailContent = {
 export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
   pt: {
     metaTitle: "Aula · SpeakSquad",
+    pageTitle: "Detalhes da Aula",
+    dateLabel: "data",
+    timeLabel: "horário",
+    remindersTitle: "// lembretes",
+    remindersText:
+      "Confira sua conexão e se o jogo está atualizado. Entre na sala um pouco antes do início da aula. Lembre-se: o professor espera apenas 10 minutos após o horário agendado — se você não entrar nesse período, o crédito será consumido.",
+    viewTeacherProfile: "ver perfil",
     loading: "carregando...",
     statusLabel: "status",
     modeLabel: "modo",
@@ -795,6 +808,13 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
   },
   jp: {
     metaTitle: "レッスン · SpeakSquad",
+    pageTitle: "レッスン詳細",
+    dateLabel: "日付",
+    timeLabel: "時刻",
+    remindersTitle: "// リマインダー",
+    remindersText:
+      "接続環境とゲームが最新かどうかを確認してください。レッスン開始の少し前に入室しましょう。先生が待つのは開始時刻から10分間だけです。その間に入室しない場合、クレジットは消費されます。",
+    viewTeacherProfile: "プロフィールを見る",
     loading: "読み込み中...",
     statusLabel: "ステータス",
     modeLabel: "モード",

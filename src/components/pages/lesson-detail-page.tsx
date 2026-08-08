@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/app-shell";
 import { useSession } from "@/hooks/use-session";
 import {
@@ -42,6 +43,7 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
   const [acting, setActing] = useState(false);
   const [confirm, setConfirm] = useState<null | { title: string; run: () => Promise<any> }>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     getLessonDetail({ data: { id } })
@@ -77,7 +79,18 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length]);
 
-  async function send(e: React.FormEvent) {
+  // Auto-grow the chat textarea up to ~6 lines, then scroll inside it.
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    const line = 20;
+    const max = line * 6 + 16;
+    el.style.height = `${Math.min(el.scrollHeight, max)}px`;
+    el.style.overflowY = el.scrollHeight > max ? "auto" : "hidden";
+  }, [text]);
+
+  async function send(e: { preventDefault: () => void }) {
     e.preventDefault();
     if (!text.trim()) return;
     const content = text;
@@ -111,10 +124,129 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
 
   const { lesson, student, teacher, viewerIsTeacher } = detail;
   const isFinished = ["completed", "student_cancelled", "teacher_cancelled", "no_show", "late_cancel"].includes(lesson.status);
+  const when = new Date(lesson.scheduled_at);
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+    .formatToParts(when)
+    .reduce<Record<string, string>>((acc, p) => {
+      acc[p.type] = p.value;
+      return acc;
+    }, {});
+  const ymd = `${parts["year"]}/${parts["month"]}/${parts["day"]}`;
+  const hhmm = `${parts["hour"]}:${parts["minute"]}`;
+  const hour24 = Number(parts["hour"] ?? "0");
+  const ampm = hour24 >= 12 ? "PM" : "AM";
+  const hour12 = String(hour24 % 12 === 0 ? 12 : hour24 % 12).padStart(2, "0");
+  const topLabel = `// LESSON_${ymd}_${hour12}${ampm}`;
+  const weekday = new Intl.DateTimeFormat(locale, {
+    timeZone: "Asia/Tokyo",
+    weekday: lang === "jp" ? "narrow" : "long",
+  }).format(when);
+  const teacherProfileHref =
+    lang === "jp" ? "/teacher-profile/$id" : "/ptbr/teacher-profile/$id";
+
+  const detailCards = viewerIsTeacher ? null : (
+    <>
+      <div className="card-hair space-y-3 p-5">
+        <div>
+          <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.statusLabel}</div>
+          <div className="text-lg">{lessonStatusLabel(lesson.status, lang)}</div>
+        </div>
+        <div>
+          <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.dateLabel}</div>
+          <div>{ymd} ({weekday})</div>
+        </div>
+        <div>
+          <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.timeLabel}</div>
+          <div>{hhmm}</div>
+        </div>
+        <div>
+          <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.durationLabel}</div>
+          <div>{lesson.duration_min}{t.minutes}</div>
+        </div>
+        {teacher?.zoom_link && (
+          <a href={teacher.zoom_link} target="_blank" rel="noreferrer" className="btn-primary inline-flex">
+            {t.openZoom}
+          </a>
+        )}
+        {lesson.feedback && (
+          <div className="border-t border-hair pt-3">
+            <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.feedbackLabel}</div>
+            <div className="text-sm whitespace-pre-wrap">{lesson.feedback}</div>
+          </div>
+        )}
+        {lesson.vocabulary_notes && (
+          <div className="border-t border-hair pt-3">
+            <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.vocabularyLabel}</div>
+            <div className="text-sm whitespace-pre-wrap">{lesson.vocabulary_notes}</div>
+          </div>
+        )}
+      </div>
+
+      <div className="card-hair space-y-2 p-5">
+        <div className="font-mono-alt text-[11px] uppercase tracking-widest text-magenta">
+          {t.remindersTitle}
+        </div>
+        <p className="text-sm text-muted">{t.remindersText}</p>
+      </div>
+
+      <div className="card-hair space-y-3 p-5">
+        {teacher && (
+          <div>
+            <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.teacherLabel}</div>
+            <Link
+              to={teacherProfileHref}
+              params={{ id: teacher.id }}
+              className="text-cyan underline underline-offset-4"
+            >
+              {teacher.name}
+            </Link>
+            <div className="mt-1 text-xs text-muted whitespace-pre-wrap">{teacher.bio || t.bioMissing}</div>
+          </div>
+        )}
+        {student && (
+          <div className="border-t border-hair pt-3">
+            <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.studentLabel}</div>
+            <div>{student.name}</div>
+            {student.minecraft_gamertag && <div className="text-xs text-muted">MC: {student.minecraft_gamertag}</div>}
+            {student.fortnite_nickname && <div className="text-xs text-muted">FN: {student.fortnite_nickname}</div>}
+          </div>
+        )}
+        {!isFinished && (
+          <div className="border-t border-hair pt-3 space-y-2">
+            <div className="text-xs text-muted">{t.cancelPolicy}</div>
+            <button
+              disabled={acting}
+              onClick={() =>
+                setConfirm({
+                  title: t.confirmTitleStudentCancel,
+                  run: () => studentCancelLesson({ data: { lessonId: id } }),
+                })
+              }
+              className="btn-outline !py-1 text-xs"
+            >
+              {t.studentCancel}
+            </button>
+          </div>
+        )}
+        {err && <div className="text-magenta text-sm">{err}</div>}
+      </div>
+    </>
+  );
 
   return (
-    <AppShell lang={lang} title={`${t.metaTitle.split(" · ")[0]} · ${new Date(lesson.scheduled_at).toLocaleString(locale, { timeZone: "Asia/Tokyo" })}`}>
-      <div className="grid gap-6 md:grid-cols-2">
+    <AppShell lang={lang} title={t.pageTitle} label={topLabel}>
+      <div className="grid items-stretch gap-6 md:grid-cols-2">
+        <div className="space-y-6">
+        {detailCards}
+        {viewerIsTeacher && (
         <div className="card-hair space-y-3 p-5">
           <div>
             <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.statusLabel}</div>
@@ -132,13 +264,6 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
             <a href={teacher.zoom_link} target="_blank" rel="noreferrer" className="btn-primary inline-flex">
               {t.openZoom}
             </a>
-          )}
-          {teacher && !viewerIsTeacher && (
-            <div className="border-t border-hair pt-3">
-              <div className="font-mono-alt text-[11px] uppercase tracking-widest text-muted">{t.teacherLabel}</div>
-              <div>{teacher.name}</div>
-              <div className="mt-1 text-xs text-muted whitespace-pre-wrap">{teacher.bio || t.bioMissing}</div>
-            </div>
           )}
           {student && (
             <div className="border-t border-hair pt-3">
@@ -220,27 +345,12 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
             </div>
           )}
 
-          {!viewerIsTeacher && !isFinished && (
-            <div className="border-t border-hair pt-4 space-y-2">
-              <div className="text-xs text-muted">{t.cancelPolicy}</div>
-              <button
-                disabled={acting}
-                onClick={() =>
-                  setConfirm({
-                    title: t.confirmTitleStudentCancel,
-                    run: () => studentCancelLesson({ data: { lessonId: id } }),
-                  })
-                }
-                className="btn-outline !py-1 text-xs"
-              >
-                {t.studentCancel}
-              </button>
-            </div>
-          )}
           {err && <div className="text-magenta text-sm">{err}</div>}
         </div>
+        )}
+        </div>
 
-        <div className="card-hair flex flex-col p-4" style={{ height: "500px" }}>
+        <div className="card-hair flex h-full min-h-[24rem] flex-col p-4">
           <div className="mb-2 font-mono-alt text-[11px] uppercase tracking-widest text-muted">
             {t.chatTitle}
           </div>
@@ -265,14 +375,22 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
             })}
             <div ref={bottomRef} />
           </div>
-          <form onSubmit={send} className="mt-3 flex gap-2">
-            <input
+          <form onSubmit={send} className="mt-3 flex flex-col gap-2">
+            <textarea
+              ref={textareaRef}
+              rows={1}
               value={text}
               onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  send(e);
+                }
+              }}
               placeholder={t.chatPlaceholder}
-              className="flex-1 rounded border border-hair bg-transparent px-3 py-2 text-sm"
+              className="w-full resize-none rounded border border-hair bg-transparent px-3 py-2 text-sm leading-5"
             />
-            <button type="submit" className="btn-primary !py-2 text-xs">{t.send}</button>
+            <button type="submit" className="btn-primary !py-2 self-start text-xs">{t.send}</button>
           </form>
         </div>
       </div>
