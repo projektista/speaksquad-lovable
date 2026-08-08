@@ -34,6 +34,7 @@ import { Route as AuthenticatedTeacherScheduleRouteImport } from './routes/_auth
 import { Route as AuthenticatedTeacherProfileRouteImport } from './routes/_authenticated/teacher.profile'
 import { Route as AuthenticatedTeacherLessonsRouteImport } from './routes/_authenticated/teacher.lessons'
 import { Route as AuthenticatedTeacherDashboardRouteImport } from './routes/_authenticated/teacher.dashboard'
+import { Route as AuthenticatedTeacherProfileIdRouteImport } from './routes/_authenticated/teacher-profile.$id'
 import { Route as AuthenticatedPtbrScheduleRouteImport } from './routes/_authenticated/ptbr.schedule'
 import { Route as AuthenticatedPtbrProfileRouteImport } from './routes/_authenticated/ptbr.profile'
 import { Route as AuthenticatedPtbrDashboardRouteImport } from './routes/_authenticated/ptbr.dashboard'
@@ -45,6 +46,7 @@ import { Route as AuthenticatedTeacherStudentsIndexRouteImport } from './routes/
 import { Route as AuthenticatedPtbrLessonsIndexRouteImport } from './routes/_authenticated/ptbr.lessons.index'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as AuthenticatedTeacherStudentsIdRouteImport } from './routes/_authenticated/teacher.students.$id'
+import { Route as AuthenticatedPtbrTeacherProfileIdRouteImport } from './routes/_authenticated/ptbr.teacher-profile.$id'
 import { Route as AuthenticatedPtbrLessonsIdRouteImport } from './routes/_authenticated/ptbr.lessons.$id'
 import { Route as AuthenticatedPtbrCheckoutReturnRouteImport } from './routes/_authenticated/ptbr.checkout.return'
 
@@ -178,6 +180,12 @@ const AuthenticatedTeacherDashboardRoute =
     path: '/teacher/dashboard',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedTeacherProfileIdRoute =
+  AuthenticatedTeacherProfileIdRouteImport.update({
+    id: '/teacher-profile/$id',
+    path: '/teacher-profile/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPtbrScheduleRoute =
   AuthenticatedPtbrScheduleRouteImport.update({
     id: '/ptbr/schedule',
@@ -243,6 +251,12 @@ const AuthenticatedTeacherStudentsIdRoute =
     path: '/teacher/students/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPtbrTeacherProfileIdRoute =
+  AuthenticatedPtbrTeacherProfileIdRouteImport.update({
+    id: '/ptbr/teacher-profile/$id',
+    path: '/ptbr/teacher-profile/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPtbrLessonsIdRoute =
   AuthenticatedPtbrLessonsIdRouteImport.update({
     id: '/ptbr/lessons/$id',
@@ -283,6 +297,7 @@ export interface FileRoutesByFullPath {
   '/ptbr/dashboard': typeof AuthenticatedPtbrDashboardRoute
   '/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
   '/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
+  '/teacher-profile/$id': typeof AuthenticatedTeacherProfileIdRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/lessons': typeof AuthenticatedTeacherLessonsRoute
   '/teacher/profile': typeof AuthenticatedTeacherProfileRoute
@@ -290,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/lessons/': typeof AuthenticatedLessonsIndexRoute
   '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
+  '/ptbr/teacher-profile/$id': typeof AuthenticatedPtbrTeacherProfileIdRoute
   '/teacher/students/$id': typeof AuthenticatedTeacherStudentsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/ptbr/lessons/': typeof AuthenticatedPtbrLessonsIndexRoute
@@ -322,6 +338,7 @@ export interface FileRoutesByTo {
   '/ptbr/dashboard': typeof AuthenticatedPtbrDashboardRoute
   '/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
   '/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
+  '/teacher-profile/$id': typeof AuthenticatedTeacherProfileIdRoute
   '/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/teacher/lessons': typeof AuthenticatedTeacherLessonsRoute
   '/teacher/profile': typeof AuthenticatedTeacherProfileRoute
@@ -329,6 +346,7 @@ export interface FileRoutesByTo {
   '/lessons': typeof AuthenticatedLessonsIndexRoute
   '/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
+  '/ptbr/teacher-profile/$id': typeof AuthenticatedPtbrTeacherProfileIdRoute
   '/teacher/students/$id': typeof AuthenticatedTeacherStudentsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/ptbr/lessons': typeof AuthenticatedPtbrLessonsIndexRoute
@@ -363,6 +381,7 @@ export interface FileRoutesById {
   '/_authenticated/ptbr/dashboard': typeof AuthenticatedPtbrDashboardRoute
   '/_authenticated/ptbr/profile': typeof AuthenticatedPtbrProfileRoute
   '/_authenticated/ptbr/schedule': typeof AuthenticatedPtbrScheduleRoute
+  '/_authenticated/teacher-profile/$id': typeof AuthenticatedTeacherProfileIdRoute
   '/_authenticated/teacher/dashboard': typeof AuthenticatedTeacherDashboardRoute
   '/_authenticated/teacher/lessons': typeof AuthenticatedTeacherLessonsRoute
   '/_authenticated/teacher/profile': typeof AuthenticatedTeacherProfileRoute
@@ -370,6 +389,7 @@ export interface FileRoutesById {
   '/_authenticated/lessons/': typeof AuthenticatedLessonsIndexRoute
   '/_authenticated/ptbr/checkout/return': typeof AuthenticatedPtbrCheckoutReturnRoute
   '/_authenticated/ptbr/lessons/$id': typeof AuthenticatedPtbrLessonsIdRoute
+  '/_authenticated/ptbr/teacher-profile/$id': typeof AuthenticatedPtbrTeacherProfileIdRoute
   '/_authenticated/teacher/students/$id': typeof AuthenticatedTeacherStudentsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/_authenticated/ptbr/lessons/': typeof AuthenticatedPtbrLessonsIndexRoute
@@ -404,6 +424,7 @@ export interface FileRouteTypes {
     | '/ptbr/dashboard'
     | '/ptbr/profile'
     | '/ptbr/schedule'
+    | '/teacher-profile/$id'
     | '/teacher/dashboard'
     | '/teacher/lessons'
     | '/teacher/profile'
@@ -411,6 +432,7 @@ export interface FileRouteTypes {
     | '/lessons/'
     | '/ptbr/checkout/return'
     | '/ptbr/lessons/$id'
+    | '/ptbr/teacher-profile/$id'
     | '/teacher/students/$id'
     | '/api/public/payments/webhook'
     | '/ptbr/lessons/'
@@ -443,6 +465,7 @@ export interface FileRouteTypes {
     | '/ptbr/dashboard'
     | '/ptbr/profile'
     | '/ptbr/schedule'
+    | '/teacher-profile/$id'
     | '/teacher/dashboard'
     | '/teacher/lessons'
     | '/teacher/profile'
@@ -450,6 +473,7 @@ export interface FileRouteTypes {
     | '/lessons'
     | '/ptbr/checkout/return'
     | '/ptbr/lessons/$id'
+    | '/ptbr/teacher-profile/$id'
     | '/teacher/students/$id'
     | '/api/public/payments/webhook'
     | '/ptbr/lessons'
@@ -483,6 +507,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ptbr/dashboard'
     | '/_authenticated/ptbr/profile'
     | '/_authenticated/ptbr/schedule'
+    | '/_authenticated/teacher-profile/$id'
     | '/_authenticated/teacher/dashboard'
     | '/_authenticated/teacher/lessons'
     | '/_authenticated/teacher/profile'
@@ -490,6 +515,7 @@ export interface FileRouteTypes {
     | '/_authenticated/lessons/'
     | '/_authenticated/ptbr/checkout/return'
     | '/_authenticated/ptbr/lessons/$id'
+    | '/_authenticated/ptbr/teacher-profile/$id'
     | '/_authenticated/teacher/students/$id'
     | '/api/public/payments/webhook'
     | '/_authenticated/ptbr/lessons/'
@@ -692,6 +718,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeacherDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/teacher-profile/$id': {
+      id: '/_authenticated/teacher-profile/$id'
+      path: '/teacher-profile/$id'
+      fullPath: '/teacher-profile/$id'
+      preLoaderRoute: typeof AuthenticatedTeacherProfileIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/ptbr/schedule': {
       id: '/_authenticated/ptbr/schedule'
       path: '/ptbr/schedule'
@@ -769,6 +802,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeacherStudentsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ptbr/teacher-profile/$id': {
+      id: '/_authenticated/ptbr/teacher-profile/$id'
+      path: '/ptbr/teacher-profile/$id'
+      fullPath: '/ptbr/teacher-profile/$id'
+      preLoaderRoute: typeof AuthenticatedPtbrTeacherProfileIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/ptbr/lessons/$id': {
       id: '/_authenticated/ptbr/lessons/$id'
       path: '/ptbr/lessons/$id'
@@ -799,6 +839,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPtbrDashboardRoute: typeof AuthenticatedPtbrDashboardRoute
   AuthenticatedPtbrProfileRoute: typeof AuthenticatedPtbrProfileRoute
   AuthenticatedPtbrScheduleRoute: typeof AuthenticatedPtbrScheduleRoute
+  AuthenticatedTeacherProfileIdRoute: typeof AuthenticatedTeacherProfileIdRoute
   AuthenticatedTeacherDashboardRoute: typeof AuthenticatedTeacherDashboardRoute
   AuthenticatedTeacherLessonsRoute: typeof AuthenticatedTeacherLessonsRoute
   AuthenticatedTeacherProfileRoute: typeof AuthenticatedTeacherProfileRoute
@@ -806,6 +847,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedLessonsIndexRoute: typeof AuthenticatedLessonsIndexRoute
   AuthenticatedPtbrCheckoutReturnRoute: typeof AuthenticatedPtbrCheckoutReturnRoute
   AuthenticatedPtbrLessonsIdRoute: typeof AuthenticatedPtbrLessonsIdRoute
+  AuthenticatedPtbrTeacherProfileIdRoute: typeof AuthenticatedPtbrTeacherProfileIdRoute
   AuthenticatedTeacherStudentsIdRoute: typeof AuthenticatedTeacherStudentsIdRoute
   AuthenticatedPtbrLessonsIndexRoute: typeof AuthenticatedPtbrLessonsIndexRoute
   AuthenticatedTeacherStudentsIndexRoute: typeof AuthenticatedTeacherStudentsIndexRoute
@@ -824,6 +866,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPtbrDashboardRoute: AuthenticatedPtbrDashboardRoute,
   AuthenticatedPtbrProfileRoute: AuthenticatedPtbrProfileRoute,
   AuthenticatedPtbrScheduleRoute: AuthenticatedPtbrScheduleRoute,
+  AuthenticatedTeacherProfileIdRoute: AuthenticatedTeacherProfileIdRoute,
   AuthenticatedTeacherDashboardRoute: AuthenticatedTeacherDashboardRoute,
   AuthenticatedTeacherLessonsRoute: AuthenticatedTeacherLessonsRoute,
   AuthenticatedTeacherProfileRoute: AuthenticatedTeacherProfileRoute,
@@ -831,6 +874,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedLessonsIndexRoute: AuthenticatedLessonsIndexRoute,
   AuthenticatedPtbrCheckoutReturnRoute: AuthenticatedPtbrCheckoutReturnRoute,
   AuthenticatedPtbrLessonsIdRoute: AuthenticatedPtbrLessonsIdRoute,
+  AuthenticatedPtbrTeacherProfileIdRoute:
+    AuthenticatedPtbrTeacherProfileIdRoute,
   AuthenticatedTeacherStudentsIdRoute: AuthenticatedTeacherStudentsIdRoute,
   AuthenticatedPtbrLessonsIndexRoute: AuthenticatedPtbrLessonsIndexRoute,
   AuthenticatedTeacherStudentsIndexRoute:
@@ -861,13 +906,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

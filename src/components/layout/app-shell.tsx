@@ -35,12 +35,15 @@ const teacherItems: Array<{ to: string; label: string }> = [
 
 export function AppShell({
   title,
+  label,
   subtitle,
   credits,
   children,
   lang = "pt",
 }: {
   title: string;
+  /** Overrides the small "// slug" top bar above the H1. */
+  label?: string;
   subtitle?: string;
   credits?: number;
   children: ReactNode;
@@ -211,7 +214,9 @@ export function AppShell({
 
         <main className="min-w-0 flex-1">
           <div className="mb-6 border-b border-hair pb-4">
-            <div className="section-label mb-2">// {title.toLowerCase().replace(/\s+/g, "_")}</div>
+            <div className="section-label mb-2">
+              {label ?? `// ${title.toLowerCase().replace(/\s+/g, "_")}`}
+            </div>
             <h1 className="font-display text-2xl md:text-3xl">{title}</h1>
             {subtitle && <p className="mt-1 text-base text-muted">{subtitle}</p>}
           </div>
