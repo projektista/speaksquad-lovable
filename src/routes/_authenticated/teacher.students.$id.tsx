@@ -16,6 +16,57 @@ function defaultExpiry(): string {
   return d.toISOString().slice(0, 10);
 }
 
+type LotRow = {
+  key: string;
+  created_at: string;
+  source: string;
+  expires_at: string;
+  note: string | null;
+  status: string;
+  total: number;
+  used: number;
+};
+
+function groupLots(lots: any[]): LotRow[] {
+  const rows: LotRow[] = [];
+  const byPurchase = new Map<string, LotRow>();
+  for (const l of lots) {
+    const isUsed = l.status === "consumed" || Boolean(l.consumed_at);
+    if (!l.purchase_id) {
+      rows.push({
+        key: l.id,
+        created_at: l.created_at,
+        source: l.source,
+        expires_at: l.expires_at,
+        note: l.note ?? null,
+        status: l.status,
+        total: 1,
+        used: isUsed ? 1 : 0,
+      });
+      continue;
+    }
+    const existing = byPurchase.get(l.purchase_id);
+    if (existing) {
+      existing.total += 1;
+      if (isUsed) existing.used += 1;
+    } else {
+      const row: LotRow = {
+        key: `p-${l.purchase_id}`,
+        created_at: l.created_at,
+        source: l.source,
+        expires_at: l.expires_at,
+        note: l.note ?? null,
+        status: l.status,
+        total: 1,
+        used: isUsed ? 1 : 0,
+      };
+      byPurchase.set(l.purchase_id, row);
+      rows.push(row);
+    }
+  }
+  return rows;
+}
+
 function TeacherStudentDetailPage() {
   const { id } = Route.useParams();
   const [data, setData] = useState<Detail | null>(null);
@@ -157,13 +208,19 @@ function TeacherStudentDetailPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.lots.map((l: any) => (
-                    <tr key={l.id} className="border-t border-hair">
+                  {groupLots(data.lots as any[]).map((l) => (
+                    <tr key={l.key} className="border-t border-hair">
                       <td className="px-3 py-2 text-muted">
                         {new Date(l.created_at).toLocaleDateString("pt-BR")}
                       </td>
                       <td className="px-3 py-2">
-                        <StatusPill status={l.status} />
+                        {l.total > 1 ? (
+                          <span className="font-mono-alt text-xs text-muted">
+                            {l.used}/{l.total} usados
+                          </span>
+                        ) : (
+                          <StatusPill status={l.status} />
+                        )}
                       </td>
                       <td className="px-3 py-2 text-muted">{l.source}</td>
                       <td className="px-3 py-2 text-muted">
