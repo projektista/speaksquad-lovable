@@ -110,7 +110,7 @@ function Section({
           (items ?? []).map((l) => (
           <li key={l.id} className="border-b border-hair pb-2 last:border-0">
             <Link
-              to="/lessons/$id"
+              to="/ptbr/lessons/$id"
               params={{ id: l.id }}
               className="block rounded-[var(--radius)] px-2 py-1 -mx-2 transition-all duration-200 hover:translate-x-1 hover:bg-[color:var(--cyan)]/8 hover:text-cyan"
             >

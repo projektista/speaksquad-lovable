@@ -18,7 +18,7 @@ export function persistLang(lang: Lang) {
   window.localStorage.setItem(LANG_STORAGE_KEY, lang === "jp" ? "ja" : "pt-BR");
 }
 
-function detectBrowserLang(): Lang {
+export function detectBrowserLang(): Lang {
   if (typeof navigator === "undefined") return "jp";
   const langs = [navigator.language, ...(navigator.languages ?? [])].filter(Boolean);
   for (const l of langs) {
@@ -642,6 +642,9 @@ export type ProfileContent = {
   sectionIdentity: string;
   sectionLearning: string;
   sectionGames: string;
+  langLabel: string;
+  langHint: string;
+  langOptions: { value: Lang; label: string }[];
 };
 
 export const profileContent: Record<Lang, ProfileContent> = {
@@ -678,6 +681,13 @@ export const profileContent: Record<Lang, ProfileContent> = {
     sectionIdentity: "// identidade",
     sectionLearning: "// aprendizado",
     sectionGames: "// games",
+    langLabel: "Idioma preferido",
+    langHint:
+      "Define em qual idioma você verá o site depois de entrar. Ao salvar, você será levado para a versão escolhida.",
+    langOptions: [
+      { value: "jp", label: "日本語" },
+      { value: "pt", label: "Português" },
+    ],
   },
   jp: {
     metaTitle: "プロフィール — SpeakSquad",
@@ -712,6 +722,13 @@ export const profileContent: Record<Lang, ProfileContent> = {
     sectionIdentity: "// アイデンティティ",
     sectionLearning: "// 学習",
     sectionGames: "// ゲーム",
+    langLabel: "表示言語",
+    langHint:
+      "ログイン後にサイトを表示する言語です。保存すると選択した言語のページに移動します。",
+    langOptions: [
+      { value: "jp", label: "日本語" },
+      { value: "pt", label: "Português" },
+    ],
   },
 };
 

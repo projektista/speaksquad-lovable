@@ -68,7 +68,7 @@ export const getMyProfile = createServerFn({ method: "GET" })
     const { data, error } = await context.supabase
       .from("profiles")
       .select(
-        "id, name, bio, english_level, minecraft_gamertag, fortnite_nickname, birth_date, interests, learning_goal",
+        "id, name, bio, english_level, minecraft_gamertag, fortnite_nickname, birth_date, interests, learning_goal, preferred_lang",
       )
       .eq("id", context.userId)
       .maybeSingle();
@@ -89,6 +89,7 @@ export const updateMyProfile = createServerFn({ method: "POST" })
     birth_date?: string;
     interests?: string;
     learning_goal?: string;
+    preferred_lang?: string;
   }) => data)
   .handler(async ({ data, context }) => {
     const patch: ProfilesUpdate = {};
@@ -116,7 +117,7 @@ export const getProfileCompletion = createServerFn({ method: "GET" })
       context.supabase.from("user_roles").select("role").eq("user_id", context.userId),
       context.supabase
         .from("profiles")
-        .select("birth_date, minecraft_gamertag, fortnite_nickname")
+        .select("birth_date, minecraft_gamertag, fortnite_nickname, preferred_lang")
         .eq("id", context.userId)
         .maybeSingle(),
     ]);
@@ -128,6 +129,7 @@ export const getProfileCompletion = createServerFn({ method: "GET" })
         missing: [] as string[],
         hasMinecraft: true,
         hasFortnite: true,
+        preferredLang: null as "jp" | "pt" | null,
         error: profRes.error.message,
       };
     }
@@ -147,6 +149,9 @@ export const getProfileCompletion = createServerFn({ method: "GET" })
       missing,
       hasMinecraft,
       hasFortnite,
+      preferredLang: (p?.preferred_lang === "pt" || p?.preferred_lang === "jp"
+        ? p.preferred_lang
+        : null) as "jp" | "pt" | null,
       error: null as string | null,
     };
   });

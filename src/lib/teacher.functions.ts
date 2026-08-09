@@ -85,7 +85,9 @@ export const getTeacherProfile = createServerFn({ method: "GET" })
     await assertTeacher(context);
     const { data } = await context.supabase
       .from("profiles")
-      .select("id, name, bio, english_level, minecraft_gamertag, fortnite_nickname, zoom_link")
+      .select(
+        "id, name, bio, english_level, minecraft_gamertag, fortnite_nickname, zoom_link, preferred_lang",
+      )
       .eq("id", context.userId)
       .maybeSingle();
     return data;
@@ -100,6 +102,7 @@ export const updateTeacherProfile = createServerFn({ method: "POST" })
       minecraft_gamertag?: string;
       fortnite_nickname?: string;
       zoom_link?: string;
+      preferred_lang?: string;
     }) => data,
   )
   .handler(async ({ data, context }) => {
@@ -110,6 +113,7 @@ export const updateTeacherProfile = createServerFn({ method: "POST" })
       minecraft_gamertag?: string | null;
       fortnite_nickname?: string | null;
       zoom_link?: string | null;
+      preferred_lang?: string | null;
     } = {};
     if (data.name !== undefined) patch.name = data.name;
     if (data.bio !== undefined) patch.bio = data.bio;
@@ -118,6 +122,7 @@ export const updateTeacherProfile = createServerFn({ method: "POST" })
     if (data.fortnite_nickname !== undefined)
       patch.fortnite_nickname = data.fortnite_nickname || null;
     if (data.zoom_link !== undefined) patch.zoom_link = data.zoom_link.trim() || null;
+    if (data.preferred_lang !== undefined) patch.preferred_lang = data.preferred_lang || null;
     await context.supabase.from("profiles").update(patch).eq("id", context.userId);
     return { ok: true };
   });

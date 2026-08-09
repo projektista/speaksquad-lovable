@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/app-shell";
 import { Field, inputCls } from "@/components/ui/auth-frame";
 import { getMyProfile, updateMyProfile } from "@/lib/booking.functions";
-import type { Lang, ProfileContent } from "@/lib/i18n";
+import { pathForLang, persistLang, type Lang, type ProfileContent } from "@/lib/i18n";
 import { useSession } from "@/hooks/use-session";
 
 export function ProfilePage({ content, lang }: { content: ProfileContent; lang: Lang }) {
   const { user } = useSession();
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [bio, setBio] = useState("");
@@ -15,6 +18,7 @@ export function ProfilePage({ content, lang }: { content: ProfileContent; lang: 
   const [fn, setFn] = useState("");
   const [interests, setInterests] = useState("");
   const [goal, setGoal] = useState("");
+  const [prefLang, setPrefLang] = useState<Lang>(lang);
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -32,6 +36,7 @@ export function ProfilePage({ content, lang }: { content: ProfileContent; lang: 
         setFn(p.fortnite_nickname ?? "");
         setInterests(p.interests ?? "");
         setGoal(p.learning_goal ?? "");
+        if (p.preferred_lang === "pt" || p.preferred_lang === "jp") setPrefLang(p.preferred_lang);
       }
       })
       .catch((e: any) => setErr(e?.message ?? String(e)))
@@ -54,10 +59,15 @@ export function ProfilePage({ content, lang }: { content: ProfileContent; lang: 
           fortnite_nickname: fn,
           interests,
           learning_goal: goal,
+          preferred_lang: prefLang,
         },
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
+      if (prefLang !== lang) {
+        persistLang(prefLang);
+        navigate({ to: pathForLang(pathname, prefLang), replace: true });
+      }
     } catch (e: any) {
       setErr(e?.message ?? String(e));
     } finally {
@@ -134,6 +144,21 @@ export function ProfilePage({ content, lang }: { content: ProfileContent; lang: 
               </Field>
             </section>
           </div>
+
+          <section className="card-hair p-6 space-y-3">
+            <div className="section-label">{content.langLabel}</div>
+            <Field label={content.langLabel} hint={content.langHint}>
+              <select
+                className={inputCls}
+                value={prefLang}
+                onChange={(e) => setPrefLang(e.target.value as Lang)}
+              >
+                {content.langOptions.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </Field>
+          </section>
 
           <section className="card-hair p-6 space-y-4">
             <div className="section-label">{content.sectionGames}</div>
