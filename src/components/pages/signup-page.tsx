@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AuthFrame, Field, inputCls } from "@/components/ui/auth-frame";
-import type { Lang, SignupContent } from "@/lib/i18n";
+import { detectBrowserLang, storedLang, type Lang, type SignupContent } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 
 export function SignupPage({ content, lang }: { content: SignupContent; lang: Lang }) {
@@ -42,7 +42,9 @@ export function SignupPage({ content, lang }: { content: SignupContent; lang: La
       password: pw,
       options: {
         emailRedirectTo: `${window.location.origin}${dashTo}`,
-        data: { name },
+        // Seed the persistent language preference from the same detection the
+        // public landing uses (stored choice first, then browser language).
+        data: { name, preferred_lang: storedLang() ?? detectBrowserLang() },
       },
     });
     if (error) {
