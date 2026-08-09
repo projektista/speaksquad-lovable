@@ -9,6 +9,7 @@ export function TeacherProfilePage() {
   const [mc, setMc] = useState("");
   const [fn, setFn] = useState("");
   const [zoom, setZoom] = useState("");
+  const [prefLang, setPrefLang] = useState<"jp" | "pt">("pt");
   const [loaded, setLoaded] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -21,6 +22,7 @@ export function TeacherProfilePage() {
         setMc(p.minecraft_gamertag ?? "");
         setFn(p.fortnite_nickname ?? "");
         setZoom(p.zoom_link ?? "");
+        if (p.preferred_lang === "jp" || p.preferred_lang === "pt") setPrefLang(p.preferred_lang);
       }
       setLoaded(true);
     });
@@ -31,7 +33,14 @@ export function TeacherProfilePage() {
     setSaving(true);
     setSaved(false);
     await updateTeacherProfile({
-      data: { name, bio, minecraft_gamertag: mc, fortnite_nickname: fn, zoom_link: zoom },
+      data: {
+        name,
+        bio,
+        minecraft_gamertag: mc,
+        fortnite_nickname: fn,
+        zoom_link: zoom,
+        preferred_lang: prefLang,
+      },
     });
     setSaving(false);
     setSaved(true);
@@ -72,6 +81,20 @@ export function TeacherProfilePage() {
           </Field>
           <p className="font-mono-alt text-[11px] text-muted">
             Este link fixo é usado como sala de todas as suas aulas.
+          </p>
+          <Field label="Idioma preferido">
+            <select
+              className={inputCls}
+              value={prefLang}
+              onChange={(e) => setPrefLang(e.target.value as "jp" | "pt")}
+            >
+              <option value="jp">日本語</option>
+              <option value="pt">Português</option>
+            </select>
+          </Field>
+          <p className="font-mono-alt text-[11px] text-muted">
+            Define em qual idioma você vê as páginas do site depois de entrar (o painel do
+            professor permanece em português). Só é aplicado ao salvar.
           </p>
           <button type="submit" disabled={saving} className="btn-primary">
             {saving ? "..." : "Salvar"}
