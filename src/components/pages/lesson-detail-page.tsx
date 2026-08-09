@@ -354,7 +354,13 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
           <div className="mb-2 font-mono-alt text-[11px] uppercase tracking-widest text-muted">
             {t.chatTitle}
           </div>
-          <div className="flex-1 overflow-y-auto space-y-2 pr-2">
+          <div
+            className="flex-1 overflow-y-auto space-y-2 pr-2"
+            role="log"
+            aria-live="polite"
+            aria-label={t.chatLogLabel}
+            tabIndex={0}
+          >
             {messages.length === 0 && <div className="text-sm text-muted">{t.chatEmpty}</div>}
             {messages.map((m) => {
               const mine = m.sender_id === user?.id;
@@ -376,11 +382,16 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
             <div ref={bottomRef} />
           </div>
           <form onSubmit={send} className="mt-3 flex flex-col gap-2">
+            <label htmlFor={`chat-input-${id}`} className="sr-only">
+              {t.chatInputLabel}
+            </label>
             <textarea
+              id={`chat-input-${id}`}
               ref={textareaRef}
               rows={1}
               value={text}
               onChange={(e) => setText(e.target.value)}
+              aria-describedby={`chat-hint-${id}`}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -390,7 +401,14 @@ export function LessonDetailPage({ id, lang = "pt" }: { id: string; lang?: Lang 
               placeholder={t.chatPlaceholder}
               className="w-full resize-none rounded border border-hair bg-transparent px-3 py-2 text-sm leading-5"
             />
-            <button type="submit" className="btn-primary !py-2 self-start text-xs">{t.send}</button>
+            <div className="flex items-center justify-between gap-3">
+              <p id={`chat-hint-${id}`} className="text-[11px] text-muted">
+                {t.chatKeyboardHint}
+              </p>
+              <button type="submit" className="btn-primary !py-2 text-xs" disabled={!text.trim()}>
+                {t.send}
+              </button>
+            </div>
           </form>
         </div>
       </div>

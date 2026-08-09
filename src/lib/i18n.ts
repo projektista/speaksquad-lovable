@@ -763,6 +763,9 @@ export type LessonDetailContent = {
   chatTitle: string;
   chatEmpty: string;
   chatPlaceholder: string;
+  chatInputLabel: string;
+  chatKeyboardHint: string;
+  chatLogLabel: string;
   send: string;
   historyTitle: string;
   historyEmpty: string;
@@ -808,6 +811,9 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
     chatTitle: "// chat (atualiza a cada 5s)",
     chatEmpty: "Sem mensagens ainda.",
     chatPlaceholder: "Mensagem...",
+    chatInputLabel: "Mensagem para o chat da aula",
+    chatKeyboardHint: "Pressione Enter para enviar, Shift + Enter para quebrar linha.",
+    chatLogLabel: "Mensagens do chat da aula",
     send: "Enviar",
     historyTitle: "// aulas_anteriores",
     historyEmpty: "Nenhuma aula anterior concluída.",
@@ -851,6 +857,9 @@ export const lessonDetailContent: Record<Lang, LessonDetailContent> = {
     chatTitle: "// チャット(5秒ごと更新)",
     chatEmpty: "メッセージはまだありません。",
     chatPlaceholder: "メッセージ...",
+    chatInputLabel: "レッスンチャットのメッセージ",
+    chatKeyboardHint: "Enter で送信、Shift + Enter で改行します。",
+    chatLogLabel: "レッスンチャットのメッセージ一覧",
     send: "送信",
     historyTitle: "// 過去のレッスン",
     historyEmpty: "完了した過去のレッスンはありません。",
