@@ -67,9 +67,49 @@ export function LandingPage({ content, lang }: { content: LandingContent; lang: 
 
 function Hero({ content }: { content: LandingContent }) {
   const { hero, signupPath } = content;
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    const onMove = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+      const y = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+      setTilt({ x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) });
+    };
+    const onLeave = () => setTilt({ x: 0, y: 0 });
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
   return (
-    <section id="hero" className="hero-aurora bg-noise relative overflow-hidden">
-      <ParticleField density={36} />
+    <section
+      ref={sectionRef}
+      id="hero"
+      className="hero-aurora bg-noise relative overflow-hidden"
+      style={
+        {
+          "--aurora-x": `${-tilt.x * 18}px`,
+          "--aurora-y": `${-tilt.y * 18}px`,
+        } as CSSProperties
+      }
+    >
+      <div
+        className="pointer-events-none absolute inset-0 transition-transform duration-300 ease-out"
+        style={{ transform: `translate3d(${tilt.x * 28}px, ${tilt.y * 28}px, 0)` }}
+      >
+        <ParticleField density={36} />
+      </div>
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-5 pb-16 pt-14 md:grid-cols-[1.2fr_0.8fr] md:pb-24 md:pt-20">
         <div>
           <SectionLabel n="00">
