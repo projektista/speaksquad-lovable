@@ -455,7 +455,7 @@ textarea:focus-visible {
 
 @keyframes ss-float-slow {
   0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, -14px, 0); }
+  50% { transform: translate3d(0, -36px, 0); }
 }
 
 /* Ambient section backgrounds — subtle cyberpunk depth per section */
@@ -471,7 +471,7 @@ textarea:focus-visible {
     background:
       radial-gradient(60% 55% at 15% 20%, color-mix(in oklab, var(--cyan) 18%, transparent) 0%, transparent 62%),
       radial-gradient(45% 50% at 90% 80%, color-mix(in oklab, var(--magenta) 15%, transparent) 0%, transparent 66%);
-    animation: ss-float-slow 14s ease-in-out infinite;
+    animation: ss-float-slow 9s ease-in-out infinite;
   }
 }
 @utility section-glow-magenta {
@@ -486,7 +486,7 @@ textarea:focus-visible {
     background:
       radial-gradient(55% 55% at 85% 15%, color-mix(in oklab, var(--magenta) 18%, transparent) 0%, transparent 62%),
       radial-gradient(50% 55% at 10% 90%, color-mix(in oklab, var(--violet) 15%, transparent) 0%, transparent 66%);
-    animation: ss-float-slow 18s ease-in-out infinite;
+    animation: ss-float-slow 10s ease-in-out infinite;
   }
 }
 @utility section-glow-violet {
@@ -501,7 +501,7 @@ textarea:focus-visible {
     background:
       radial-gradient(50% 50% at 50% 0%, color-mix(in oklab, var(--violet) 18%, transparent) 0%, transparent 66%),
       radial-gradient(60% 55% at 50% 100%, color-mix(in oklab, var(--cyan) 14%, transparent) 0%, transparent 70%);
-    animation: ss-float-slow 20s ease-in-out infinite;
+    animation: ss-float-slow 11s ease-in-out infinite;
   }
 }
 @utility section-scanlines {
@@ -521,7 +521,7 @@ textarea:focus-visible {
       color-mix(in oklab, var(--cyan) 4%, transparent) 4px
     );
     mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-    animation: ss-scanline-move 8s linear infinite;
+    animation: ss-scanline-move 6s linear infinite;
   }
 }
 
@@ -540,7 +540,7 @@ textarea:focus-visible {
       linear-gradient(90deg, rgba(255, 0, 110, 0.085) 1px, transparent 1px);
     background-size: 56px 56px;
     mask-image: radial-gradient(ellipse at center, black 40%, transparent 90%);
-    animation: ss-grid-drift 24s linear infinite;
+    animation: ss-grid-drift 13s linear infinite;
   }
 }
 
@@ -561,7 +561,7 @@ textarea:focus-visible {
     filter: blur(30px);
     translate: var(--aurora-x, 0) var(--aurora-y, 0);
     transition: translate 250ms ease-out;
-    animation: ss-aurora 22s ease-in-out infinite alternate;
+    animation: ss-aurora 15s ease-in-out infinite alternate;
   }
 }
 
@@ -697,8 +697,8 @@ textarea:focus-visible {
 
 @keyframes ss-aurora {
   0%   { transform: translate3d(0,0,0) scale(1); }
-  50%  { transform: translate3d(-2%, 1%, 0) scale(1.05); }
-  100% { transform: translate3d(2%, -1%, 0) scale(1.02); }
+  50%  { transform: translate3d(-3%, 2%, 0) scale(1.09); }
+  100% { transform: translate3d(3%, -2%, 0) scale(1.03); }
 }
 
 @keyframes ss-scanline-move {
