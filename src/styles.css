@@ -469,8 +469,8 @@ textarea:focus-visible {
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(60% 55% at 15% 20%, color-mix(in oklab, var(--cyan) 14%, transparent) 0%, transparent 60%),
-      radial-gradient(45% 50% at 90% 80%, color-mix(in oklab, var(--magenta) 10%, transparent) 0%, transparent 65%);
+      radial-gradient(60% 55% at 15% 20%, color-mix(in oklab, var(--cyan) 18%, transparent) 0%, transparent 62%),
+      radial-gradient(45% 50% at 90% 80%, color-mix(in oklab, var(--magenta) 15%, transparent) 0%, transparent 66%);
     animation: ss-float-slow 14s ease-in-out infinite;
   }
 }
@@ -484,8 +484,8 @@ textarea:focus-visible {
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(55% 55% at 85% 15%, color-mix(in oklab, var(--magenta) 14%, transparent) 0%, transparent 60%),
-      radial-gradient(50% 55% at 10% 90%, color-mix(in oklab, var(--violet) 10%, transparent) 0%, transparent 65%);
+      radial-gradient(55% 55% at 85% 15%, color-mix(in oklab, var(--magenta) 18%, transparent) 0%, transparent 62%),
+      radial-gradient(50% 55% at 10% 90%, color-mix(in oklab, var(--violet) 15%, transparent) 0%, transparent 66%);
     animation: ss-float-slow 18s ease-in-out infinite;
   }
 }
@@ -499,8 +499,8 @@ textarea:focus-visible {
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(50% 50% at 50% 0%, color-mix(in oklab, var(--violet) 14%, transparent) 0%, transparent 65%),
-      radial-gradient(60% 55% at 50% 100%, color-mix(in oklab, var(--cyan) 8%, transparent) 0%, transparent 70%);
+      radial-gradient(50% 50% at 50% 0%, color-mix(in oklab, var(--violet) 18%, transparent) 0%, transparent 66%),
+      radial-gradient(60% 55% at 50% 100%, color-mix(in oklab, var(--cyan) 14%, transparent) 0%, transparent 70%);
     animation: ss-float-slow 20s ease-in-out infinite;
   }
 }
@@ -536,8 +536,8 @@ textarea:focus-visible {
     z-index: -1;
     pointer-events: none;
     background-image:
-      linear-gradient(rgba(0, 217, 255, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 0, 110, 0.05) 1px, transparent 1px);
+      linear-gradient(rgba(0, 217, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 0, 110, 0.085) 1px, transparent 1px);
     background-size: 56px 56px;
     mask-image: radial-gradient(ellipse at center, black 40%, transparent 90%);
     animation: ss-grid-drift 24s linear infinite;
@@ -555,10 +555,12 @@ textarea:focus-visible {
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(35% 30% at 25% 30%, color-mix(in oklab, var(--cyan) 22%, transparent) 0%, transparent 60%),
-      radial-gradient(35% 30% at 75% 55%, color-mix(in oklab, var(--magenta) 20%, transparent) 0%, transparent 60%),
-      radial-gradient(28% 25% at 55% 85%, color-mix(in oklab, var(--violet) 18%, transparent) 0%, transparent 60%);
+      radial-gradient(35% 30% at 25% 30%, color-mix(in oklab, var(--cyan) 28%, transparent) 0%, transparent 62%),
+      radial-gradient(35% 30% at 75% 55%, color-mix(in oklab, var(--magenta) 26%, transparent) 0%, transparent 62%),
+      radial-gradient(28% 25% at 55% 85%, color-mix(in oklab, var(--violet) 22%, transparent) 0%, transparent 62%);
     filter: blur(30px);
+    translate: var(--aurora-x, 0) var(--aurora-y, 0);
+    transition: translate 250ms ease-out;
     animation: ss-aurora 22s ease-in-out infinite alternate;
   }
 }
