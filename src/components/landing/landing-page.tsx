@@ -434,7 +434,8 @@ function Requisitos({ content }: { content: LandingContent }) {
 function Sobre({ content }: { content: LandingContent }) {
   const { sobre } = content;
   return (
-    <section id="about" className="section-glow-cyan relative">
+    <section id="about" className="section-glow-cyan bg-noise relative">
+      <ParticleField density={14} className="opacity-40" />
       <div className="mx-auto max-w-6xl px-5 py-20">
         <Reveal>
           <SectionLabel n={sobre.sectionN}>{sobre.label}</SectionLabel>
