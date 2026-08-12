@@ -10,6 +10,43 @@ async function getRoles(ctx: { supabase: any; userId: string }) {
   return (data ?? []).map((r: { role: string }) => r.role as string);
 }
 
+/** Ensures the caller participates in the lesson (student owner, teacher or admin). */
+async function assertParticipant(
+  context: { supabase: any; userId: string },
+  lessonId: string,
+) {
+  const { data: lesson, error } = await context.supabase
+    .from("lessons")
+    .select("id, student_id, teacher_id")
+    .eq("id", lessonId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!lesson) throw new Error("Not found");
+  const roles = await getRoles(context);
+  const isStaff = roles.includes("teacher") || roles.includes("admin");
+  if (!isStaff && lesson.student_id !== context.userId) throw new Error("Forbidden");
+  return lesson;
+}
+
+/** Ensures the caller is the lesson's own teacher (admins may act on any lesson). */
+async function assertLessonTeacher(
+  context: { supabase: any; userId: string },
+  lessonId: string,
+) {
+  const roles = await getRoles(context);
+  const isAdmin = roles.includes("admin");
+  if (!isAdmin && !roles.includes("teacher")) throw new Error("Forbidden");
+  const { data: lesson, error } = await context.supabase
+    .from("lessons")
+    .select("id, teacher_id")
+    .eq("id", lessonId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!lesson) throw new Error("Not found");
+  if (!isAdmin && lesson.teacher_id !== context.userId) throw new Error("Forbidden");
+  return lesson;
+}
+
 export const getLessonDetail = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { id: string }) => data)
@@ -78,6 +115,7 @@ export const getLessonMessages = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { lessonId: string }) => data)
   .handler(async ({ data, context }) => {
+    await assertParticipant(context, data.lessonId);
     const { data: messages } = await context.supabase
       .from("lesson_messages")
       .select("id, sender_id, content, created_at")
@@ -95,6 +133,7 @@ export const postLessonMessage = createServerFn({ method: "POST" })
     return { lessonId: data.lessonId, content: c };
   })
   .handler(async ({ data, context }) => {
+    await assertParticipant(context, data.lessonId);
     const { error } = await context.supabase.from("lesson_messages").insert({
       lesson_id: data.lessonId,
       sender_id: context.userId,
@@ -108,8 +147,7 @@ export const finalizeLesson = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { lessonId: string; feedback?: string; vocabulary?: string }) => data)
   .handler(async ({ data, context }) => {
-    const roles = await getRoles(context);
-    if (!roles.includes("teacher") && !roles.includes("admin")) throw new Error("Forbidden");
+    await assertLessonTeacher(context, data.lessonId);
     // service_role-only RPC — role already checked above with the user's client.
     await supabaseAdmin.rpc("consume_credit_lot", { _lesson_id: data.lessonId });
     const patch: { status: "completed"; feedback?: string | null; vocabulary_notes?: string | null } = { status: "completed" };
@@ -124,8 +162,7 @@ export const teacherCancelLesson = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { lessonId: string }) => data)
   .handler(async ({ data, context }) => {
-    const roles = await getRoles(context);
-    if (!roles.includes("teacher") && !roles.includes("admin")) throw new Error("Forbidden");
+    await assertLessonTeacher(context, data.lessonId);
     // Release credit and extend expiration by 30 days as compensation.
     // service_role-only RPC — role already checked above with the user's client.
     await supabaseAdmin.rpc("release_credit_lot", {
@@ -144,8 +181,7 @@ export const teacherMarkNoShow = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { lessonId: string }) => data)
   .handler(async ({ data, context }) => {
-    const roles = await getRoles(context);
-    if (!roles.includes("teacher") && !roles.includes("admin")) throw new Error("Forbidden");
+    await assertLessonTeacher(context, data.lessonId);
     // Consume the credit (student pays). service_role-only RPC — role
     // already checked above with the user's client.
     await supabaseAdmin.rpc("consume_credit_lot", { _lesson_id: data.lessonId });
