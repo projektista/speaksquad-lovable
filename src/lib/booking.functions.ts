@@ -190,7 +190,12 @@ export const getAvailableSlotsRange = createServerFn({ method: "POST" })
  */
 export const bookLesson = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { starts_at: string; mode: "minecraft" | "fortnite" }) => data)
+  .inputValidator((data: { starts_at: string; mode: "minecraft" | "fortnite" }) => {
+    if (!["minecraft", "fortnite"].includes(data.mode)) {
+      throw new Error("Invalid mode");
+    }
+    return data;
+  })
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
 
