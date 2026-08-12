@@ -162,7 +162,12 @@ export const getTeacherAvailabilityRange = createServerFn({ method: "POST" })
 
 export const setSlot = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { starts_at: string; state: "available" | "blocked" | "off" }) => data)
+  .inputValidator((data: { starts_at: string; state: "available" | "blocked" | "off" }) => {
+    if (!["available", "blocked", "off"].includes(data.state)) {
+      throw new Error("Invalid state");
+    }
+    return data;
+  })
   .handler(async ({ data, context }) => {
     await assertTeacher(context);
     // If a lesson exists on this slot, block changes.
