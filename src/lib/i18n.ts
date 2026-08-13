@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useRouter, useRouterState } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 
 export type Lang = "pt" | "jp";
 
