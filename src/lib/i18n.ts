@@ -1,4 +1,4 @@
-import { useRouter } from "@tanstack/react-router";
+
 
 export type Lang = "pt" | "jp";
 
