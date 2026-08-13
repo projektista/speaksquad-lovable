@@ -9,7 +9,6 @@ type Lesson = {
   scheduled_at: string;
   mode: string;
   status: string;
-  meet_url: string | null;
 };
 
 export function LessonsListPage({ content, lang }: { content: LessonsListContent; lang: Lang }) {

@@ -21,7 +21,7 @@ export const getMyOverview = createServerFn({ method: "GET" })
         .maybeSingle(),
       supabase
         .from("lessons")
-        .select("id, scheduled_at, mode, status, meet_url")
+        .select("id, scheduled_at, mode, status")
         .eq("student_id", userId)
         .eq("status", "scheduled")
         .gte("scheduled_at", new Date().toISOString())
@@ -52,7 +52,7 @@ export const getMyLessons = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data } = await context.supabase
       .from("lessons")
-      .select("id, scheduled_at, mode, status, meet_url")
+      .select("id, scheduled_at, mode, status")
       .eq("student_id", context.userId)
       .order("scheduled_at", { ascending: false })
       .limit(200);

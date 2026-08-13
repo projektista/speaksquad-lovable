@@ -26,7 +26,7 @@ export const getTeacherOverview = createServerFn({ method: "GET" })
     const [todayRes, upcomingRes, recentRes] = await Promise.all([
       context.supabase
         .from("lessons")
-        .select("id, scheduled_at, mode, status, meet_url, student_id")
+        .select("id, scheduled_at, mode, status, student_id")
         .gte("scheduled_at", startOfToday.toISOString())
         .lte("scheduled_at", endOfToday.toISOString())
         .order("scheduled_at", { ascending: true }),
@@ -58,7 +58,7 @@ export const getTeacherAllLessons = createServerFn({ method: "GET" })
     await assertTeacher(context);
     const { data } = await context.supabase
       .from("lessons")
-      .select("id, scheduled_at, mode, status, student_id, feedback, meet_url")
+      .select("id, scheduled_at, mode, status, student_id, feedback")
       .order("scheduled_at", { ascending: false })
       .limit(200);
     const lessons = data ?? [];
