@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { AppShell } from "@/components/layout/app-shell";
 import { Reveal } from "@/components/fx/reveal";
 import type { Lang, ScheduleContent } from "@/lib/i18n";
-import { getAvailableSlotsRange, bookLesson, getMyOverview } from "@/lib/booking.functions";
+import { getAvailableSlotsRange, bookLesson, getMyOverview, getMyProfile } from "@/lib/booking.functions";
 
 function startOfWeekSunday(d: Date) {
   const x = new Date(d);
@@ -39,6 +39,10 @@ export function SchedulePage({ content, lang }: { content: ScheduleContent; lang
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [needsProfile, setNeedsProfile] = useState(false);
+  const [availableModes, setAvailableModes] = useState<Array<"minecraft" | "fortnite">>([
+    "minecraft",
+    "fortnite",
+  ]);
 
   // Restore a booking interrupted by the profile checkpoint.
   useEffect(() => {
@@ -57,6 +61,23 @@ export function SchedulePage({ content, lang }: { content: ScheduleContent; lang
 
   useEffect(() => {
     getMyOverview().then((o) => setAvailable(o.available)).catch(() => {});
+  }, []);
+
+  // Only offer the game mode(s) the student has actually filled a gamertag
+  // for. If both or neither are filled, offer both (profile checkpoint on
+  // booking already handles the "neither" case).
+  useEffect(() => {
+    getMyProfile()
+      .then((p) => {
+        if (!p) return;
+        const modes: Array<"minecraft" | "fortnite"> = [];
+        if (p.minecraft_gamertag) modes.push("minecraft");
+        if (p.fortnite_nickname) modes.push("fortnite");
+        if (modes.length === 0) return; // keep both, checkpoint will catch it
+        setAvailableModes(modes);
+        setMode((current) => (modes.includes(current) ? current : modes[0]));
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -181,27 +202,29 @@ export function SchedulePage({ content, lang }: { content: ScheduleContent; lang
         </div>
       </Reveal>
 
-      <Reveal delay={80}>
-        <div className="card-hair mt-6 p-5">
-          <div className="section-label">{content.modeLabel}</div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {(["minecraft", "fortnite"] as const).map((k) => (
-              <button
-                key={k}
-                type="button"
-                onClick={() => setMode(k)}
-                className={`rounded-[4px] border px-3 py-2 font-mono-alt text-xs transition-colors ${
-                  mode === k
-                    ? "border-[color:var(--cyan)] bg-[color:var(--bg3)] text-cyan"
-                    : "border-hair text-muted hover:text-foreground"
-                }`}
-              >
-                {content.modes[k]}
-              </button>
-            ))}
+      {availableModes.length > 1 && (
+        <Reveal delay={80}>
+          <div className="card-hair mt-6 p-5">
+            <div className="section-label">{content.modeLabel}</div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {availableModes.map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setMode(k)}
+                  className={`rounded-[4px] border px-3 py-2 font-mono-alt text-xs transition-colors ${
+                    mode === k
+                      ? "border-[color:var(--cyan)] bg-[color:var(--bg3)] text-cyan"
+                      : "border-hair text-muted hover:text-foreground"
+                  }`}
+                >
+                  {content.modes[k]}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </Reveal>
+        </Reveal>
+      )}
 
       <Reveal delay={160}>
         <div className="card-hair mt-6 p-5">
