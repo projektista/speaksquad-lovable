@@ -35,31 +35,6 @@ export function pathForLang(pathname: string, target: Lang): string {
   return bare;
 }
 
-/**
- * On first visit to the domain root (/), detect the browser language and
- * redirect PT speakers to /ptbr. Any other language stays on / (JP default).
- * Runs only when the visitor lands on "/" without a stored preference, so
- * deep links and manual switch choices are always respected.
- */
-export function useLangAutoDetect() {
-  const router = useRouter();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (pathname !== "/") return; // only auto-detect at domain root
-
-    if (storedLang()) return; // user already has an explicit preference
-
-    const preferred = detectBrowserLang();
-    persistLang(preferred);
-    if (preferred === "pt") {
-      router.navigate({ to: "/ptbr", replace: true });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-}
-
 /* ------------------------------------------------------------------ */
 /* Page dictionaries                                                    */
 /* ------------------------------------------------------------------ */

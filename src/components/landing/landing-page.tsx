@@ -11,7 +11,6 @@ import { BracketFrame } from "@/components/fx/bracket-frame";
 import { GlitchText } from "@/components/fx/glitch-text";
 import { ScrambleText } from "@/components/fx/scramble-text";
 import type { FaqAnswer, LandingContent } from "./landing-content";
-import { useLangAutoDetect } from "@/lib/i18n";
 
 const COLOR: Record<"white" | "cyan" | "magenta", string> = {
   white: "#f7fafc",
