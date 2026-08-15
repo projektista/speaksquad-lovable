@@ -18,4 +18,4 @@ Disallow: /profile
 Disallow: /ptbr/profile
 Disallow: /teacher/
 
-Sitemap: https://speaksquad.vercel.app/sitemap.xml
+Sitemap: https://www.speaksquad.co/sitemap.xml
