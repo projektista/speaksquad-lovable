@@ -97,7 +97,7 @@ export function ContactPage({ content, lang }: { content: ContactContent; lang: 
               <div className="space-y-6 font-mono-alt text-sm">
                 <div className="card-hair card-tilt p-5">
                   <div className="text-xs uppercase tracking-widest text-violet">{content.info.emailLabel}</div>
-                  <div className="mt-2 break-all text-soft">contato@speaksquad.jp</div>
+                  <div className="mt-2 break-all text-soft">contact@speaksquad.co</div>
                 </div>
                 <div className="card-hair card-tilt p-5">
                   <div className="text-xs uppercase tracking-widest text-violet">{content.info.hoursLabel}</div>
