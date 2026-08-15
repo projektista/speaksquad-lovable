@@ -2,52 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://speaksquad.vercel.app/</loc>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://speaksquad.vercel.app/" />
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://speaksquad.vercel.app/ptbr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://speaksquad.vercel.app/" />
+    <loc>https://www.speaksquad.co/</loc>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.speaksquad.co/" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.speaksquad.co/ptbr" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.speaksquad.co/" />
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://speaksquad.vercel.app/ptbr</loc>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://speaksquad.vercel.app/" />
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://speaksquad.vercel.app/ptbr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://speaksquad.vercel.app/" />
+    <loc>https://www.speaksquad.co/ptbr</loc>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.speaksquad.co/" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.speaksquad.co/ptbr" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.speaksquad.co/" />
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://speaksquad.vercel.app/contact</loc>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://speaksquad.vercel.app/contact" />
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://speaksquad.vercel.app/ptbr/contact" />
+    <loc>https://www.speaksquad.co/contact</loc>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.speaksquad.co/contact" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.speaksquad.co/ptbr/contact" />
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://speaksquad.vercel.app/ptbr/contact</loc>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://speaksquad.vercel.app/contact" />
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://speaksquad.vercel.app/ptbr/contact" />
+    <loc>https://www.speaksquad.co/ptbr/contact</loc>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.speaksquad.co/contact" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://www.speaksquad.co/ptbr/contact" />
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://speaksquad.vercel.app/privacy</loc>
+    <loc>https://www.speaksquad.co/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://speaksquad.vercel.app/ptbr/privacy</loc>
+    <loc>https://www.speaksquad.co/ptbr/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://speaksquad.vercel.app/terms</loc>
+    <loc>https://www.speaksquad.co/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://speaksquad.vercel.app/ptbr/terms</loc>
+    <loc>https://www.speaksquad.co/ptbr/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
