@@ -77,3 +77,4 @@ export function trackLoadError(
   });
 
   reportAppError(error, { scope, failures: m.failures, attempts: m.attempts, ...context });
+  }
