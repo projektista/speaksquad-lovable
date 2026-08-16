@@ -27,7 +27,7 @@ Acesse `http://localhost:8080`.
 
 ## Deploy no Vercel
 
-1. Faça push deste repositório para o GitHub (a sincronização do Lovable já cuida disso automaticamente).
+1. Faça push deste repositório para o GitHub.
 2. No Vercel: **Add New Project → Import Git Repository** e selecione o repo.
 3. Framework Preset: **Other** (Vercel detecta Vite/TanStack automaticamente).
 4. Build Command: `bun run build`
