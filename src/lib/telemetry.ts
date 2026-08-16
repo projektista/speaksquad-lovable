@@ -1,7 +1,7 @@
 // Lightweight client-side error logging + failure metrics for dashboard loads.
 // Keeps a rolling in-memory record so failures can be inspected during debugging
 // (window.__speaksquadMetrics) and forwards errors to the platform reporter.
-import { reportLovableError } from "./lovable-error-reporting";
+import { reportAppError } from "./error-reporting";
 
 export type LoadScope = "student-dashboard" | "teacher-dashboard" | string;
 
@@ -76,5 +76,4 @@ export function trackLoadError(
     attempts: m.attempts,
   });
 
-  reportLovableError(error, { scope, failures: m.failures, attempts: m.attempts, ...context });
-}
+  reportAppError(error, { scope, failures: m.failures, attempts: m.attempts, ...context });
